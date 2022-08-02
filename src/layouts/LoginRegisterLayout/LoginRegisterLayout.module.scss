@@ -1,0 +1,82 @@
+.wrapper {
+    height: 100vh;
+    background-image: url('/assets/images/background_login.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.body {
+    position: absolute;
+    display: flex;
+    top: 50%;
+    left: 50%;
+    width: 90%;
+    height: 700px;
+    max-width: 1150px;
+    transform: translate(-50%, -50%);
+    background-color: var(--white);
+    border-radius: 20px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.slider-wrapper {
+    position: relative;
+    height: 100%;
+    width: 50%;
+    background: linear-gradient(180deg, rgba(9, 198, 249, 0.92) 0%, rgba(4, 93, 233, 0.6808) 100%);
+    border-radius: 20px 0px 0px 20px;
+}
+
+.slider {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.content {
+    height: 100%;
+    width: 50%;
+}
+
+// Css header slider
+.header {
+    position: absolute;
+    top: 25px;
+    width: 100%;
+    &-title {
+        display: block;
+        margin-top: 16px;
+        text-align: center;
+        color: var(--white);
+    }
+    &-imgbox {
+        display: block;
+        margin: 0 auto;
+        width: 70px;
+        height: 70px;
+    }
+}
+
+// Custom arrow for slider
+.custom-next-nav,
+.custom-prev-nav {
+    position: absolute;
+    background-color: transparent;
+    width: 30px;
+    height: 30px;
+    z-index: 999;
+    &::before {
+        font-size: 28px;
+        line-height: unset;
+    }
+}
+
+.custom-prev-nav {
+    left: -1px;
+}
+
+.custom-next-nav {
+    right: -5px;
+}

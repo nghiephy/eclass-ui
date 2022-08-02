@@ -1,0 +1,16 @@
+export { default as IcLanguage } from './Language.js';
+export { default as IcCircleQuestion } from './CircleQuestion.js';
+export { default as IcKeyboard } from './Keyboard.js';
+export { default as IcNotification } from './Notification.js';
+export { default as IcProfile } from './Profile.js';
+export { default as IcMessage } from './Message.js';
+export { default as IcTiktokCoin } from './TiktokCoin.js';
+export { default as IcSetting } from './Setting.js';
+export { default as IcLogout } from './Logout.js';
+export { default as IcFollowing } from './Following.js';
+export { default as IcCamcorder } from './Camcorder.js';
+export { default as IcHome } from './Home.js';
+export { default as IcHashtag } from './Hashtag.js';
+export { default as IcMusicNote } from './MusicNote.js';
+export { default as IcVolume } from './Volume.js';
+export { default as IcFlag } from './Flag.js';
