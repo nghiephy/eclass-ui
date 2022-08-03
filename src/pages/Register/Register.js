@@ -6,11 +6,11 @@ import Button from '~/components/Button';
 import Inputs from '~/components/Inputs';
 import { MyIcon } from '~/components/MyIcons';
 import { IcProfile } from '~/components/MyIcons/regular';
-import styles from './Login.module.scss';
+import styles from './Register.module.scss';
 
 const cx = classNames.bind(styles);
 
-function Login() {
+function Register() {
     const {
         register,
         formState: { errors },
@@ -25,8 +25,10 @@ function Login() {
                 <div className={cx('imgBox')}>
                     <img src={images.logo} alt="logo" className={cx('img')} />
                 </div>
-                <h2 className={cx('label')}>Đăng nhập</h2>
-                <p className={cx('sub-label')}>Bạn đã có tài khoản chưa? Vui lòng đăng nhập để tiếp tục</p>
+                <h2 className={cx('label')}>Đăng ký</h2>
+                <p className={cx('sub-label')}>
+                    Đăng ký ngay tài khoản! Để trải nghiệm các tính năng tuyệt vời trên EClass
+                </p>
             </div>
             <form className={cx('form')} onSubmit={handleSubmit(onSubmit)}>
                 <Inputs
@@ -60,37 +62,48 @@ function Login() {
                     errors={errors}
                 />
 
-                <div className={cx('form-sub-actions')}>
-                    <Inputs
-                        chkradio
-                        className={cx('remember')}
-                        name="remember"
-                        type="checkbox"
-                        label="Ghi nhớ đăng nhập"
-                        register={register}
-                    />
-                    <Button className={cx('forgot')} text>
-                        Quên mật khẩu?
-                    </Button>
-                </div>
+                <Inputs
+                    primary
+                    name="repassword"
+                    type="password"
+                    label="Nhập lại mật khẩu"
+                    autoComplete="on"
+                    register={register}
+                    validate={{
+                        required: 'Nhập lại mật khẩu vào đây',
+                        minLength: { value: 6, message: 'Tối thiểu 6 kí tự' },
+                    }}
+                    errors={errors}
+                />
+
+                <Inputs
+                    primary
+                    name="email"
+                    type="email"
+                    label="Nhập email của bạn"
+                    register={register}
+                    validate={{
+                        required: 'Nhập email của bạn vào đây',
+                        pattern: {
+                            value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                            message: 'Email không hợp lệ',
+                        },
+                    }}
+                    errors={errors}
+                />
 
                 <div className={cx('form-actions')}>
-                    <Inputs submit className={cx('login')} type="submit" value="Đăng nhập" />
-                    <div style={{ marginBottom: '16px' }}></div>
-                    <Button className={cx('login-google')} outline style={{ width: '100%' }}>
-                        <img className={cx('login-google-icon')} alt="google icon" src={images.googleSignIn} />
-                        Đăng nhập với Google
-                    </Button>
+                    <Inputs submit className={cx('login')} type="submit" value="Đăng Ký" />
                 </div>
             </form>
             <div className={cx('footer')}>
-                <span className={cx('title')}>Bạn đã có tài khoản chưa?</span>
-                <Button to="/register" className={cx('register-btn')} text>
-                    Đăng ký ngay
+                <span className={cx('title')}>Bạn đã có tài khoản?</span>
+                <Button to="/login" className={cx('login-btn')} text>
+                    Đăng nhập ngay
                 </Button>
             </div>
         </div>
     );
 }
 
-export default Login;
+export default Register;

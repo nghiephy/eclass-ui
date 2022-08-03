@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import styles from './Inputs.module.scss';
 import { MyIcon } from '~/components/MyIcons';
@@ -16,10 +16,11 @@ function Inputs({
     chkradio = false,
     submit = false,
     text = false,
-    // disabled = false,
     children,
     className,
-    register = () => {},
+    register = () => {
+        return { ref: () => {} };
+    },
     validate = {},
     errors = {},
     classItem = {},
@@ -37,6 +38,9 @@ function Inputs({
     };
     const [showPassword, setShowPassword] = useState(false);
     const inputPasswordRef = useRef();
+    const { ref, ...rest } = register(name, { ...validate });
+
+    // console.log(ref);
 
     const handleShowPass = (e) => {
         setShowPassword(!showPassword);
@@ -60,11 +64,15 @@ function Inputs({
     return (
         <div className={classes}>
             <Comp
+                ref={(e) => {
+                    ref(e);
+                    inputPasswordRef.current = e;
+                }}
                 {...props}
-                ref={inputPasswordRef}
                 id={name}
                 className={cx('form-input')}
-                {...register(name, { ...validate })}
+                // {...register(name, { ...validate })}
+                {...rest}
             />
             {label && (
                 <label htmlFor={name} className={cx('form-label')}>
