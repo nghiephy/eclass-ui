@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import styles from './Inputs.module.scss';
 import { MyIcon } from '~/components/MyIcons';
@@ -71,8 +71,11 @@ function Inputs({
                 {...props}
                 id={name}
                 className={cx('form-input')}
-                // {...register(name, { ...validate })}
+                onKeyUp={(e) => {
+                    e.target.setAttribute('value', e.target.value);
+                }}
                 {...rest}
+                {...passProps}
             />
             {label && (
                 <label htmlFor={name} className={cx('form-label')}>

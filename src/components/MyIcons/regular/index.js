@@ -16,3 +16,4 @@ export { default as IcVolume } from './Volume.js';
 export { default as IcFlag } from './Flag.js';
 export { default as IcHideEyes } from './HideEyes.js';
 export { default as IcShowEyes } from './ShowEyes.js';
+export { default as IcEmail } from './Email.js';

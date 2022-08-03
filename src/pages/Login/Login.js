@@ -69,7 +69,7 @@ function Login() {
                         label="Ghi nhớ đăng nhập"
                         register={register}
                     />
-                    <Button className={cx('forgot')} text>
+                    <Button to="/forgot-password" className={cx('forgot')} text>
                         Quên mật khẩu?
                     </Button>
                 </div>

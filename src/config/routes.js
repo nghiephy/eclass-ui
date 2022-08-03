@@ -7,6 +7,7 @@ const routes = {
     member: '/member',
     grade: '/grade',
     profile: '/profile',
+    forgotPassword: '/forgot-password',
 };
 
 export default routes;

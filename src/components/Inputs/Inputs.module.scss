@@ -80,6 +80,18 @@
     .icon-show {
         cursor: pointer;
     }
+
+    .form-input:not([value='']) {
+        + .form-label {
+            padding: 0 10px;
+            line-height: 1;
+            font-weight: 500;
+            background-color: white;
+            top: 0;
+            display: inline-block;
+            color: var(--primary);
+        }
+    }
 }
 
 .form-group.chkradio {

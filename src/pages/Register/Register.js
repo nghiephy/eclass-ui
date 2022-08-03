@@ -1,11 +1,12 @@
 import classNames from 'classnames/bind';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import images from '~/assets/images';
 import Button from '~/components/Button';
 import Inputs from '~/components/Inputs';
 import { MyIcon } from '~/components/MyIcons';
-import { IcProfile } from '~/components/MyIcons/regular';
+import { IcEmail, IcProfile } from '~/components/MyIcons/regular';
 import styles from './Register.module.scss';
 
 const cx = classNames.bind(styles);
@@ -16,6 +17,7 @@ function Register() {
         formState: { errors },
         handleSubmit,
     } = useForm();
+    const [password, setPassword] = useState('');
 
     const onSubmit = (data) => console.log(data);
 
@@ -54,6 +56,9 @@ function Register() {
                     type="password"
                     label="Mật khẩu"
                     autoComplete="on"
+                    onChange={(e) => {
+                        setPassword(e.target.value);
+                    }}
                     register={register}
                     validate={{
                         required: 'Chưa nhập mật khẩu',
@@ -72,6 +77,13 @@ function Register() {
                     validate={{
                         required: 'Nhập lại mật khẩu vào đây',
                         minLength: { value: 6, message: 'Tối thiểu 6 kí tự' },
+                        validate: {
+                            compareValue: (value) => {
+                                if (value !== password) {
+                                    return 'Mật khẩu nhập lại không khớp';
+                                }
+                            },
+                        },
                     }}
                     errors={errors}
                 />
@@ -81,11 +93,16 @@ function Register() {
                     name="email"
                     type="email"
                     label="Nhập email của bạn"
+                    icon={
+                        <MyIcon className={cx('icon-show')}>
+                            <IcEmail />
+                        </MyIcon>
+                    }
                     register={register}
                     validate={{
                         required: 'Nhập email của bạn vào đây',
                         pattern: {
-                            value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                            value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
                             message: 'Email không hợp lệ',
                         },
                     }}
