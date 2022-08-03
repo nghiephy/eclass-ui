@@ -27,7 +27,7 @@ function LoginRegisterLayout({ children }) {
         slidesToScroll: 1,
         initialSlide: 0,
         autoplay: true,
-        speed: 2000,
+        speed: 1500,
         nextArrow: <SampleNextArrow customNav={cx('custom-next-nav')} />,
         prevArrow: <SamplePrevArrow customNav={cx('custom-prev-nav')} />,
         responsive: [

@@ -1,16 +1,17 @@
 @import 'normalize.css';
 
 :root {
-    --primary: #fe2c55;
+    --primary: #045de9ae;
     --black: #000;
     --white: #fff;
-    --text-color: #161823;
+    --text-color: #35414c;
+    --placeholder-color: #666;
     --tick-color: #20d5ec;
     --text-sidebar-color: #161823bf;
     --text-footer-color: #16182380;
     --border-sidebar-color: rgba(22, 24, 35, 0.12);
 
-    --font-family: 'ProximaNova', sans-serif;
+    --font-family: 'Roboto', sans-serif;
 
     --container-width: 1150px;
     // Default layout
@@ -33,7 +34,7 @@ html {
 body {
     font-family: var(--font-family);
     height: 100vh;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     line-height: 1.5;
     text-rendering: optimizeSpeed;
     color: var(--text-color);
@@ -74,18 +75,28 @@ img {
 
 // Font embeded
 @font-face {
-    font-family: ProximaNova;
-    src: url('/assets/fonts/Proxima-Nova-Regular.woff2');
+    font-family: Roboto;
+    src: url('/assets/fonts/Roboto/Roboto-Thin.ttf');
+    font-weight: 100;
+}
+@font-face {
+    font-family: Roboto;
+    src: url('/assets/fonts/Roboto/Roboto-Light.ttf');
+    font-weight: 300;
+}
+@font-face {
+    font-family: Roboto;
+    src: url('/assets/fonts/Roboto/Roboto-Regular.ttf');
     font-weight: 400;
 }
 @font-face {
-    font-family: ProximaNova;
-    src: url('/assets/fonts/Proxima-Nova-Semibold.woff2');
-    font-weight: 600;
+    font-family: Roboto;
+    src: url('/assets/fonts/Roboto/Roboto-Medium.ttf');
+    font-weight: 500;
 }
 @font-face {
-    font-family: ProximaNova;
-    src: url('/assets/fonts/Proxima-Nova-Bold.woff2');
+    font-family: Roboto;
+    src: url('/assets/fonts/Roboto/Roboto-Bold.ttf');
     font-weight: 700;
 }
 @font-face {

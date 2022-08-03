@@ -1,0 +1,101 @@
+.form-group {
+    position: relative;
+    padding: 0;
+    + .form-group {
+        margin-top: 20px;
+    }
+}
+
+.form-group.primary {
+    .form-input {
+        display: inline-flex;
+        align-items: center;
+        min-width: 100px;
+        background-color: transparent;
+        border: 1px solid transparent;
+        user-select: none;
+        border: 1px solid var(--border-sidebar-color);
+        padding: 10px 34px 10px 20px;
+        font-size: 1.4rem;
+        width: 100%;
+        height: 44px;
+        border-radius: 4px;
+        transition: 0.25s ease;
+        font-family: var(--font-family);
+        + .form-input {
+            margin-left: 8px;
+        }
+
+        &:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        &.disabled {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        &:not(:placeholder-shown) + .form-label,
+        &:focus + .form-label {
+            padding: 0 10px;
+            line-height: 1;
+            font-weight: 500;
+            background-color: white;
+            top: 0;
+            display: inline-block;
+            color: var(--primary);
+        }
+    }
+
+    .form-input + .form-label {
+        font-size: 1.4rem;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 21px;
+        user-select: none;
+        pointer-events: none;
+        color: var(--placeholder-color);
+        font-weight: 400;
+        transition: 0.25s ease;
+        background-color: transparent;
+    }
+
+    .icon {
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--placeholder-color);
+        overflow: hidden;
+        &.show .icon-hide {
+            display: none;
+        }
+    }
+
+    .icon-hide,
+    .icon-show {
+        cursor: pointer;
+    }
+}
+
+.form-group.chkradio {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .form-input {
+        width: 14px;
+        height: 14px;
+    }
+    .form-input + .form-label {
+        font-size: 1.4rem;
+        margin-left: 6px;
+        user-select: none;
+        color: var(--text-color);
+        font-weight: 400;
+        background-color: transparent;
+    }
+}

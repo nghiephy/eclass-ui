@@ -1,0 +1,110 @@
+.wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+}
+.header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 40px auto 20px;
+    .imgBox {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        overflow: hidden;
+        object-fit: cover;
+        cursor: pointer;
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+        img {
+            width: 100%;
+            height: 100%;
+            transform: scale(0.9);
+        }
+    }
+    .label {
+        margin-top: 20px;
+        text-transform: uppercase;
+        user-select: none;
+    }
+    .sub-label {
+        margin-top: 10px;
+        font-size: 1.4rem;
+        text-align: center;
+        user-select: none;
+        color: var(--text-color);
+    }
+}
+
+// CSS form section
+.form {
+    display: block;
+    margin: 30px auto 20px;
+    width: 80%;
+    max-width: 350px;
+}
+
+.form-actions {
+    margin-top: 30px;
+}
+
+.login,
+.login-google {
+    padding: 8px 16px;
+}
+
+.login-google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+    font-weight: normal;
+    border-color: var(--border-sidebar-color);
+    &:hover {
+        border-color: var(--border-sidebar-color);
+    }
+    &-icon {
+        position: relative;
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        margin-right: 10px;
+    }
+}
+
+.form-sub-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+
+    .remember {
+        font-size: 1.4rem;
+        font-weight: 400;
+    }
+
+    .forgot {
+        display: inline;
+        width: auto !important;
+        min-width: unset;
+        font-size: 1.4rem;
+        font-weight: 400;
+        padding: 0;
+    }
+}
+
+.footer {
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+    text-align: center;
+
+    .login-btn {
+        padding: 0;
+        min-width: unset;
+        color: var(--primary);
+        margin-left: 6px;
+    }
+}
