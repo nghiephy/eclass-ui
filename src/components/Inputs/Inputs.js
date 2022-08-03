@@ -14,10 +14,14 @@ function Inputs({
     label = null,
     primary = false,
     chkradio = false,
+    submit = false,
     text = false,
-    disabled = false,
+    // disabled = false,
     children,
     className,
+    register = () => {},
+    validate = {},
+    errors = {},
     classItem = {},
     icon,
     onClick,
@@ -43,32 +47,32 @@ function Inputs({
         }
     };
 
-    // Remove event listener when button disabled
-    if (disabled) {
-        Object.keys(props).forEach((key) => {
-            if (key.startsWith('on') && typeof props[key] === 'function') {
-                delete props[key];
-            }
-        });
-    }
-
     const classes = cx('form-group', {
         [className]: className,
         [classItem.menuItem]: classItem.menuItem,
         primary,
         chkradio,
+        submit,
         text,
-        disabled,
+        errors: errors[name]?.type !== undefined,
     });
 
     return (
         <div className={classes}>
-            <Comp ref={inputPasswordRef} id={name} className={cx('form-input')} {...props} />
+            <Comp
+                {...props}
+                ref={inputPasswordRef}
+                id={name}
+                className={cx('form-input')}
+                {...register(name, { ...validate })}
+            />
             {label && (
                 <label htmlFor={name} className={cx('form-label')}>
                     {label}
                 </label>
             )}
+            <span className={cx('message-error')}>{errors[name]?.type !== undefined && errors[name]?.message}</span>
+
             {type === 'password' ? (
                 <span
                     className={cx('icon', { [classItem.menuIcon]: classItem.menuIcon, show: showPassword })}
