@@ -2,6 +2,7 @@ import config from '~/config';
 
 // Import Layouts
 import { LoginRegisterLayout } from '~/layouts';
+import { HomeLayout } from '~/layouts';
 
 // Import Pages
 import Login from '~/pages/Login';
@@ -18,7 +19,7 @@ const publicRoutes = [
 
 const privateRoutes = [
     { path: config.routes.stream, component: Stream },
-    { path: config.routes.home, component: Home },
+    { path: config.routes.home, component: Home, layout: HomeLayout },
 ];
 
 export { publicRoutes, privateRoutes };

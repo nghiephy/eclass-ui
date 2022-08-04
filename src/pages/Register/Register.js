@@ -110,7 +110,7 @@ function Register() {
                 />
 
                 <div className={cx('form-actions')}>
-                    <Inputs submit className={cx('login')} type="submit" value="Đăng Ký" />
+                    <Inputs submit className={cx('register')} type="submit" value="Đăng Ký" />
                 </div>
             </form>
             <div className={cx('footer')}>

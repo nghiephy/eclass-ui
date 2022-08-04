@@ -13,6 +13,7 @@
     text-align: center;
     user-select: none;
     font-family: var(--font-family);
+    transition: 0.25s ease;
     + .wrapper {
         margin-left: 8px;
     }
@@ -56,6 +57,14 @@
 .text {
     &:hover {
         text-decoration: underline;
+    }
+}
+
+.circle {
+    min-width: unset;
+    border-radius: 999px;
+    &:hover {
+        background-color: var(--cirle-hover-color);
     }
 }
 

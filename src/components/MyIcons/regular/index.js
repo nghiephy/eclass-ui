@@ -17,3 +17,4 @@ export { default as IcFlag } from './Flag.js';
 export { default as IcHideEyes } from './HideEyes.js';
 export { default as IcShowEyes } from './ShowEyes.js';
 export { default as IcEmail } from './Email.js';
+export { default as IcBars } from './Bars.js';

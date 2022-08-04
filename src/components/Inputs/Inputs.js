@@ -7,6 +7,8 @@ import { IcHideEyes, IcShowEyes } from '~/components/MyIcons/regular';
 
 const cx = classNames.bind(styles);
 
+const emptyFunction = () => {};
+
 function Inputs({
     name = '',
     placeholder = ' ',
@@ -19,7 +21,7 @@ function Inputs({
     children,
     className,
     register = () => {
-        return { ref: () => {} };
+        return { ref: emptyFunction, onChange: emptyFunction };
     },
     validate = {},
     errors = {},
@@ -38,9 +40,8 @@ function Inputs({
     };
     const [showPassword, setShowPassword] = useState(false);
     const inputPasswordRef = useRef();
-    const { ref, ...rest } = register(name, { ...validate });
-
-    // console.log(ref);
+    const { ref, onChange, ...rest } = register(name, { ...validate });
+    const [valueInput, setValueInput] = useState('');
 
     const handleShowPass = (e) => {
         setShowPassword(!showPassword);
@@ -69,11 +70,13 @@ function Inputs({
                     inputPasswordRef.current = e;
                 }}
                 {...props}
+                value={valueInput}
+                onChange={(e) => {
+                    onChange(e);
+                    setValueInput(e.target.value);
+                }}
                 id={name}
                 className={cx('form-input')}
-                onKeyUp={(e) => {
-                    e.target.setAttribute('value', e.target.value);
-                }}
                 {...rest}
                 {...passProps}
             />

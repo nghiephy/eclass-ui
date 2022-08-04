@@ -1,0 +1,43 @@
+.wrapper {
+    width: 500px;
+    border-radius: 10px;
+    &--content {
+        width: 500px;
+    }
+}
+
+.modal {
+    display: block;
+    width: 30vw;
+    min-width: 350px;
+    position: relative;
+    padding: 0px 20px;
+}
+
+.title {
+    font-size: 2.4rem;
+    margin-bottom: 4px;
+}
+
+.exits {
+    position: absolute;
+    top: -20px;
+    right: 0px;
+    font-size: 3.8rem;
+    cursor: pointer;
+}
+
+.form {
+    margin-top: 20px;
+    &-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 100%;
+        margin-top: 20px;
+        .cancel {
+            padding: 7.5px 16px;
+            margin-right: 20px;
+        }
+    }
+}

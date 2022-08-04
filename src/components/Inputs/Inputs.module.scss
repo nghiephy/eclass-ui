@@ -81,6 +81,7 @@
         cursor: pointer;
     }
 
+    .form-input:-webkit-autofill,
     .form-input:not([value='']) {
         + .form-label {
             padding: 0 10px;
@@ -113,7 +114,7 @@
 }
 
 .form-group.submit {
-    display: block;
+    display: inline-block;
     min-width: 100px;
     height: 40px;
     border-radius: 4px;

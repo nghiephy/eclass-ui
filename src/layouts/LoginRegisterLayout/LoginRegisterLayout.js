@@ -9,6 +9,7 @@ import images from '~/assets/images';
 
 const cx = classNames.bind(styles);
 
+// Function custom nav arrow for slider
 function SampleNextArrow(props) {
     const { className, customNav, style, onClick } = props;
     return <div className={`${className} ${customNav}`} style={{ ...style, display: 'none' }} onClick={onClick} />;

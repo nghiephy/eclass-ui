@@ -53,7 +53,7 @@ function ForgotPassword() {
                 />
 
                 <div className={cx('form-actions')}>
-                    <Inputs submit className={cx('login')} type="submit" value="Lấy lại mật khẩu" />
+                    <Inputs submit className={cx('get-pass')} type="submit" value="Lấy lại mật khẩu" />
                     <div style={{ marginBottom: '16px' }}></div>
                     <Button to="/login" className={cx('back')} outline style={{ width: '100%' }}>
                         Trở về
