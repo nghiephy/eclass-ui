@@ -2,10 +2,11 @@
 
 :root {
     --primary: #045de9ae;
+    --primary-hover: #e6edf8ae;
     --black: #000;
     --white: #fff;
     --error-color: red;
-    --text-color: #35414c;
+    --text-color: #3c4043;
     --placeholder-color: #666;
     --overlay-color: rgb(0 0 0 / 50%);
     --tick-color: #20d5ec;
@@ -218,4 +219,18 @@ body {
     transition: all 0.3s ease;
     animation: overlay-animation 0.3s forwards;
     background: var(--overlay-color);
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.11);
+    z-index: 1;
+    display: none;
+    &.show {
+        display: block;
+    }
 }

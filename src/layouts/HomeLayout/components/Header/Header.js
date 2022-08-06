@@ -21,14 +21,14 @@ const MENU_ITEMS = [
                 <IcLanguage />
             </MyIcon>
         ),
-        title: 'English',
+        title: 'Ngôn Ngữ',
         children: {
-            title: 'Language',
+            title: 'Ngôn Ngữ',
             data: [
                 {
                     type: 'language',
                     code: 'en',
-                    title: 'English',
+                    title: 'Tiếng Anh',
                 },
                 {
                     type: 'language',
@@ -44,8 +44,8 @@ const MENU_ITEMS = [
                 <IcCircleQuestion />
             </MyIcon>
         ),
-        title: 'Feedback and help',
-        to: '/feedback',
+        title: 'Trang cá nhân',
+        to: '/user',
     },
     {
         icon: (
@@ -53,11 +53,11 @@ const MENU_ITEMS = [
                 <IcKeyboard />
             </MyIcon>
         ),
-        title: 'Keyboard shortcuts',
+        title: 'Cài đặt',
     },
 ];
 
-function Header() {
+function Header({ toggleSidebar }) {
     const [openCreate, setOpenCreate] = useState(false);
     const closeModalCreate = () => setOpenCreate(false);
     const [openJoin, setOpenJoin] = useState(false);
@@ -79,7 +79,7 @@ function Header() {
                     content="Thanh công cụ"
                     placement="bottom"
                 >
-                    <Button circle className={cx('sidebar-btn')}>
+                    <Button circle className={cx('sidebar-btn')} onClick={toggleSidebar}>
                         <MyIcon className={cx('sidebar-icon')}>
                             <IcBars />
                         </MyIcon>
