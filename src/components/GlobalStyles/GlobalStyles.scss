@@ -1,8 +1,10 @@
 @import 'normalize.css';
+@import 'grid';
 
 :root {
     --primary: #045de9ae;
     --primary-hover: #e6edf8ae;
+    --primary-active: #d8e6fcae;
     --black: #000;
     --white: #fff;
     --error-color: red;

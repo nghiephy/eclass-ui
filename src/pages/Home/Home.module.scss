@@ -1,0 +1,14 @@
+.actions-item {
+    border-color: transparent;
+    margin-bottom: 20px;
+    &:hover {
+        text-decoration: none;
+        border-color: var(--primary);
+        background-color: var(--primary-hover);
+    }
+}
+
+.title {
+    padding-left: 16px;
+    margin-bottom: 16px;
+}

@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import Button from '~/components/Button';
+import { NavLink } from 'react-router-dom';
 
 import styles from './ListItem.module.scss';
 
@@ -12,12 +12,12 @@ const Sidebar = ({ title, data, bottomline = 1, ...passProps }) => {
             <div className={cx('list')}>
                 {data.map((item, index) => {
                     return (
-                        <Button to={item.path} index={index} text className={cx('item')}>
+                        <NavLink to={item.path} key={index} className={(nav) => cx('item', { active: nav.isActive })}>
                             <div className={cx('item-imgbox')}>
                                 <img src={item.image} alt="logo class" />
                             </div>
                             {item.name}
-                        </Button>
+                        </NavLink>
                     );
                 })}
             </div>

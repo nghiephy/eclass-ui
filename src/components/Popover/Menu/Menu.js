@@ -24,6 +24,7 @@ function Menu({
     placement = 'top-start',
     hideOnClick = false,
     onChange = defaultFn,
+    ...passProps
 }) {
     const [history, setHistory] = useState([{ data: firstLoad ? items.slice(0, firstLoad) : items }]);
     const current = history[history.length - 1];
@@ -88,11 +89,12 @@ function Menu({
         <Tippy
             interactive
             hideOnClick={hideOnClick}
-            delay={[0, 500]}
+            delay={[0, 400]}
             offset={placement === 'top-start' ? [12, 10] : [12, 14]}
             placement={placement}
             render={(attrs) => renderResult(attrs)}
             onHide={handleResetToFirstPage}
+            {...passProps}
         >
             {children}
         </Tippy>

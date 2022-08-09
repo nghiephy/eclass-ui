@@ -1,6 +1,4 @@
-import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
 import { forwardRef } from 'react';
 
 import styles from './Sidebar.module.scss';
@@ -13,7 +11,7 @@ const SIDEBAR_TOP_ITEMS = [
     {
         image: images.class,
         name: 'Lớp học',
-        path: '/class',
+        path: '/',
     },
     {
         image: images.calendar,

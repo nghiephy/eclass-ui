@@ -19,7 +19,7 @@ function HomeLayout({ children }) {
 
             <Sidebar show={showSidebar} />
 
-            <div>{children}</div>
+            <div className={cx('body')}>{children}</div>
 
             <div className={`overlay ${showSidebar && 'show'}`} onClick={toggleSidebar}></div>
         </div>
