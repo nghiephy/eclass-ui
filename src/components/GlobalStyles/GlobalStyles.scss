@@ -4,6 +4,7 @@
 :root {
     --primary: #045de9ae;
     --primary-hover: #e6edf8ae;
+    --primary-hover-bold: #9ec4f7ae;
     --primary-active: #d8e6fcae;
     --black: #000;
     --white: #fff;
@@ -21,7 +22,7 @@
 
     --container-width: 1150px;
     // Default layout
-    --default-layout-header-height: 60px;
+    --default-layout-header-height: 64px;
     --default-layout-width: 1150px;
     --default-layout-sidebar-width: 356px;
     --default-layout-horizontal-spacer: 24px;

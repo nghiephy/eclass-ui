@@ -16,7 +16,10 @@ const Sidebar = ({ title, data, bottomline = 1, ...passProps }) => {
                             <div className={cx('item-imgbox')}>
                                 <img src={item.image} alt="logo class" />
                             </div>
-                            {item.name}
+                            <div className={cx('item-content')}>
+                                <p className={cx('name')}>{item.name}</p>
+                                <p className={cx('semester')}>{item.semester}</p>
+                            </div>
                         </NavLink>
                     );
                 })}

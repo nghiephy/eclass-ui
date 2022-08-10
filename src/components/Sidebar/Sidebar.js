@@ -33,24 +33,34 @@ const SIDEBAR_BOTTOM_ITEMS = [
 ];
 const TEACH_CLASSES = [
     {
+        image: images.listCheck,
+        name: 'Cần đánh giá',
+        path: '/javascript',
+    },
+    {
         image: images.default_icon_class,
         name: 'Javascript Basic',
-        semeter: 'HK1 2022-2023',
-        path: '/javascript',
+        semester: 'HK1 2022-2023',
+        path: '/stream',
     },
 ];
 const STUDY_CLASSES = [
     {
-        image: images.default_icon_class,
-        name: 'HTML, CSS Basic',
-        semeter: 'HK1 2022-2023',
+        image: images.todolist,
+        name: 'Việc cần làm',
         path: '/javascript',
     },
     {
         image: images.default_icon_class,
+        name: 'HTML, CSS Basic',
+        semester: 'HK1 2022-2023',
+        path: '/stream',
+    },
+    {
+        image: images.default_icon_class,
         name: 'Backend Developer 2022',
-        semeter: 'HK1 2022-2023',
-        path: '/javascript',
+        semester: 'HK1 2022-2023',
+        path: '/stream',
     },
 ];
 
