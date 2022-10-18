@@ -26,3 +26,5 @@ export { default as IcDot } from './Dot.js';
 export { default as IcExercise } from './Exercise.js';
 export { default as IcGradeBook } from './GradeBook.js';
 export { default as IcThreeDotsVertical } from './ThreeDotsVertical.js';
+export { default as IcUpload } from './Upload.js';
+export { default as IcLink } from './Link.js';

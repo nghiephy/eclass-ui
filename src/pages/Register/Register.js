@@ -35,6 +35,23 @@ function Register() {
             <form className={cx('form')} onSubmit={handleSubmit(onSubmit)}>
                 <Inputs
                     primary
+                    name="fullname"
+                    type="text"
+                    label="Họ và tên"
+                    icon={
+                        <MyIcon className={cx('icon-show')}>
+                            <IcProfile />
+                        </MyIcon>
+                    }
+                    register={register}
+                    validate={{
+                        required: 'Chưa nhập họ tên',
+                        minLength: { value: 6, message: 'Tối thiểu 6 kí tự' },
+                    }}
+                    errors={errors}
+                />
+                <Inputs
+                    primary
                     name="username"
                     type="text"
                     label="Tài khoản"
@@ -56,6 +73,7 @@ function Register() {
                     type="password"
                     label="Mật khẩu"
                     autoComplete="on"
+                    value={password}
                     onChange={(e) => {
                         setPassword(e.target.value);
                     }}

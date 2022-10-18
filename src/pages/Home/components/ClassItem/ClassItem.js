@@ -17,7 +17,7 @@ const MENU_ITEMS = [
     },
 ];
 
-function ClassItem() {
+function ClassItem({ data }) {
     return (
         <div className={'xl-2-4 l-3 m-4 c-12 g-16 col'}>
             <div className={cx('wrapper')}>
@@ -43,10 +43,10 @@ function ClassItem() {
                     <img src={images.classCover} alt="class cover" className={cx('header-img')} />
                     <div className={cx('header-content')}>
                         <div className={cx('name-class')}>
-                            <h2 className={cx('name')}>Thực tập thực tế - Nhóm 1Thực tập thực tế - Nhóm 1</h2>
-                            <p className={cx('semester')}>HK1 2022-2034</p>
+                            <h2 className={cx('name')}>{data.className}</h2>
+                            <p className={cx('semester')}>{data.semester}</p>
                         </div>
-                        <h5 className={cx('teacher-name')}>Thái Minh Tuấn</h5>
+                        <h5 className={cx('teacher-name')}>Giáo viên: {data.teacherName}</h5>
                     </div>
                 </div>
                 <div className={cx('body')}>

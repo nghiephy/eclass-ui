@@ -8,14 +8,15 @@
 
 .modal {
     display: block;
-    width: 30vw;
+    width: 40vw;
+    max-width: 100px;
     min-width: 350px;
     position: relative;
     padding: 0px 20px;
 }
 
 .title {
-    font-size: 2.4rem;
+    font-size: 1.8rem;
     margin-bottom: 4px;
 }
 
@@ -35,9 +36,17 @@
         align-items: center;
         width: 100%;
         margin-top: 20px;
-        .cancel {
+        .cancel,
+        .add {
             padding: 7.5px 16px;
             margin-right: 20px;
         }
     }
+}
+
+.error-mesg {
+    margin-left: 4px;
+    margin-top: 2px;
+    font-size: 1.2rem;
+    color: var(--error-color);
 }

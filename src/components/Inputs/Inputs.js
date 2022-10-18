@@ -20,6 +20,7 @@ function Inputs({
     text = false,
     children,
     className,
+    refParent = {},
     register = () => {
         return { ref: emptyFunction, onChange: emptyFunction };
     },
@@ -68,6 +69,7 @@ function Inputs({
                 ref={(e) => {
                     ref(e);
                     inputPasswordRef.current = e;
+                    refParent.current = e;
                 }}
                 {...props}
                 value={valueInput}
