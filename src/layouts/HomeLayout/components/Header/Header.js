@@ -2,6 +2,7 @@ import classNames from 'classnames/bind';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '~/components/Button';
 import { MyIcon } from '~/components/MyIcons';
@@ -11,10 +12,20 @@ import { CreateClass, JoinClass } from '../Modals';
 import styles from './Header.module.scss';
 import images from '~/assets/images';
 import Menu from '~/components/Popover/Menu';
+import useLogout from '~/hooks/useLogout';
 
 const cx = classNames.bind(styles);
 
 const MENU_ITEMS = [
+    {
+        icon: (
+            <MyIcon>
+                <IcCircleQuestion />
+            </MyIcon>
+        ),
+        title: 'Trang cá nhân',
+        to: '/user',
+    },
     {
         icon: (
             <MyIcon>
@@ -41,19 +52,13 @@ const MENU_ITEMS = [
     {
         icon: (
             <MyIcon>
-                <IcCircleQuestion />
-            </MyIcon>
-        ),
-        title: 'Trang cá nhân',
-        to: '/user',
-    },
-    {
-        icon: (
-            <MyIcon>
                 <IcKeyboard />
             </MyIcon>
         ),
-        title: 'Cài đặt',
+        title: 'Đăng xuất',
+        onClick: () => {
+            alert('Log out');
+        },
     },
 ];
 
@@ -62,9 +67,18 @@ function Header({ toggleSidebar }) {
     const closeModalCreate = () => setOpenCreate(false);
     const [openJoin, setOpenJoin] = useState(false);
     const closeModalJoin = () => setOpenJoin(false);
+    const navigate = useNavigate();
+    const logout = useLogout();
 
-    const handleOnChange = (menuItem) => {
-        console.log(menuItem);
+    const signOut = async () => {
+        await logout();
+        navigate('/login');
+    };
+
+    const handleOnChange = async (menuItem) => {
+        if (menuItem.title === 'Đăng xuất') {
+            signOut();
+        }
     };
 
     return (

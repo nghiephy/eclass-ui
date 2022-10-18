@@ -23,6 +23,7 @@ function Menu({
     firstLoad = null,
     placement = 'top-start',
     hideOnClick = false,
+    onClick,
     onChange = defaultFn,
     ...passProps
 }) {
