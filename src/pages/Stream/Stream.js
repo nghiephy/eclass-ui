@@ -1,10 +1,12 @@
 import classNames from 'classnames/bind';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import images from '~/assets/images';
 import Button from '~/components/Button';
 import Images from '~/components/Images';
 import { Post } from './components/Modals';
+import PostItem from './components/PostItem';
 
 import styles from './Stream.module.scss';
 
@@ -28,7 +30,22 @@ function Stream() {
                 </Button>
             </div>
             <div className={cx('container')}>
-                <div className={cx('annouce-board')}>Announcement Board</div>
+                <div className={cx('annouce-board')}>
+                    <h4 className={cx('annouce-title')}>Bảng thông báo</h4>
+                    <div className={cx('annouce-panel')}>
+                        <h2 className={cx('label')}>Mã mời</h2>
+                        <h2 className={cx('key')}>012SBAA</h2>
+                    </div>
+                    <div className={cx('annouce-panel', 'view-all')}>
+                        <h2 className={cx('label')}>Công việc sắp tới</h2>
+                        <Link to="" className={cx('item')}>
+                            - Làm bài tập trang 22 Làm bài tập trang 22
+                        </Link>
+                        <Button to="/" text className={cx('control-btn')}>
+                            Xem tất cả
+                        </Button>
+                    </div>
+                </div>
                 <div className={cx('timeline')}>
                     <div className={cx('post-section')} onClick={toggleSidebar}>
                         <Images src={images.logo} alt="avatar" className={cx('avatar')} />
@@ -36,6 +53,8 @@ function Stream() {
                     </div>
 
                     <Post open={openPost} closeOnDocumentClick onClose={closeModalPost} />
+
+                    <PostItem />
                 </div>
             </div>
         </div>

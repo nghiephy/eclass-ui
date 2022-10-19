@@ -10,9 +10,7 @@ import AttachItem from './AttachItem';
 
 const cx = classNames.bind(styles);
 
-function Attachment({ className, ...passProps }) {
-    const [linkList, setLinkList] = useState([]);
-
+function Attachment({ className, setLinkList, ...passProps }) {
     const classes = cx('wrapper', {
         [className]: className,
     });
@@ -24,33 +22,9 @@ function Attachment({ className, ...passProps }) {
         setOpenAddLink(!openAddLink);
     };
 
-    console.log(linkList);
-
     return (
         <div className={classes}>
-            <div className={cx('title')}>
-                <h2>Đính kèm</h2>
-            </div>
             <div className={cx('actions')}>
-                <Tippy
-                    delay={[250, 80]}
-                    offset={[0, 0]}
-                    moveTransition="transform 0.2s ease-out"
-                    hideOnClick={false}
-                    arrow={false}
-                    content="Tải lên"
-                    placement="bottom"
-                >
-                    <div className={cx('action-item')}>
-                        <label htmlFor="file-input" className={cx('label')}>
-                            <MyIcon>
-                                <IcUpload />
-                            </MyIcon>
-                        </label>
-                        <input style={{ display: 'none' }} type="file" multiple id="file-input" name="file" />
-                    </div>
-                </Tippy>
-
                 <Tippy
                     delay={[250, 80]}
                     offset={[0, 0]}
@@ -75,13 +49,6 @@ function Attachment({ className, ...passProps }) {
                         />
                     </div>
                 </Tippy>
-            </div>
-            <div className={cx('review')}>
-                {linkList.map((item, index) => {
-                    // let driver = new webdriver.Builder().forBrowser(webdriver.Browser.FIREFOX).build();
-
-                    return <AttachItem key={index} data={{ url: item }} />;
-                })}
             </div>
         </div>
     );

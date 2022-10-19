@@ -40,7 +40,6 @@ function Login() {
                 const accessToken = dataRespone.accessToken;
                 let roles = ['user'];
                 setAuth({ ...dataRespone.user, roles, accessToken });
-                console.log(dataRespone);
                 navigate(from, { replace: true });
             }
         } catch (err) {

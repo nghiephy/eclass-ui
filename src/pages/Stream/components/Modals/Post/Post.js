@@ -1,3 +1,4 @@
+import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
 import { useForm } from 'react-hook-form';
 import Popup from 'reactjs-popup';
@@ -6,11 +7,14 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useState } from 'react';
 
+import { MyIcon } from '~/components/MyIcons';
+import { IcLink, IcUpload } from '~/components/MyIcons/regular';
 import Button from '~/components/Button';
 import Inputs from '~/components/Inputs';
 
 import styles from './Post.module.scss';
 import Attachment from '~/components/Attachment';
+import AttachItem from '~/components/Attachment/AttachItem';
 
 const cx = classNames.bind(styles);
 
@@ -33,6 +37,8 @@ const toolbarOptions = [
 
 function Post({ onClose, ...props }) {
     const [convertedText, setConvertedText] = useState('');
+    const [linkList, setLinkList] = useState([]);
+    // const [fileList, setFileList] = useState();
     const {
         register,
         formState: { errors },
@@ -42,6 +48,11 @@ function Post({ onClose, ...props }) {
     const onSubmit = (data) => {
         console.log(data);
         console.log(convertedText);
+        console.log(linkList);
+    };
+
+    const changeHandler = (event) => {
+        console.log(event.target.files);
     };
 
     const onClosePost = () => {
@@ -72,10 +83,45 @@ function Post({ onClose, ...props }) {
                         />
                     </div>
 
-                    {/* <div className={cx('form-attachment')}>
-                        <input {...register('file')} type="file" multiple name="file" />
-                    </div> */}
-                    <Attachment />
+                    <div className={cx('attach-section')}>
+                        <div className={cx('attach-file')}>
+                            <Tippy
+                                delay={[250, 80]}
+                                offset={[0, 0]}
+                                moveTransition="transform 0.2s ease-out"
+                                hideOnClick={false}
+                                arrow={false}
+                                content="Tải lên"
+                                placement="bottom"
+                            >
+                                <div className={cx('action-item')}>
+                                    <label htmlFor="file-input" className={cx('label')}>
+                                        <MyIcon>
+                                            <IcUpload />
+                                        </MyIcon>
+                                    </label>
+                                    <input
+                                        {...register('file')}
+                                        style={{ display: 'none' }}
+                                        type="file"
+                                        multiple
+                                        id="file-input"
+                                        name="file"
+                                        onChange={changeHandler}
+                                    />
+                                </div>
+                            </Tippy>
+                        </div>
+                        <Attachment setLinkList={setLinkList} />
+                    </div>
+
+                    <div className={cx('review')}>
+                        {linkList.map((item, index) => {
+                            return (
+                                <AttachItem key={index} setLinkList={setLinkList} data={{ url: item, index: index }} />
+                            );
+                        })}
+                    </div>
 
                     <div className={cx('form-actions')}>
                         <Button outline className={cx('cancel')} onClick={onClosePost}>

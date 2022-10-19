@@ -24,7 +24,7 @@ const MENU_ITEMS = [
             </MyIcon>
         ),
         title: 'Trang cá nhân',
-        to: '/user',
+        to: '/profile',
     },
     {
         icon: (
@@ -56,9 +56,6 @@ const MENU_ITEMS = [
             </MyIcon>
         ),
         title: 'Đăng xuất',
-        onClick: () => {
-            alert('Log out');
-        },
     },
 ];
 

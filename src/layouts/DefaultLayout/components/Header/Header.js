@@ -45,7 +45,7 @@ const MENU_ITEMS = [
             </MyIcon>
         ),
         title: 'Trang cá nhân',
-        to: '/user',
+        to: '/profile',
     },
     {
         icon: (
@@ -53,7 +53,7 @@ const MENU_ITEMS = [
                 <IcKeyboard />
             </MyIcon>
         ),
-        title: 'Cài đặt',
+        title: 'Đăng xuất',
     },
 ];
 const DATA_TABS = [

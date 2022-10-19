@@ -23,7 +23,6 @@ function Home() {
                 const response = await axiosPrivate.get('/class/getall', {
                     signal: controller.signal,
                 });
-                console.log(response.data.data);
                 isMounted && setClasses(response.data.data);
             } catch (err) {
                 console.log(err);

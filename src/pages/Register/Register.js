@@ -1,6 +1,7 @@
 import classNames from 'classnames/bind';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 import images from '~/assets/images';
 import Button from '~/components/Button';
@@ -8,18 +9,36 @@ import Inputs from '~/components/Inputs';
 import { MyIcon } from '~/components/MyIcons';
 import { IcEmail, IcProfile } from '~/components/MyIcons/regular';
 import styles from './Register.module.scss';
+import axios from '~/api/axios';
+import Popup from 'reactjs-popup';
 
 const cx = classNames.bind(styles);
 
 function Register() {
+    const navigate = useNavigate();
     const {
         register,
         formState: { errors },
         handleSubmit,
     } = useForm();
     const [password, setPassword] = useState('');
+    const [openSuccess, setOpenSuccess] = useState(false);
+    const closeModalSuccess = () => setOpenSuccess(false);
 
-    const onSubmit = (data) => console.log(data);
+    const handleRegister = async (data) => {
+        try {
+            const regisResponse = await axios.post('user/register', { ...data });
+
+            console.log(regisResponse);
+            setOpenSuccess(true);
+        } catch (err) {
+            alert('Vui lòng thử một tài khoản khác!');
+        }
+    };
+
+    const onSubmit = (data) => {
+        handleRegister(data);
+    };
 
     return (
         <div className={cx('wrapper')}>
@@ -137,6 +156,29 @@ function Register() {
                     Đăng nhập ngay
                 </Button>
             </div>
+
+            <Popup onClose={closeModalSuccess} closeOnDocumentClick open={openSuccess}>
+                <div className={cx('modal')}>
+                    <div className={cx('title')} style={{ fontWeight: 500, textAlign: 'center', marginBottom: '15px' }}>
+                        Đăng ký thành công!
+                    </div>
+                    <div className={cx('sub-title')} style={{ textAlign: 'center' }}>
+                        Nhớ cập nhật thêm thông tin cho mọi người hiểu thêm về bàn nhé! <br />
+                    </div>
+                    <div className={cx('form-actions')}>
+                        <Button
+                            primary
+                            className={cx('cancel')}
+                            onClick={() => {
+                                navigate('/login');
+                            }}
+                            style={{ margin: '0 auto' }}
+                        >
+                            Đăng nhập
+                        </Button>
+                    </div>
+                </div>
+            </Popup>
         </div>
     );
 }

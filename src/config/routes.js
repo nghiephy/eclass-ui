@@ -2,7 +2,7 @@ const routes = {
     home: '/',
     login: '/login',
     register: '/register',
-    stream: '/stream',
+    stream: '/stream/:id',
     classwork: '/classwork',
     member: '/member',
     grade: '/grade',

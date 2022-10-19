@@ -11,13 +11,27 @@ import styles from './ClassItem.module.scss';
 
 const cx = classNames.bind(styles);
 
-const MENU_ITEMS = [
+const MENU_ITEMS_STUDY = [
     {
         title: 'Huỷ đăng ký',
     },
 ];
+const MENU_ITEMS_TEACH = [
+    {
+        title: 'Chỉnh sửa',
+    },
+    {
+        title: 'Xoá',
+    },
+];
 
 function ClassItem({ data }) {
+    const handleOnChange = async (menuItem) => {
+        if (menuItem.title === 'Huỷ đăng ký') {
+            alert('Huy dang ky');
+        }
+    };
+
     return (
         <div className={'xl-2-4 l-3 m-4 c-12 g-16 col'}>
             <div className={cx('wrapper')}>
@@ -28,7 +42,8 @@ function ClassItem({ data }) {
                         trigger={'click'}
                         placement="bottom-end"
                         delay={[50, 50]}
-                        items={MENU_ITEMS}
+                        items={data.userId === data.teacherId ? MENU_ITEMS_TEACH : MENU_ITEMS_STUDY}
+                        onChange={handleOnChange}
                         className={cx('menu-more')}
                     >
                         <Button circle className={cx('more-btn')}>
@@ -42,10 +57,10 @@ function ClassItem({ data }) {
                 <div className={cx('header')}>
                     <img src={images.classCover} alt="class cover" className={cx('header-img')} />
                     <div className={cx('header-content')}>
-                        <div className={cx('name-class')}>
+                        <Link to={`/stream/${data.classId}`} className={cx('name-class')}>
                             <h2 className={cx('name')}>{data.className}</h2>
                             <p className={cx('semester')}>{data.semester}</p>
-                        </div>
+                        </Link>
                         <h5 className={cx('teacher-name')}>Giáo viên: {data.teacherName}</h5>
                     </div>
                 </div>

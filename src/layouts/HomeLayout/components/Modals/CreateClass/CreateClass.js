@@ -26,7 +26,6 @@ function CreateClass({ onClose, ...props }) {
     const closeModalSuccess = () => setOpenSuccess(false);
 
     const createClass = async (data) => {
-        console.log(data);
         try {
             const response = await axiosPrivate.post('/class/create', JSON.stringify(data));
             setEnrollKey(response.data.data.enrollKey);
