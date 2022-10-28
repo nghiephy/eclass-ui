@@ -7,6 +7,9 @@
     display: flex;
     justify-content: flex-start;
     margin-bottom: 10px;
+    &:hover {
+        background: var(--primary-hover);
+    }
 }
 .img-box {
     height: 100%;
@@ -22,7 +25,8 @@
     }
 }
 .body {
-    flex: 1;
+    display: block;
+    width: 78%;
     padding-right: 10px;
     position: relative;
     .exits {
@@ -32,6 +36,16 @@
         transform: translateY(-50%);
         font-size: 3rem;
         cursor: pointer;
+    }
+    .title {
+        margin-top: 5px;
+    }
+    .title,
+    .url {
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .url {
         font-size: 1.3rem;

@@ -24,6 +24,7 @@
             img {
                 width: 100%;
                 height: 100%;
+                object-fit: cover;
             }
             label {
                 position: absolute;
@@ -48,7 +49,7 @@
             color: var(--text-color);
             user-select: none;
             .name {
-                font-size: 1.8rem;
+                font-size: 2.4rem;
                 font-weight: bold;
                 color: black;
                 margin-bottom: 8px;
@@ -97,10 +98,11 @@
         border: 1px solid var(--error-color);
     }
 }
+
 .form-section-title {
     font-size: 2.4rem;
     color: var(--overlay-color);
-    margin-bottom: 10px;
+    margin-bottom: 30px;
 }
 
 .image-block {
@@ -126,7 +128,42 @@
 }
 
 .update-btn {
-    // margin-top: 20px;
-    // left: 50%;
-    // transform: translateX(-50%);
+    color: white;
+}
+
+// Modal success
+.modal {
+    display: block;
+    width: 30vw;
+    min-width: 350px;
+    position: relative;
+    padding: 0px 20px;
+}
+
+.title {
+    font-size: 2.4rem;
+    margin-bottom: 4px;
+}
+
+.exits {
+    position: absolute;
+    top: -20px;
+    right: 0px;
+    font-size: 3.8rem;
+    cursor: pointer;
+}
+
+.form {
+    margin-top: 20px;
+    &-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 100%;
+        margin-top: 20px;
+        .cancel {
+            padding: 7.5px 16px;
+            margin-right: 20px;
+        }
+    }
 }

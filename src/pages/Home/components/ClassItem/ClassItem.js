@@ -57,7 +57,7 @@ function ClassItem({ data }) {
                 <div className={cx('header')}>
                     <img src={images.classCover} alt="class cover" className={cx('header-img')} />
                     <div className={cx('header-content')}>
-                        <Link to={`/stream/${data.classId}`} className={cx('name-class')}>
+                        <Link to={`/stream?id=${data.classId}`} className={cx('name-class')}>
                             <h2 className={cx('name')}>{data.className}</h2>
                             <p className={cx('semester')}>{data.semester}</p>
                         </Link>

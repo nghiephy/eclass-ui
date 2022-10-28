@@ -6,6 +6,7 @@ const images = {
     noImage: require('~/assets/images/no_image.png'),
     noAvatar: require('~/assets/images/no_avatar.jpg'),
     logoLink: require('~/assets/images/logo_link.png'),
+    fileIcon: require('~/assets/images/file_icon.png'),
     default_icon_class: require('~/assets/images/icons/default_icon_class.png'),
     saved: require('~/assets/images/icons/saved.png'),
     setting: require('~/assets/images/icons/setting.png'),

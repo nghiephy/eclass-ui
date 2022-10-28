@@ -8,9 +8,10 @@ import 'react-quill/dist/quill.snow.css';
 import { useState } from 'react';
 
 import { MyIcon } from '~/components/MyIcons';
-import { IcLink, IcUpload } from '~/components/MyIcons/regular';
+import { IcUpload } from '~/components/MyIcons/regular';
 import Button from '~/components/Button';
 import Inputs from '~/components/Inputs';
+import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 
 import styles from './Post.module.scss';
 import Attachment from '~/components/Attachment';
@@ -36,28 +37,59 @@ const toolbarOptions = [
 ];
 
 function Post({ onClose, ...props }) {
+    const axiosPrivate = useAxiosPrivate();
     const [convertedText, setConvertedText] = useState('');
     const [linkList, setLinkList] = useState([]);
-    // const [fileList, setFileList] = useState();
+    const [fileList, setFileList] = useState();
     const {
         register,
         formState: { errors },
         handleSubmit,
     } = useForm();
 
-    const onSubmit = (data) => {
-        console.log(data);
-        console.log(convertedText);
-        console.log(linkList);
+    const onSubmit = async (data) => {
+        const formData = new FormData();
+        formData.append('content', convertedText);
+        formData.append('links', linkList);
+        if (fileList) {
+            for (let i = 0; i < fileList.length; i++) {
+                formData.append('files', fileList[i]);
+            }
+        }
+
+        const currURL = window.location.href;
+        const classId = currURL[currURL.length - 1];
+
+        formData.append('classId', parseInt(classId));
+        formData.append('type', 'TB');
+
+        try {
+            const response = await axiosPrivate.post('/post/create', formData, {
+                headers: {
+                    'content-type': 'multipart/form-data',
+                },
+            });
+            window.location.reload();
+        } catch (err) {
+            alert('Đăng thông báo thất bại!');
+        }
     };
 
     const changeHandler = (event) => {
-        console.log(event.target.files);
+        setFileList(event.target.files);
     };
 
     const onClosePost = () => {
         onClose();
         setConvertedText('');
+    };
+
+    const deleteItemLink = (index) => {
+        setLinkList((prev) => {
+            const array = [...prev];
+            array.splice(index, 1);
+            return array;
+        });
     };
 
     return (
@@ -118,7 +150,11 @@ function Post({ onClose, ...props }) {
                     <div className={cx('review')}>
                         {linkList.map((item, index) => {
                             return (
-                                <AttachItem key={index} setLinkList={setLinkList} data={{ url: item, index: index }} />
+                                <AttachItem
+                                    key={index}
+                                    deleteItemLink={deleteItemLink}
+                                    data={{ url: item, index: index }}
+                                />
                             );
                         })}
                     </div>

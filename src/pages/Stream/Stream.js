@@ -1,24 +1,54 @@
 import classNames from 'classnames/bind';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 
 import images from '~/assets/images';
 import Button from '~/components/Button';
 import Images from '~/components/Images';
 import { Post } from './components/Modals';
 import PostItem from './components/PostItem';
+import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 
 import styles from './Stream.module.scss';
 
 const cx = classNames.bind(styles);
 
 function Stream() {
+    let [searchParams, setSearchParams] = useSearchParams();
+    const axiosPrivate = useAxiosPrivate();
+    const [posts, setPosts] = useState([]);
+    const [classId, setClassId] = useState();
+    const [classData, setClassData] = useState();
     const [openPost, setOpenCreate] = useState(false);
     const closeModalPost = () => setOpenCreate(false);
 
     const toggleSidebar = () => {
         setOpenCreate(!openPost);
     };
+
+    const getPostData = async (classId) => {
+        const dataPost = await axiosPrivate.get(`/class/getpost/${classId}`);
+        setPosts(dataPost.data.data);
+    };
+    const getClassData = async (classId) => {
+        const dataClass = await axiosPrivate.get(`/class/${classId}`);
+        setClassData(dataClass.data.data);
+        console.log(dataClass);
+    };
+
+    useEffect(() => {
+        const params = [];
+
+        for (let entry of searchParams.entries()) {
+            params.push(entry);
+        }
+        params.map(([keyVa, value]) => {
+            if (keyVa === 'id') {
+                getClassData(value);
+                getPostData(value);
+            }
+        });
+    }, []);
 
     return (
         <div className={cx('wrapper')}>
@@ -54,7 +84,9 @@ function Stream() {
 
                     <Post open={openPost} closeOnDocumentClick onClose={closeModalPost} />
 
-                    <PostItem />
+                    {posts.map((post, index) => {
+                        return <PostItem key={index} data={post} />;
+                    })}
                 </div>
             </div>
         </div>
