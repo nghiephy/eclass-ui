@@ -1,6 +1,7 @@
 import classNames from 'classnames/bind';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '~/components/Button';
 import { MyIcon } from '~/components/MyIcons';
@@ -11,10 +12,21 @@ import images from '~/assets/images';
 import Menu from '~/components/Popover/Menu';
 import { Link } from 'react-router-dom';
 import TabList from '../TabList';
+import useLogout from '~/hooks/useLogout';
+import useAuth from '~/hooks/useAuth';
 
 const cx = classNames.bind(styles);
 
 const MENU_ITEMS = [
+    {
+        icon: (
+            <MyIcon>
+                <IcCircleQuestion />
+            </MyIcon>
+        ),
+        title: 'Trang cá nhân',
+        to: '/profile',
+    },
     {
         icon: (
             <MyIcon>
@@ -37,15 +49,6 @@ const MENU_ITEMS = [
                 },
             ],
         },
-    },
-    {
-        icon: (
-            <MyIcon>
-                <IcCircleQuestion />
-            </MyIcon>
-        ),
-        title: 'Trang cá nhân',
-        to: '/profile',
     },
     {
         icon: (
@@ -76,8 +79,19 @@ const DATA_TABS = [
 ];
 
 function Header({ toggleSidebar }) {
+    const navigate = useNavigate();
+    const logout = useLogout();
+    const { auth } = useAuth();
+
+    const signOut = async () => {
+        await logout();
+        navigate('/login');
+    };
+
     const handleOnChange = (menuItem) => {
-        console.log(menuItem);
+        if (menuItem.title === 'Đăng xuất') {
+            signOut();
+        }
     };
 
     return (
@@ -99,11 +113,12 @@ function Header({ toggleSidebar }) {
                     </Button>
                 </Tippy>
 
-                <div className={cx('class-name')}>
-                    <Link to="/stream" className={cx('name')}>
-                        Javascript
-                    </Link>
-                </div>
+                <Link to="/" className={cx('logo')}>
+                    <div className={cx('logo-imgbox')}>
+                        <img src={images.logo} alt="logo"></img>
+                    </div>
+                    <h2 className={cx('logo-title')}>EClass</h2>
+                </Link>
             </div>
 
             <div className={cx('header-middle')}>
@@ -114,7 +129,11 @@ function Header({ toggleSidebar }) {
                 <Menu placement="bottom-end" arrow items={MENU_ITEMS} onChange={handleOnChange}>
                     <Button circle className={cx('user')}>
                         <div className={cx('user-imgbox')}>
-                            <img src={images.logo} alt="user avatar" className={cx('user-img')} />
+                            <img
+                                src={auth.avatar ? `http://localhost:8080${auth.avatar}` : images.logo}
+                                alt="user avatar"
+                                className={cx('user-img')}
+                            />
                         </div>
                     </Button>
                 </Menu>

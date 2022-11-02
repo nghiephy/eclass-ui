@@ -1,7 +1,4 @@
-import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
-import { useForm } from 'react-hook-form';
-import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import 'react-quill/dist/quill.snow.css';
 import { useState, useEffect } from 'react';
@@ -10,13 +7,13 @@ import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 import { MyIcon } from '~/components/MyIcons';
 import { IcThreeDotsVertical } from '~/components/MyIcons/regular';
 import Button from '~/components/Button';
-import Inputs from '~/components/Inputs';
 
 import styles from './PostItem.module.scss';
 import Images from '~/components/Images';
 import images from '~/assets/images';
 import Menu from '~/components/Popover/Menu';
 import AttachItem from '~/components/Attachment/AttachItem';
+import CommentForm from './CommentForm';
 
 const cx = classNames.bind(styles);
 
@@ -31,9 +28,36 @@ const MENU_ITEMS_POST = [
 
 function PostItem({ data }) {
     const axiosPrivate = useAxiosPrivate();
+    const [showMoreCmt, setShowMoreCmt] = useState(true);
     const [attachment, setAttachment] = useState();
+    const [comments, setComments] = useState([]);
+
     const handleOnChange = async (menuItem) => {
         console.log(menuItem);
+    };
+
+    const getAllComment = async () => {
+        const allCommentRes = await axiosPrivate.get(`/comment/get-all`, {
+            params: {
+                postId: data.postId,
+                classId: data.classId,
+            },
+        });
+        console.log(allCommentRes);
+        setComments(allCommentRes.data.allComment);
+    };
+
+    console.log(comments);
+
+    const handleSubmitComment = async (comment) => {
+        console.log('Comment', comment);
+        const dataCommentRes = await axiosPrivate.post(`/comment/create`, {
+            content: comment,
+            postId: data.postId,
+            classId: data.classId,
+        });
+        console.log(dataCommentRes);
+        await getAllComment();
     };
 
     const getAttachment = async () => {
@@ -43,6 +67,7 @@ function PostItem({ data }) {
 
     useEffect(() => {
         getAttachment();
+        getAllComment();
     }, []);
 
     return (
@@ -113,6 +138,52 @@ function PostItem({ data }) {
                             className={cx('body-attach-item')}
                             data={{ url: 'url-https', title: '', index: 1 }}
                         /> */}
+                    </div>
+                    <CommentForm data={{ avatar: data.avatar }} handleSubmit={handleSubmitComment} />
+                    <div className={cx('body-comment-section', { 'show-more-cmt': showMoreCmt })}>
+                        {comments.map((comment, index) => {
+                            return (
+                                <div key={index} className={cx('comment-item')}>
+                                    <div className={cx('img-box')}>
+                                        <Images
+                                            alt="user-avatar"
+                                            src={
+                                                comment.avatar
+                                                    ? `http://localhost:8080${comment.avatar}`
+                                                    : images.noAvatar
+                                            }
+                                        />
+                                    </div>
+                                    <div className={cx('comment-item-body')}>
+                                        <div className={cx('header')}>
+                                            <h4 className={cx('fullname')}>{comment.fullName}</h4>
+                                            <p className={cx('time')}>{comment.createdAt}</p>
+                                        </div>
+                                        <div className={cx('content')}>{comment.content}</div>
+                                        {/* <Button text className={cx('btn-reply')}>
+                                    Trả lời
+                                </Button> */}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                        {showMoreCmt ? (
+                            <Button
+                                onClick={() => setShowMoreCmt((prev) => !prev)}
+                                text
+                                className={cx('show-more-btn')}
+                            >
+                                Xem tất cả
+                            </Button>
+                        ) : (
+                            <Button
+                                onClick={() => setShowMoreCmt((prev) => !prev)}
+                                text
+                                className={cx('show-less-btn')}
+                            >
+                                Thu gọn
+                            </Button>
+                        )}
                     </div>
                 </div>
             </div>

@@ -1,9 +1,10 @@
 import classNames from 'classnames/bind';
-import { forwardRef } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 
 import styles from './Sidebar.module.scss';
 import ListItem from './components/ListItem';
 import images from '~/assets/images';
+import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 
 const cx = classNames.bind(styles);
 
@@ -37,12 +38,6 @@ const TEACH_CLASSES = [
         name: 'Cần đánh giá',
         path: '/javascript',
     },
-    {
-        image: images.default_icon_class,
-        name: 'Javascript Basic',
-        semester: 'HK1 2022-2023',
-        path: '/stream',
-    },
 ];
 const STUDY_CLASSES = [
     {
@@ -50,27 +45,42 @@ const STUDY_CLASSES = [
         name: 'Việc cần làm',
         path: '/javascript',
     },
-    {
-        image: images.default_icon_class,
-        name: 'HTML, CSS Basic',
-        semester: 'HK1 2022-2023',
-        path: '/stream',
-    },
-    {
-        image: images.default_icon_class,
-        name: 'Backend Developer 2022',
-        semester: 'HK1 2022-2023',
-        path: '/stream',
-    },
 ];
 
 const Sidebar = forwardRef(({ show, ...passProps }, ref) => {
+    const axiosPrivate = useAxiosPrivate();
+    const [classes, setClasses] = useState({});
+
+    useEffect(() => {
+        let isMounted = true;
+        const controller = new AbortController();
+
+        const getClasses = async () => {
+            try {
+                const response = await axiosPrivate.get('/class/getall', {
+                    signal: controller.signal,
+                });
+                isMounted && setClasses(response.data.data);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        getClasses();
+
+        return () => {
+            isMounted = false;
+            controller.abort();
+        };
+    }, []);
+
+    console.log(classes);
+
     return (
         <div {...passProps} className={cx('wrapper', { show: show })}>
-            <ListItem data={SIDEBAR_TOP_ITEMS} bottomline />
-            <ListItem title="Giảng dạy" data={TEACH_CLASSES} bottomline />
-            <ListItem title="Học tập" data={STUDY_CLASSES} bottomline />
-            <ListItem data={SIDEBAR_BOTTOM_ITEMS} />
+            <ListItem dataActions={SIDEBAR_TOP_ITEMS} bottomline />
+            <ListItem title="Giảng dạy" dataActions={TEACH_CLASSES} data={classes?.classTeach} bottomline />
+            <ListItem title="Học tập" dataActions={STUDY_CLASSES} data={classes?.classStudy} bottomline />
+            <ListItem dataActions={SIDEBAR_BOTTOM_ITEMS} />
         </div>
     );
 });

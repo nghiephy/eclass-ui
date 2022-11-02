@@ -13,6 +13,7 @@ import styles from './Header.module.scss';
 import images from '~/assets/images';
 import Menu from '~/components/Popover/Menu';
 import useLogout from '~/hooks/useLogout';
+import useAuth from '~/hooks/useAuth';
 
 const cx = classNames.bind(styles);
 
@@ -60,6 +61,7 @@ const MENU_ITEMS = [
 ];
 
 function Header({ toggleSidebar }) {
+    const { auth } = useAuth();
     const [openCreate, setOpenCreate] = useState(false);
     const closeModalCreate = () => setOpenCreate(false);
     const [openJoin, setOpenJoin] = useState(false);
@@ -139,7 +141,11 @@ function Header({ toggleSidebar }) {
                 <Menu placement="bottom-end" arrow items={MENU_ITEMS} onChange={handleOnChange}>
                     <Button circle className={cx('user')}>
                         <div className={cx('user-imgbox')}>
-                            <img src={images.logo} alt="user avatar" className={cx('user-img')} />
+                            <img
+                                src={auth.avatar ? `http://localhost:8080${auth.avatar}` : images.logo}
+                                alt="user avatar"
+                                className={cx('user-img')}
+                            />
                         </div>
                     </Button>
                 </Menu>

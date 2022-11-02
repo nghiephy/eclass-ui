@@ -6,6 +6,7 @@
     --primary-hover: #e6edf8ae;
     --primary-hover-bold: #9ec4f7ae;
     --primary-active: #d8e6fcae;
+    --border: #aeb6beae;
     --black: #000;
     --white: #fff;
     --error-color: red;
@@ -241,4 +242,10 @@ body {
 .ql-editor {
     height: 140px;
     overflow-y: auto;
+}
+
+.show-more-cmt {
+    position: relative;
+    height: 65px;
+    overflow: hidden;
 }
