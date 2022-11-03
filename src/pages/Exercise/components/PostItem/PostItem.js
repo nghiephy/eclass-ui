@@ -36,6 +36,12 @@ function PostItem({ data, role, classId }) {
     if (data.type === 'TL') {
         icon = images.materialIcon;
     }
+    if (data.type === 'BT') {
+        icon = images.exerciseIcon;
+    }
+    if (data.type === 'CH') {
+        icon = images.questionIcon;
+    }
 
     return (
         <div className={cx('wrapper')}>

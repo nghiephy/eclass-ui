@@ -8,6 +8,8 @@ const images = {
     logoLink: require('~/assets/images/logo_link.png'),
     fileIcon: require('~/assets/images/file_icon.png'),
     materialIcon: require('~/assets/images/material_icon.png'),
+    exerciseIcon: require('~/assets/images/exercise_icon.png'),
+    questionIcon: require('~/assets/images/question_icon.png'),
     default_icon_class: require('~/assets/images/icons/default_icon_class.png'),
     saved: require('~/assets/images/icons/saved.png'),
     setting: require('~/assets/images/icons/setting.png'),

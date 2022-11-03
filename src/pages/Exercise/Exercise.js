@@ -146,7 +146,13 @@ function Exercise() {
                 </div>
             </div>
 
-            <Assignment topics={topics} open={openAssignment} closeOnDocumentClick onClose={closeAssignment} />
+            <Assignment
+                setExercises={setExercises}
+                topics={topics}
+                open={openAssignment}
+                closeOnDocumentClick
+                onClose={closeAssignment}
+            />
             <Topic setTopics={setTopics} open={openCreateTopic} closeOnDocumentClick onClose={closeCreateTopic} />
             <Material
                 setExercises={setExercises}

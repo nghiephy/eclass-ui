@@ -26,12 +26,14 @@ function Select({ name = '', data = [], label = null, children, handleSelect, cl
                 {...props}
                 id={name}
                 className={cx('form-select')}
-                onChange={(e) => handleSelect(e.target.value)}
+                onChange={(e) => {
+                    return handleSelect(e.target.value);
+                }}
                 {...passProps}
             >
                 {data.map((item, index) => {
                     return (
-                        <option value={item?.topicId ? item.topicId : item.value} key={index}>
+                        <option value={item?.topicId || item?.topicId === 0 ? item.topicId : item.value} key={index}>
                             {item?.name ? item.name : item.title}
                         </option>
                     );

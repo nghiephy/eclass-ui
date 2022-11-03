@@ -22,6 +22,7 @@ import Select from '~/components/Select';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import { TextField } from '@mui/material';
 import moment from 'moment/moment';
+import { useParams } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -42,9 +43,10 @@ const toolbarOptions = [
     ['clean'], // remove formatting button
 ];
 
-function Assignment({ onClose, topics, ...props }) {
+function Assignment({ onClose, topics, setExercises, ...props }) {
+    const { classId } = useParams();
     const axiosPrivate = useAxiosPrivate();
-    const [topic, setTopic] = useState('all');
+    const [topic, setTopic] = useState(0);
     const [convertedText, setConvertedText] = useState('');
     const [linkList, setLinkList] = useState([]);
     const [fileList, setFileList] = useState();
@@ -69,22 +71,22 @@ function Assignment({ onClose, topics, ...props }) {
             }
         }
 
-        const currURL = window.location.href;
-        const classId = currURL[currURL.length - 1];
         const deadline = moment(value['$d']).format('DD-MM-YYYY HH:MM:SS');
 
-        formData.append('topic', topic);
-        formData.append('classId', parseInt(classId));
+        formData.append('topicId', topic);
+        formData.append('title', data.title);
+        formData.append('classId', classId);
         formData.append('deadline', deadline);
-        console.log('deadline: ', deadline);
-        console.log('topic: ', topic);
         try {
-            // const response = await axiosPrivate.post('/post/create', formData, {
-            //     headers: {
-            //         'content-type': 'multipart/form-data',
-            //     },
-            // });
-            // window.location.reload();
+            const response = await axiosPrivate.post('/exercise/BT/create', formData, {
+                headers: {
+                    'content-type': 'multipart/form-data',
+                },
+            });
+            setExercises((prev) => {
+                return [response.data.materialRes, ...prev];
+            });
+            onClose();
         } catch (err) {
             alert('Đăng bài tập thất bại!');
         }
@@ -130,6 +132,18 @@ function Assignment({ onClose, topics, ...props }) {
                             </LocalizationProvider>
                         </div>
                     </div>
+
+                    <Inputs
+                        primary
+                        name="title"
+                        type="text"
+                        label="Tiêu đề (*)"
+                        register={register}
+                        validate={{
+                            required: 'Chưa nhập tiêu đề',
+                        }}
+                        errors={errors}
+                    />
 
                     <div className={cx('form-editor')}>
                         <ReactQuill

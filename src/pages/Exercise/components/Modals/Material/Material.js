@@ -17,6 +17,7 @@ import styles from './Material.module.scss';
 import Attachment from '~/components/Attachment';
 import AttachItem from '~/components/Attachment/AttachItem';
 import Select from '~/components/Select';
+import { useParams } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -38,8 +39,9 @@ const toolbarOptions = [
 ];
 
 function Material({ onClose, topics = [], setExercises, ...props }) {
+    const { classId } = useParams();
     const axiosPrivate = useAxiosPrivate();
-    const [topic, setTopic] = useState('all');
+    const [topic, setTopic] = useState(0);
     const [convertedText, setConvertedText] = useState('');
     const [linkList, setLinkList] = useState([]);
     const [fileList, setFileList] = useState();
@@ -59,9 +61,6 @@ function Material({ onClose, topics = [], setExercises, ...props }) {
             }
         }
 
-        const currURL = window.location.href;
-        const classId = currURL[currURL.length - 1];
-
         formData.append('topicId', topic);
         formData.append('title', data.title);
         formData.append('classId', classId);
@@ -73,7 +72,6 @@ function Material({ onClose, topics = [], setExercises, ...props }) {
                     'content-type': 'multipart/form-data',
                 },
             });
-            console.log(response);
             setExercises((prev) => {
                 return [response.data.materialRes, ...prev];
             });
