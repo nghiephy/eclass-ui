@@ -95,6 +95,10 @@ function Menu({
             placement={placement}
             render={(attrs) => renderResult(attrs)}
             onHide={handleResetToFirstPage}
+            // onShow={(instance) => {
+            //     instance.setProps({ trigger: 'click' });
+            // }}
+            // open={true}
             {...passProps}
         >
             {children}

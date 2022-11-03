@@ -3,12 +3,19 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@emotion/react": "^11.10.5",
+        "@emotion/styled": "^11.10.5",
+        "@mui/material": "^5.10.12",
+        "@mui/styled-engine-sc": "^5.10.6",
+        "@mui/x-date-pickers": "^5.0.6",
         "@testing-library/jest-dom": "^5.16.4",
         "@testing-library/react": "^13.3.0",
         "@testing-library/user-event": "^13.5.0",
         "@tippyjs/react": "^4.2.6",
         "axios": "^0.27.2",
         "classnames": "^2.3.1",
+        "dayjs": "^1.11.6",
+        "moment": "^2.29.4",
         "normalize.css": "^8.0.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
@@ -19,6 +26,7 @@
         "react-slick": "^0.29.0",
         "reactjs-popup": "^2.0.5",
         "slick-carousel": "^1.8.1",
+        "styled-components": "^5.3.6",
         "web-vitals": "^2.1.4"
     },
     "devDependencies": {

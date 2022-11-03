@@ -4,6 +4,7 @@ const routes = {
     register: '/register',
     stream: '/stream/:id',
     classwork: '/classwork',
+    exercise: '/exercise/:role/:classId',
     member: '/member',
     grade: '/grade',
     profile: '/profile',

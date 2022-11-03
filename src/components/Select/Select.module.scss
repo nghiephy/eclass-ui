@@ -1,0 +1,23 @@
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.form-label {
+    font-size: 1.8rem;
+    margin-right: 10px;
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+.form-select {
+    padding: 10px 20px;
+    font-size: 1.4rem;
+    option {
+        font-size: 1.4rem;
+        padding: 10px 20px;
+    }
+}

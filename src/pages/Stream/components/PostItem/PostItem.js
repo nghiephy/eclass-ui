@@ -26,7 +26,7 @@ const MENU_ITEMS_POST = [
     },
 ];
 
-function PostItem({ data }) {
+function PostItem({ data, avatarUser }) {
     const axiosPrivate = useAxiosPrivate();
     const [showMoreCmt, setShowMoreCmt] = useState(true);
     const [attachment, setAttachment] = useState();
@@ -43,11 +43,8 @@ function PostItem({ data }) {
                 classId: data.classId,
             },
         });
-        console.log(allCommentRes);
         setComments(allCommentRes.data.allComment);
     };
-
-    console.log(comments);
 
     const handleSubmitComment = async (comment) => {
         console.log('Comment', comment);
@@ -56,7 +53,6 @@ function PostItem({ data }) {
             postId: data.postId,
             classId: data.classId,
         });
-        console.log(dataCommentRes);
         await getAllComment();
     };
 
@@ -96,16 +92,16 @@ function PostItem({ data }) {
                     <div className={cx('img-box')}>
                         <Images
                             alt="author-avatar"
-                            src={data.avatar ? `http://localhost:8080${data.avatar}` : images.noAvatar}
+                            src={data?.avatar ? `http://localhost:8080${data.avatar}` : images.noAvatar}
                         />
                     </div>
                     <div className={cx('author-infor')}>
-                        <h2 className={cx('name')}>{data.fullName}</h2>
-                        <p className={cx('time')}>{data.createdAt}</p>
+                        <h2 className={cx('name')}>{data?.fullName}</h2>
+                        <p className={cx('time')}>{data?.createdAt}</p>
                     </div>
                 </div>
                 <div className={cx('body')}>
-                    <div className={cx('body-content')} dangerouslySetInnerHTML={{ __html: data.content }}></div>
+                    <div className={cx('body-content')} dangerouslySetInnerHTML={{ __html: data?.content }}></div>
                     <div className={cx('body-attach', { row: true })}>
                         {attachment?.files &&
                             attachment.files.map((file, index) => {
@@ -139,8 +135,13 @@ function PostItem({ data }) {
                             data={{ url: 'url-https', title: '', index: 1 }}
                         /> */}
                     </div>
-                    <CommentForm data={{ avatar: data.avatar }} handleSubmit={handleSubmitComment} />
-                    <div className={cx('body-comment-section', { 'show-more-cmt': showMoreCmt })}>
+                    <CommentForm data={{ avatar: avatarUser }} handleSubmit={handleSubmitComment} />
+                    <div
+                        className={cx('body-comment-section', {
+                            'show-more-cmt': showMoreCmt,
+                            'no-comment': comments.length === 0,
+                        })}
+                    >
                         {comments.map((comment, index) => {
                             return (
                                 <div key={index} className={cx('comment-item')}>
@@ -167,22 +168,27 @@ function PostItem({ data }) {
                                 </div>
                             );
                         })}
-                        {showMoreCmt ? (
-                            <Button
-                                onClick={() => setShowMoreCmt((prev) => !prev)}
-                                text
-                                className={cx('show-more-btn')}
-                            >
-                                Xem tất cả
-                            </Button>
+                        {comments.length > 0 ? (
+                            showMoreCmt ? (
+                                <Button
+                                    onClick={() => setShowMoreCmt((prev) => !prev)}
+                                    text
+                                    className={cx('show-more-btn')}
+                                    hidden
+                                >
+                                    Xem tất cả
+                                </Button>
+                            ) : (
+                                <Button
+                                    onClick={() => setShowMoreCmt((prev) => !prev)}
+                                    text
+                                    className={cx('show-less-btn')}
+                                >
+                                    Thu gọn
+                                </Button>
+                            )
                         ) : (
-                            <Button
-                                onClick={() => setShowMoreCmt((prev) => !prev)}
-                                text
-                                className={cx('show-less-btn')}
-                            >
-                                Thu gọn
-                            </Button>
+                            <></>
                         )}
                     </div>
                 </div>

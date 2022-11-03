@@ -59,29 +59,29 @@ const MENU_ITEMS = [
         title: 'Đăng xuất',
     },
 ];
-const DATA_TABS = [
-    {
-        title: 'Bảng tin',
-        path: '/stream',
-    },
-    {
-        title: 'Bài tập',
-        path: '/homework',
-    },
-    {
-        title: 'Thành viên',
-        path: '/member',
-    },
-    {
-        title: 'Điểm',
-        path: '/grade',
-    },
-];
 
 function Header({ toggleSidebar }) {
     const navigate = useNavigate();
     const logout = useLogout();
-    const { auth } = useAuth();
+    const { auth, classData } = useAuth();
+    const DATA_TABS = [
+        {
+            title: 'Bảng tin',
+            path: `/stream/${classData?.classId}`,
+        },
+        {
+            title: 'Bài tập',
+            path: `/exercise/${classData?.role}/${classData?.classId}`,
+        },
+        {
+            title: 'Thành viên',
+            path: '/member',
+        },
+        {
+            title: 'Điểm',
+            path: '/grade',
+        },
+    ];
 
     const signOut = async () => {
         await logout();

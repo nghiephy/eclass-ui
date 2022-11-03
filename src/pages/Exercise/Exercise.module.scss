@@ -1,0 +1,22 @@
+// Container
+.container {
+    margin-top: 20px;
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    .annouce-board {
+        width: 240px;
+    }
+    .timeline {
+        flex: 1;
+    }
+}
+
+.actions-section {
+    .post-exercise-btn {
+        margin-top: 10px;
+        margin-left: 260px;
+        padding: 10px 15px;
+    }
+}

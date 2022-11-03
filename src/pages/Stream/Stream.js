@@ -18,7 +18,7 @@ function Stream() {
     const { id } = useParams();
     // let [searchParams, setSearchParams] = useSearchParams();
     const axiosPrivate = useAxiosPrivate();
-    const { auth } = useAuth();
+    const { auth, handleSetClassData } = useAuth();
     const [posts, setPosts] = useState([]);
     const [classData, setClassData] = useState();
     const [openPost, setOpenCreate] = useState(false);
@@ -34,14 +34,16 @@ function Stream() {
     };
     const getClassData = async (classId) => {
         const dataClass = await axiosPrivate.get(`/class/${classId}`);
-        setClassData(dataClass.data.data);
-        console.log(dataClass);
+        setClassData((prev) => {
+            return dataClass.data.data;
+        });
+        const role = auth.id === dataClass.data.data.teacherId ? 't' : 'h';
+        handleSetClassData({ classId: dataClass.data.data.id, role });
     };
 
     useEffect(() => {
         const curURL = window.location.pathname.split('/');
         const classId = curURL[curURL.length - 1];
-        console.log(id);
 
         // for (let entry of searchParams.entries()) {
         //     params.push(entry);
@@ -93,7 +95,7 @@ function Stream() {
                     <Post open={openPost} closeOnDocumentClick onClose={closeModalPost} />
 
                     {posts.map((post, index) => {
-                        return <PostItem key={index} data={post} />;
+                        return <PostItem key={index} data={post} avatarUser={auth.avatar} />;
                     })}
                 </div>
             </div>

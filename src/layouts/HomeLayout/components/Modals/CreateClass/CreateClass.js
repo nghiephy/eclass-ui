@@ -21,6 +21,7 @@ function CreateClass({ onClose, ...props }) {
     } = useForm();
     const axiosPrivate = useAxiosPrivate();
     const [enrollKey, setEnrollKey] = useState('');
+    const [classId, setClassId] = useState();
 
     const [openSuccess, setOpenSuccess] = useState(false);
     const closeModalSuccess = () => setOpenSuccess(false);
@@ -31,6 +32,7 @@ function CreateClass({ onClose, ...props }) {
             setEnrollKey(response.data.data.enrollKey);
             onClose();
             setOpenSuccess(true);
+            setClassId(response.data.data.id);
         } catch (err) {
             console.log(err);
         }
@@ -99,7 +101,7 @@ function CreateClass({ onClose, ...props }) {
                             primary
                             className={cx('cancel')}
                             onClick={() => {
-                                navigate('/class/3');
+                                navigate(`/stream/${classId}`);
                             }}
                             style={{ margin: '0 auto' }}
                         >

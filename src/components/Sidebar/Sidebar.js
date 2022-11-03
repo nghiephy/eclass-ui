@@ -73,8 +73,6 @@ const Sidebar = forwardRef(({ show, ...passProps }, ref) => {
         };
     }, []);
 
-    console.log(classes);
-
     return (
         <div {...passProps} className={cx('wrapper', { show: show })}>
             <ListItem dataActions={SIDEBAR_TOP_ITEMS} bottomline />

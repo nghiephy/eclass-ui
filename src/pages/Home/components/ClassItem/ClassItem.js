@@ -9,6 +9,8 @@ import { IcDot, IcExercise, IcGradeBook, IcThreeDotsVertical } from '~/component
 import Menu from '~/components/Popover/Menu';
 
 import styles from './ClassItem.module.scss';
+import useAuth from '~/hooks/useAuth';
+import { useEffect } from 'react';
 
 const cx = classNames.bind(styles);
 
@@ -27,6 +29,8 @@ const MENU_ITEMS_TEACH = [
 ];
 
 function ClassItem({ data }) {
+    const { auth, handleSetClassData } = useAuth();
+
     const handleOnChange = async (menuItem) => {
         if (menuItem.title === 'Huỷ đăng ký') {
             alert('Huy dang ky');

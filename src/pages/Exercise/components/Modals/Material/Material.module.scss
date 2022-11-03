@@ -1,0 +1,99 @@
+.wrapper {
+    width: 500px;
+    border-radius: 10px;
+    &--content {
+        width: 500px;
+    }
+}
+
+.modal {
+    display: block;
+    width: 40vw;
+    min-width: 350px;
+    position: relative;
+    padding: 0px 20px;
+}
+
+.title {
+    font-size: 2.4rem;
+    margin-bottom: 4px;
+}
+
+.exits {
+    position: absolute;
+    top: -20px;
+    right: 0px;
+    font-size: 3.8rem;
+    cursor: pointer;
+}
+
+.form {
+    margin-top: 20px;
+    &-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 100%;
+        margin-top: 20px;
+        .cancel {
+            padding: 7.5px 16px;
+            margin-right: 20px;
+        }
+    }
+}
+
+.action-item {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    margin-top: 5px;
+}
+
+.label {
+    color: var(--primary);
+    display: inline-block;
+    width: 44px;
+    height: 44px;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 1px solid var(--cirle-hover-color);
+    &:hover {
+        background-color: var(--cirle-hover-color);
+    }
+}
+
+.attach-section {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    .attach-file {
+        margin-right: 10px;
+    }
+}
+
+.deadline-input {
+    input {
+        font-size: 1.4rem;
+        padding: 10px;
+    }
+    label {
+        font-size: 1.4rem;
+    }
+}
+
+.select-section {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.deadline-picker {
+    margin-left: 50px;
+    margin-bottom: 20px;
+    .title {
+        font-size: 1.8rem;
+    }
+}

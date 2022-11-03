@@ -4,7 +4,7 @@ import styles from './Select.module.scss';
 
 const cx = classNames.bind(styles);
 
-function Select({ name = '', data = [], label = null, children, className, ...passProps }) {
+function Select({ name = '', data = [], label = null, children, handleSelect, className, ...passProps }) {
     let Comp = 'select';
     const props = {
         name,
@@ -22,7 +22,13 @@ function Select({ name = '', data = [], label = null, children, className, ...pa
                     {label}
                 </label>
             )}
-            <Comp {...props} id={name} className={cx('form-select')} {...passProps}>
+            <Comp
+                {...props}
+                id={name}
+                className={cx('form-select')}
+                onChange={(e) => handleSelect(e.target.value)}
+                {...passProps}
+            >
                 {data.map((item, index) => {
                     return (
                         <option value={item.value} key={index}>

@@ -1,6 +1,5 @@
 import classNames from 'classnames/bind';
 import { NavLink } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 
 import styles from './ListItem.module.scss';
 import images from '~/assets/images';
@@ -8,8 +7,6 @@ import images from '~/assets/images';
 const cx = classNames.bind(styles);
 
 const Sidebar = ({ title, data, dataActions, bottomline = 1, ...passProps }) => {
-    const navigate = useNavigate();
-
     return (
         <div {...passProps} className={cx('wrapper', { bottomline: bottomline })}>
             {title && <h4 className={cx('title')}>{title}</h4>}

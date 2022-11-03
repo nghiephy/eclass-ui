@@ -1,9 +1,20 @@
+.review-container {
+    position: relative;
+    width: 50%;
+    height: 60px;
+    overflow: hidden;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+
 .wrapper {
     width: 100%;
     height: 60px;
     border-radius: 10px;
     border: 1px solid var(--border-sidebar-color);
     overflow: hidden;
+    flex: 1;
     display: flex;
     justify-content: flex-start;
     margin-bottom: 10px;
@@ -29,14 +40,6 @@
     width: 78%;
     padding-right: 10px;
     position: relative;
-    .exits {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 3rem;
-        cursor: pointer;
-    }
     .title {
         margin-top: 5px;
     }
@@ -51,4 +54,19 @@
         font-size: 1.3rem;
         margin-top: 6px;
     }
+}
+
+.exits {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 3.4rem;
+    cursor: pointer;
+    z-index: 999;
 }
