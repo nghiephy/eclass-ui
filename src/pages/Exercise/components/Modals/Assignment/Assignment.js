@@ -42,7 +42,7 @@ const toolbarOptions = [
     ['clean'], // remove formatting button
 ];
 
-function Assignment({ onClose, ...props }) {
+function Assignment({ onClose, topics, ...props }) {
     const axiosPrivate = useAxiosPrivate();
     const [topic, setTopic] = useState('all');
     const [convertedText, setConvertedText] = useState('');
@@ -53,7 +53,7 @@ function Assignment({ onClose, ...props }) {
         formState: { errors },
         handleSubmit,
     } = useForm();
-    const [value, setValue] = useState(null);
+    const [value, setValue] = useState(moment().format('DD-MM-YYYY'));
 
     const handleChange = (newValue) => {
         setValue(newValue);
@@ -117,11 +117,7 @@ function Assignment({ onClose, ...props }) {
 
                 <form className={cx('form')} onSubmit={handleSubmit(onSubmit)}>
                     <div className={cx('select-section')}>
-                        <Select
-                            data={[{ title: 'Lập trình' }, { title: 'Hai' }]}
-                            handleSelect={setTopic}
-                            label="Chủ đề"
-                        />
+                        <Select data={topics} handleSelect={setTopic} label="Chủ đề" />
                         <div className={cx('deadline-picker')}>
                             <h3 className={cx('title')}>Ngày đến hạn: </h3>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>

@@ -27,12 +27,15 @@ const MENU_ITEMS_POST = [
     },
 ];
 
-function PostItem({ data }) {
+function PostItem({ data, role, classId }) {
     const axiosPrivate = useAxiosPrivate();
-
     const handleOnChange = async (menuItem) => {
         console.log(menuItem);
     };
+    let icon = images.noImage;
+    if (data.type === 'TL') {
+        icon = images.materialIcon;
+    }
 
     return (
         <div className={cx('wrapper')}>
@@ -55,19 +58,16 @@ function PostItem({ data }) {
                 </Menu>
             </div>
 
-            <Link to="/" className={cx('content')}>
+            <Link to={`/exercise/${role}/${classId}/${data?.type}/${data?.postId}`} className={cx('content')}>
                 <div className={cx('type-question')}>
                     <div className={cx('img-box')}>
-                        <Images
-                            alt="type question icon"
-                            src={data?.avatar ? `http://localhost:8080${data.avatar}` : images.noAvatar}
-                        />
+                        <Images alt="type question icon" src={icon} />
                     </div>
                 </div>
                 <div className={cx('body')}>
                     <div className={cx('body-content')}>
-                        <h4 className={cx('title')}>Cho biết những con vật có 4 chân?</h4>
-                        <p className={cx('deadline')}>Không có ngày đến hạn</p>
+                        <h4 className={cx('title')}>{data?.content}</h4>
+                        <p className={cx('deadline')}>{data?.deadline ? data.deadline : 'Không có ngày đến hạn'}</p>
                     </div>
                 </div>
             </Link>

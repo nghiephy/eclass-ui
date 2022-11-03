@@ -42,7 +42,7 @@ const toolbarOptions = [
     ['clean'], // remove formatting button
 ];
 
-function Question({ onClose, ...props }) {
+function Question({ onClose, topics = [], ...props }) {
     const axiosPrivate = useAxiosPrivate();
     const [topic, setTopic] = useState('all');
     const [questionType, setQuestionType] = useState('text');
@@ -119,11 +119,7 @@ function Question({ onClose, ...props }) {
 
                 <form className={cx('form')} onSubmit={handleSubmit(onSubmit)}>
                     <div className={cx('select-section')}>
-                        <Select
-                            data={[{ title: 'Lập trình' }, { title: 'Hai' }]}
-                            handleSelect={setTopic}
-                            label="Chủ đề"
-                        />
+                        <Select data={topics} handleSelect={setTopic} label="Chủ đề" />
                         <div className={cx('deadline-picker')}>
                             <h3 className={cx('title')}>Ngày đến hạn: </h3>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>

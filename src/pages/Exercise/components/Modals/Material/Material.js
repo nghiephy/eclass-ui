@@ -37,7 +37,7 @@ const toolbarOptions = [
     ['clean'], // remove formatting button
 ];
 
-function Material({ onClose, ...props }) {
+function Material({ onClose, topics = [], setExercises, ...props }) {
     const axiosPrivate = useAxiosPrivate();
     const [topic, setTopic] = useState('all');
     const [convertedText, setConvertedText] = useState('');
@@ -62,16 +62,22 @@ function Material({ onClose, ...props }) {
         const currURL = window.location.href;
         const classId = currURL[currURL.length - 1];
 
-        formData.append('topic', topic);
-        formData.append('classId', parseInt(classId));
-        console.log('topic: ', topic);
+        formData.append('topicId', topic);
+        formData.append('title', data.title);
+        formData.append('classId', classId);
+        formData.append('type', 'TL');
+
         try {
-            // const response = await axiosPrivate.post('/post/create', formData, {
-            //     headers: {
-            //         'content-type': 'multipart/form-data',
-            //     },
-            // });
-            // window.location.reload();
+            const response = await axiosPrivate.post('/exercise/TL/create', formData, {
+                headers: {
+                    'content-type': 'multipart/form-data',
+                },
+            });
+            console.log(response);
+            setExercises((prev) => {
+                return [response.data.materialRes, ...prev];
+            });
+            onClose();
         } catch (err) {
             alert('Đăng bài tập thất bại!');
         }
@@ -104,12 +110,20 @@ function Material({ onClose, ...props }) {
 
                 <form className={cx('form')} onSubmit={handleSubmit(onSubmit)}>
                     <div className={cx('select-section')}>
-                        <Select
-                            data={[{ title: 'Lập trình' }, { title: 'Hai' }]}
-                            handleSelect={setTopic}
-                            label="Chủ đề"
-                        />
+                        <Select data={topics} handleSelect={setTopic} label="Chủ đề" />
                     </div>
+
+                    <Inputs
+                        primary
+                        name="title"
+                        type="text"
+                        label="Tiêu đề (*)"
+                        register={register}
+                        validate={{
+                            required: 'Chưa nhập tiêu đề',
+                        }}
+                        errors={errors}
+                    />
 
                     <div className={cx('form-editor')}>
                         <ReactQuill

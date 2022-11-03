@@ -1,5 +1,6 @@
 import classNames from 'classnames/bind';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
 import Button from '~/components/Button';
 import Menu from '~/components/Popover/Menu';
 import ListItem from './components/ListItem';
@@ -7,21 +8,12 @@ import Assignment, { Topic } from './components/Modals';
 import Material from './components/Modals/Material';
 import Question from './components/Modals/Question';
 import PostItem from './components/PostItem';
+import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 
 import styles from './Exercise.module.scss';
+import { useParams } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
-
-const TOPIC_LIST = [
-    {
-        name: 'Tẩt cả',
-        code: '',
-    },
-    {
-        name: 'Lập trình',
-        code: 'programing',
-    },
-];
 
 const MENU_ACTIONS = [
     {
@@ -56,6 +48,12 @@ function Exercise() {
     const [openQuestion, setOpenQuestion] = useState(false);
     const closeQuestion = () => setOpenQuestion(false);
 
+    const axiosPrivate = useAxiosPrivate();
+    const { role, classId, topic } = useParams();
+
+    const [topics, setTopics] = useState([]);
+    const [exercises, setExercises] = useState([]);
+
     const toggleAssigment = () => {
         setOpenAssignment(!openAssignment);
     };
@@ -85,43 +83,79 @@ function Exercise() {
         setActionHidden((prev) => !prev);
     };
 
+    const getTopic = async () => {
+        const topicRes = await axiosPrivate.get(`/topic/get-topics/${classId}`);
+
+        setTopics((prev) => [
+            {
+                name: 'Tẩt cả',
+                topicId: 0,
+            },
+            ...topicRes.data.topics,
+        ]);
+    };
+    const getAllExercise = async () => {
+        const exerciseRes = await axiosPrivate.get(`/exercise/get-all/${classId}`);
+
+        setExercises(exerciseRes.data.exercises);
+    };
+
+    useEffect(() => {
+        getTopic();
+        getAllExercise();
+    }, []);
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('actions-section')}>
-                <Menu
-                    arrow={false}
-                    hideOnClick={true}
-                    trigger={'click'}
-                    placement="bottom-end"
-                    delay={[50, 50]}
-                    items={MENU_ACTIONS}
-                    onChange={handleOnChange}
-                    className={cx('menu-more', { hidden: actionHidden })}
-                >
-                    <Button
-                        primary
-                        className={cx('post-exercise-btn')}
-                        onClick={() => {
-                            setActionHidden(false);
-                        }}
+                {topic === '0' ? (
+                    <Menu
+                        arrow={false}
+                        hideOnClick={true}
+                        trigger={'click'}
+                        placement="bottom-end"
+                        delay={[50, 50]}
+                        items={MENU_ACTIONS}
+                        onChange={handleOnChange}
+                        className={cx('menu-more', { hidden: actionHidden })}
                     >
-                        Tạo mới
-                    </Button>
-                </Menu>
+                        <Button
+                            primary
+                            className={cx('post-exercise-btn')}
+                            onClick={() => {
+                                setActionHidden(false);
+                            }}
+                        >
+                            Tạo mới
+                        </Button>
+                    </Menu>
+                ) : (
+                    <div className={cx('title-topic')}>
+                        <h2>{topics[parseInt(topic)]?.name}</h2>
+                    </div>
+                )}
             </div>
             <div className={cx('container')}>
                 <div className={cx('annouce-board')}>
-                    <ListItem title="Chủ đề" data={TOPIC_LIST} />
+                    <ListItem title="Chủ đề" data={topics} />
                 </div>
                 <div className={cx('timeline')}>
-                    <PostItem />
+                    {exercises.map((item, index) => {
+                        return <PostItem key={index} data={item} role={role} classId={classId} />;
+                    })}
                 </div>
             </div>
 
-            <Assignment open={openAssignment} closeOnDocumentClick onClose={closeAssignment} />
-            <Topic open={openCreateTopic} closeOnDocumentClick onClose={closeCreateTopic} />
-            <Material open={openMaterial} closeOnDocumentClick onClose={closeMaterial} />
-            <Question open={openQuestion} closeOnDocumentClick onClose={closeQuestion} />
+            <Assignment topics={topics} open={openAssignment} closeOnDocumentClick onClose={closeAssignment} />
+            <Topic setTopics={setTopics} open={openCreateTopic} closeOnDocumentClick onClose={closeCreateTopic} />
+            <Material
+                setExercises={setExercises}
+                topics={topics}
+                open={openMaterial}
+                closeOnDocumentClick
+                onClose={closeMaterial}
+            />
+            <Question topics={topics} open={openQuestion} closeOnDocumentClick onClose={closeQuestion} />
         </div>
     );
 }

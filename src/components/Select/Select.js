@@ -31,8 +31,8 @@ function Select({ name = '', data = [], label = null, children, handleSelect, cl
             >
                 {data.map((item, index) => {
                     return (
-                        <option value={item.value} key={index}>
-                            {item.title}
+                        <option value={item?.topicId ? item.topicId : item.value} key={index}>
+                            {item?.name ? item.name : item.title}
                         </option>
                     );
                 })}

@@ -2,21 +2,35 @@ import classNames from 'classnames/bind';
 import { useForm } from 'react-hook-form';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+
 import Button from '~/components/Button';
 import Inputs from '~/components/Inputs';
+import useAxiosPrivate from '~/hooks/useAxiosPrivate';
+import { useParams } from 'react-router-dom';
 
 import styles from './Topic.module.scss';
 
 const cx = classNames.bind(styles);
 
-function Topic({ onClose, ...props }) {
+function Topic({ onClose, setTopics, ...props }) {
     const {
         register,
         formState: { errors },
         handleSubmit,
     } = useForm();
+    const axiosPrivate = useAxiosPrivate();
+    const { classId } = useParams();
 
-    const onSubmit = (data) => console.log(data);
+    const onSubmit = async (data) => {
+        const topicRes = await axiosPrivate.post('/topic/create', {
+            classId: classId,
+            topic: data.topic,
+        });
+        setTopics((prev) => {
+            return [...prev, topicRes.data.response];
+        });
+        onClose();
+    };
 
     return (
         <Popup className={cx('wrapper')} {...props} onClose={onClose} style={{ borderRadius: '10px' }}>

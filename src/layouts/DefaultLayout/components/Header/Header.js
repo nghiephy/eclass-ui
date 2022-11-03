@@ -71,7 +71,7 @@ function Header({ toggleSidebar }) {
         },
         {
             title: 'Bài tập',
-            path: `/exercise/${classData?.role}/${classData?.classId}`,
+            path: `/exercise/${classData?.role}/${classData?.classId}/0`,
         },
         {
             title: 'Thành viên',
