@@ -22,6 +22,7 @@ import Select from '~/components/Select';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
 import { TextField } from '@mui/material';
 import moment from 'moment/moment';
+import { useParams } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -42,10 +43,11 @@ const toolbarOptions = [
     ['clean'], // remove formatting button
 ];
 
-function Question({ onClose, topics = [], ...props }) {
+function Question({ onClose, topics = [], setExercises, ...props }) {
+    const { classId } = useParams();
     const axiosPrivate = useAxiosPrivate();
     const [topic, setTopic] = useState(0);
-    const [questionType, setQuestionType] = useState('text');
+    const [questionType, setQuestionType] = useState('question_text');
     const [convertedText, setConvertedText] = useState('');
     const [linkList, setLinkList] = useState([]);
     const [fileList, setFileList] = useState();
@@ -70,23 +72,39 @@ function Question({ onClose, topics = [], ...props }) {
             }
         }
 
-        const currURL = window.location.href;
-        const classId = currURL[currURL.length - 1];
         const deadline = value;
+        let answerList = [];
 
-        formData.append('topic', topic);
-        formData.append('classId', parseInt(classId));
+        if (questionType === 'question_choice') {
+            answerList = [
+                { content: data.choice1, correct: data.correct_ans === '0' },
+                { content: data.choice2, correct: data.correct_ans === '1' },
+                { content: data.choice3, correct: data.correct_ans === '2' },
+                { content: data.choice4, correct: data.correct_ans === '3' },
+            ];
+        }
+
+        answerList.map((item) => {
+            formData.append('answerList', JSON.stringify(item));
+        });
+
+        formData.append('topicId', topic);
+        formData.append('classId', classId);
+        formData.append('question', data.question);
         formData.append('deadline', deadline);
-        console.log('deadline: ', deadline);
-        console.log('topic: ', topic);
-        console.log('questionType: ', questionType);
+        formData.append('questionType', questionType);
+        console.log(data);
+
         try {
-            // const response = await axiosPrivate.post('/post/create', formData, {
-            //     headers: {
-            //         'content-type': 'multipart/form-data',
-            //     },
-            // });
-            // window.location.reload();
+            const response = await axiosPrivate.post('/exercise/CH/create', formData, {
+                headers: {
+                    'content-type': 'multipart/form-data',
+                },
+            });
+            setExercises((prev) => {
+                return [response.data.questionRes, ...prev];
+            });
+            onClose();
         } catch (err) {
             alert('Đăng câu hỏi thất bại!');
         }
@@ -133,8 +151,8 @@ function Question({ onClose, topics = [], ...props }) {
                         </div>
                         <Select
                             data={[
-                                { title: 'Câu hỏi ngắn', value: 'text' },
-                                { title: 'Trắc nghiệm', value: 'choice' },
+                                { title: 'Câu hỏi ngắn', value: 'question_text' },
+                                { title: 'Trắc nghiệm', value: 'question_choice' },
                             ]}
                             handleSelect={setQuestionType}
                             label="Loại câu hỏi"
@@ -143,7 +161,7 @@ function Question({ onClose, topics = [], ...props }) {
 
                     <Inputs
                         primary
-                        name="title"
+                        name="question"
                         type="text"
                         label="Câu hỏi (*)"
                         register={register}
@@ -165,68 +183,99 @@ function Question({ onClose, topics = [], ...props }) {
                         />
                     </div>
 
-                    {questionType === 'choice' && (
+                    {questionType === 'question_choice' && (
                         <div className={cx('choice-section')}>
                             <div className={cx('choice-item')}>
-                                <input type="radio" name="choice" className={cx('choice')} />
-                                <span className={cx('checkmark')}></span>
+                                <input
+                                    type="radio"
+                                    name="correct_ans"
+                                    value={0}
+                                    className={cx('choice-radio')}
+                                    {...register('correct_ans', {
+                                        required: 'Chọn đáp án đúng',
+                                    })}
+                                />
                                 <Inputs
                                     primary
-                                    name="title"
+                                    name="choice1"
                                     type="text"
                                     label="Lựa chọn 1"
                                     register={register}
                                     validate={{
-                                        required: 'Chưa nhập câu hỏi',
+                                        required: 'Chưa nhập câu trả lời',
                                     }}
                                     errors={errors}
                                 />
                             </div>
                             <div className={cx('choice-item')}>
-                                <input type="radio" name="choice" className={cx('choice')} />
-                                <span className={cx('checkmark')}></span>
+                                <input
+                                    type="radio"
+                                    value={1}
+                                    name="correct_ans"
+                                    className={cx('choice-radio')}
+                                    {...register('correct_ans', {
+                                        required: 'Chọn đáp án đúng',
+                                    })}
+                                />
+
                                 <Inputs
                                     primary
-                                    name="title"
+                                    name="choice2"
                                     type="text"
                                     label="Lựa chọn 2"
                                     register={register}
                                     validate={{
-                                        required: 'Chưa nhập câu hỏi',
+                                        required: 'Chưa nhập câu trả lời',
                                     }}
                                     errors={errors}
                                 />
                             </div>
                             <div className={cx('choice-item')}>
-                                <input type="radio" name="choice" className={cx('choice')} />
-                                <span className={cx('checkmark')}></span>
+                                <input
+                                    type="radio"
+                                    value={2}
+                                    name="correct_ans"
+                                    className={cx('choice-radio')}
+                                    {...register('correct_ans', {
+                                        required: 'Chọn đáp án đúng',
+                                    })}
+                                />
+
                                 <Inputs
                                     primary
-                                    name="title"
+                                    name="choice3"
                                     type="text"
                                     label="Lựa chọn 3"
                                     register={register}
                                     validate={{
-                                        required: 'Chưa nhập câu hỏi',
+                                        required: 'Chưa nhập câu trả lời',
                                     }}
                                     errors={errors}
                                 />
                             </div>
                             <div className={cx('choice-item')}>
-                                <input type="radio" name="choice" className={cx('choice')} />
-                                <span className={cx('checkmark')}></span>
+                                <input
+                                    type="radio"
+                                    value={3}
+                                    name="correct_ans"
+                                    className={cx('choice-radio')}
+                                    {...register('correct_ans', {
+                                        required: 'Chọn đáp án đúng',
+                                    })}
+                                />
                                 <Inputs
                                     primary
-                                    name="title"
+                                    name="choice4"
                                     type="text"
                                     label="Lựa chọn 4"
                                     register={register}
                                     validate={{
-                                        required: 'Chưa nhập câu hỏi',
+                                        required: 'Chưa nhập câu trả lời',
                                     }}
                                     errors={errors}
                                 />
                             </div>
+                            {errors.correct_ans && <p className={cx('error_msg')}>** Chưa chọn đáp áp đúng!</p>}
                         </div>
                     )}
 

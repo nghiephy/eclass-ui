@@ -124,7 +124,7 @@ function Exercise() {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('actions-section')}>
-                {topic === '0' ? (
+                {topic === '0' && role === 't' ? (
                     <Menu
                         arrow={false}
                         hideOnClick={true}
@@ -177,7 +177,13 @@ function Exercise() {
                 closeOnDocumentClick
                 onClose={closeMaterial}
             />
-            <Question topics={topics} open={openQuestion} closeOnDocumentClick onClose={closeQuestion} />
+            <Question
+                setExercises={setExercises}
+                topics={topics}
+                open={openQuestion}
+                closeOnDocumentClick
+                onClose={closeQuestion}
+            />
         </div>
     );
 }

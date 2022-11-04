@@ -29,8 +29,6 @@
 
 .form {
     margin-top: 20px;
-    overflow-y: overlay;
-    max-height: 80vh;
     &-actions {
         display: flex;
         justify-content: flex-end;
@@ -41,9 +39,6 @@
             padding: 7.5px 16px;
             margin-right: 20px;
         }
-    }
-    &-editor {
-        margin-top: 20px;
     }
 }
 
@@ -77,65 +72,4 @@
     .attach-file {
         margin-right: 10px;
     }
-}
-
-.deadline-input {
-    input {
-        font-size: 1.4rem;
-        padding: 10px;
-        width: 100px;
-    }
-    label {
-        font-size: 1.4rem;
-    }
-}
-
-.select-section {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.deadline-picker {
-    margin-left: 50px;
-    margin-right: 50px;
-    margin-bottom: 20px;
-    .title {
-        font-size: 1.8rem;
-    }
-}
-
-.choice-section {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-/* The container */
-.choice-item {
-    display: block;
-    position: relative;
-    padding-left: 35px;
-    margin-bottom: 20px;
-    cursor: pointer;
-    font-size: 22px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-.choice-radio {
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 2.4rem;
-    height: 20px;
-    width: 20px;
-    cursor: pointer;
-}
-
-.error_msg {
-    color: var(--error-color);
 }

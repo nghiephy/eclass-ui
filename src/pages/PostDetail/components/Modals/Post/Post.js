@@ -6,8 +6,6 @@ import 'reactjs-popup/dist/index.css';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useState } from 'react';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import { MyIcon } from '~/components/MyIcons';
 import { IcUpload } from '~/components/MyIcons/regular';
@@ -15,14 +13,9 @@ import Button from '~/components/Button';
 import Inputs from '~/components/Inputs';
 import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 
-import styles from './Assignment.module.scss';
+import styles from './Post.module.scss';
 import Attachment from '~/components/Attachment';
 import AttachItem from '~/components/Attachment/AttachItem';
-import Select from '~/components/Select';
-import { DesktopDatePicker } from '@mui/x-date-pickers';
-import { TextField } from '@mui/material';
-import moment from 'moment/moment';
-import { useParams } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -43,10 +36,8 @@ const toolbarOptions = [
     ['clean'], // remove formatting button
 ];
 
-function Assignment({ onClose, topics, setExercises, ...props }) {
-    const { classId } = useParams();
+function Post({ onClose, ...props }) {
     const axiosPrivate = useAxiosPrivate();
-    const [topic, setTopic] = useState(0);
     const [convertedText, setConvertedText] = useState('');
     const [linkList, setLinkList] = useState([]);
     const [fileList, setFileList] = useState();
@@ -55,11 +46,6 @@ function Assignment({ onClose, topics, setExercises, ...props }) {
         formState: { errors },
         handleSubmit,
     } = useForm();
-    const [value, setValue] = useState(moment().format('MM/DD/YYYY'));
-
-    const handleChange = (newValue) => {
-        setValue(newValue);
-    };
 
     const onSubmit = async (data) => {
         const formData = new FormData();
@@ -71,25 +57,21 @@ function Assignment({ onClose, topics, setExercises, ...props }) {
             }
         }
 
-        const deadline = value;
+        const currURL = window.location.href;
+        const classId = currURL[currURL.length - 1];
 
-        formData.append('topicId', topic);
-        formData.append('title', data.title);
-        formData.append('classId', classId);
-        formData.append('deadline', deadline);
-        console.log(value);
+        formData.append('classId', parseInt(classId));
+        formData.append('type', 'TB');
+
         try {
-            const response = await axiosPrivate.post('/exercise/BT/create', formData, {
+            const response = await axiosPrivate.post('/post/create', formData, {
                 headers: {
                     'content-type': 'multipart/form-data',
                 },
             });
-            setExercises((prev) => {
-                return [response.data.exerciseRes, ...prev];
-            });
-            onClose();
+            window.location.reload();
         } catch (err) {
-            alert('Đăng bài tập thất bại!');
+            alert('Đăng thông báo thất bại!');
         }
     };
 
@@ -116,35 +98,10 @@ function Assignment({ onClose, topics, setExercises, ...props }) {
                 <span className={cx('exits')} onClick={onClosePost}>
                     &times;
                 </span>
-                <h2 className={cx('title')}>Giao bài tập</h2>
+                <h2 className={cx('title')}>Đăng thông báo</h2>
 
                 <form className={cx('form')} onSubmit={handleSubmit(onSubmit)}>
-                    <div className={cx('select-section')}>
-                        <Select data={topics} handleSelect={setTopic} label="Chủ đề" />
-                        <div className={cx('deadline-picker')}>
-                            <h3 className={cx('title')}>Ngày đến hạn: </h3>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DesktopDatePicker
-                                    inputFormat="DD/MM/YYYY"
-                                    value={value}
-                                    onChange={handleChange}
-                                    renderInput={(params) => <TextField {...params} className={cx('deadline-input')} />}
-                                />
-                            </LocalizationProvider>
-                        </div>
-                    </div>
-
-                    <Inputs
-                        primary
-                        name="title"
-                        type="text"
-                        label="Tiêu đề (*)"
-                        register={register}
-                        validate={{
-                            required: 'Chưa nhập tiêu đề',
-                        }}
-                        errors={errors}
-                    />
+                    {/* <Select data={dataClass} label="Chọn lớp" /> */}
 
                     <div className={cx('form-editor')}>
                         <ReactQuill
@@ -152,7 +109,7 @@ function Assignment({ onClose, topics, setExercises, ...props }) {
                                 toolbar: toolbarOptions,
                             }}
                             theme="snow"
-                            placeholder="Nhập hướng dẫn cho bài tập"
+                            placeholder="Nhập thông báo cho lớp học của bạn"
                             value={convertedText}
                             onChange={setConvertedText}
                         />
@@ -194,11 +151,9 @@ function Assignment({ onClose, topics, setExercises, ...props }) {
                         {linkList.map((item, index) => {
                             return (
                                 <AttachItem
-                                    type="link"
                                     key={index}
                                     deleteItemLink={deleteItemLink}
                                     data={{ url: item, index: index }}
-                                    className={cx('w-full')}
                                 />
                             );
                         })}
@@ -216,4 +171,4 @@ function Assignment({ onClose, topics, setExercises, ...props }) {
     );
 }
 
-export default Assignment;
+export default Post;

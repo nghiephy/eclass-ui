@@ -65,7 +65,7 @@ function PostItem({ data, role, classId }) {
                 </Menu>
             </div>
 
-            <Link to={`/exercise/${role}/${classId}/${data?.type}/${data?.postId}`} className={cx('content')}>
+            <Link to={`/exercise/${role}/${classId}/${data?.type}/${data?.postId}/detail`} className={cx('content')}>
                 <div className={cx('type-question')}>
                     <div className={cx('img-box')}>
                         <Images alt="type question icon" src={icon} />

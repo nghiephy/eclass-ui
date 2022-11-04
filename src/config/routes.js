@@ -5,7 +5,7 @@ const routes = {
     stream: '/stream/:id',
     classwork: '/classwork',
     exercise: '/exercise/:role/:classId/:topic',
-    exerciseDetail: '/exercise/:role/:classId/:type/:postId',
+    postDetail: '/exercise/:role/:classId/:type/:postId/detail',
     member: '/member',
     grade: '/grade',
     profile: '/profile',

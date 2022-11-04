@@ -67,7 +67,7 @@ function Material({ onClose, topics = [], setExercises, ...props }) {
         formData.append('type', 'TL');
 
         try {
-            const response = await axiosPrivate.post('/exercise/TL/create', formData, {
+            const response = await axiosPrivate.post(`/exercise/TL/create/${classId}`, formData, {
                 headers: {
                     'content-type': 'multipart/form-data',
                 },
