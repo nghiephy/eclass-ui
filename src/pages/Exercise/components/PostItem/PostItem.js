@@ -15,6 +15,7 @@ import Menu from '~/components/Popover/Menu';
 import AttachItem from '~/components/Attachment/AttachItem';
 import CommentForm from './CommentForm';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 const cx = classNames.bind(styles);
 
@@ -33,13 +34,13 @@ function PostItem({ data, role, classId }) {
         console.log(menuItem);
     };
     let icon = images.noImage;
-    if (data.type === 'TL') {
+    if (data?.type === 'TL') {
         icon = images.materialIcon;
     }
-    if (data.type === 'BT') {
+    if (data?.type === 'BT') {
         icon = images.exerciseIcon;
     }
-    if (data.type === 'CH') {
+    if (data?.type === 'CH') {
         icon = images.questionIcon;
     }
 
@@ -73,7 +74,9 @@ function PostItem({ data, role, classId }) {
                 <div className={cx('body')}>
                     <div className={cx('body-content')}>
                         <h4 className={cx('title')}>{data?.content}</h4>
-                        <p className={cx('deadline')}>{data?.deadline ? data.deadline : 'Không có ngày đến hạn'}</p>
+                        <p className={cx('deadline')}>
+                            {data?.deadline ? moment(data.deadline).format('DD/MM/YYYY') : 'Không có ngày đến hạn'}
+                        </p>
                     </div>
                 </div>
             </Link>

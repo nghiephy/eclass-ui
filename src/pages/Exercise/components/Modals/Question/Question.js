@@ -44,7 +44,7 @@ const toolbarOptions = [
 
 function Question({ onClose, topics = [], ...props }) {
     const axiosPrivate = useAxiosPrivate();
-    const [topic, setTopic] = useState('all');
+    const [topic, setTopic] = useState(0);
     const [questionType, setQuestionType] = useState('text');
     const [convertedText, setConvertedText] = useState('');
     const [linkList, setLinkList] = useState([]);
@@ -54,7 +54,7 @@ function Question({ onClose, topics = [], ...props }) {
         formState: { errors },
         handleSubmit,
     } = useForm();
-    const [value, setValue] = useState('03-11-2022');
+    const [value, setValue] = useState(moment().format('MM/DD/YYYY'));
 
     const handleChange = (newValue) => {
         setValue(newValue);
@@ -72,7 +72,7 @@ function Question({ onClose, topics = [], ...props }) {
 
         const currURL = window.location.href;
         const classId = currURL[currURL.length - 1];
-        const deadline = moment(value['$d']).format('DD-MM-YYYY HH:MM:SS');
+        const deadline = value;
 
         formData.append('topic', topic);
         formData.append('classId', parseInt(classId));
@@ -124,7 +124,7 @@ function Question({ onClose, topics = [], ...props }) {
                             <h3 className={cx('title')}>Ngày đến hạn: </h3>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DesktopDatePicker
-                                    inputFormat="MM/DD/YYYY"
+                                    inputFormat="DD/MM/YYYY"
                                     value={value}
                                     onChange={handleChange}
                                     renderInput={(params) => <TextField {...params} className={cx('deadline-input')} />}

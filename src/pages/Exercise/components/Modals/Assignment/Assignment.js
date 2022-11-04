@@ -55,7 +55,7 @@ function Assignment({ onClose, topics, setExercises, ...props }) {
         formState: { errors },
         handleSubmit,
     } = useForm();
-    const [value, setValue] = useState(moment().format('DD-MM-YYYY'));
+    const [value, setValue] = useState(moment().format('MM/DD/YYYY'));
 
     const handleChange = (newValue) => {
         setValue(newValue);
@@ -71,20 +71,22 @@ function Assignment({ onClose, topics, setExercises, ...props }) {
             }
         }
 
-        const deadline = moment(value['$d']).format('DD-MM-YYYY HH:MM:SS');
+        const deadline = value;
 
         formData.append('topicId', topic);
         formData.append('title', data.title);
         formData.append('classId', classId);
         formData.append('deadline', deadline);
+        console.log(value);
         try {
             const response = await axiosPrivate.post('/exercise/BT/create', formData, {
                 headers: {
                     'content-type': 'multipart/form-data',
                 },
             });
+            console.log(response);
             setExercises((prev) => {
-                return [response.data.materialRes, ...prev];
+                return [response.data.exerciseRes, ...prev];
             });
             onClose();
         } catch (err) {
@@ -124,7 +126,7 @@ function Assignment({ onClose, topics, setExercises, ...props }) {
                             <h3 className={cx('title')}>Ngày đến hạn: </h3>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DesktopDatePicker
-                                    inputFormat="MM/DD/YYYY"
+                                    inputFormat="DD/MM/YYYY"
                                     value={value}
                                     onChange={handleChange}
                                     renderInput={(params) => <TextField {...params} className={cx('deadline-input')} />}

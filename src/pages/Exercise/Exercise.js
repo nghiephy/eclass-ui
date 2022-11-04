@@ -100,10 +100,26 @@ function Exercise() {
         setExercises(exerciseRes.data.exercises);
     };
 
+    const getExeViaTopic = async () => {
+        const exerciseRes = await axiosPrivate.get(`/exercise/get-all/${classId}/${topic}`);
+
+        console.log(exerciseRes);
+        setExercises(exerciseRes.data.exercises);
+    };
+
     useEffect(() => {
         getTopic();
         getAllExercise();
     }, []);
+
+    useEffect(() => {
+        // getTopic();
+        if (topic === '0') {
+            getAllExercise();
+        } else {
+            getExeViaTopic();
+        }
+    }, [topic]);
 
     return (
         <div className={cx('wrapper')}>
