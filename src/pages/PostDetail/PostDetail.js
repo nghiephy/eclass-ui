@@ -11,7 +11,7 @@ import SubmitForm from './components/SubmitForm';
 const cx = classNames.bind(styles);
 
 function PostDetail() {
-    const { classId, postId, role } = useParams();
+    const { classId, postId, role, type } = useParams();
     const [postData, setPostData] = useState();
     const [attachment, setAttachment] = useState();
     const [comments, setComments] = useState([]);
@@ -21,6 +21,11 @@ function PostDetail() {
     const getExerciseData = async () => {
         const dataRes = await axiosPrivate.get(`/exercise/get-detail/${classId}/${postId}`);
         setPostData(dataRes.data.exercise);
+    };
+
+    const getMaterialData = async () => {
+        const dataRes = await axiosPrivate.get(`/material/get-detail/${classId}/${postId}`);
+        setPostData(dataRes.data.material);
     };
 
     const getAttachment = async () => {
@@ -50,7 +55,12 @@ function PostDetail() {
 
     console.log(postData);
     useEffect(() => {
-        getExerciseData();
+        if (type === 'BT') {
+            getExerciseData();
+        }
+        if (type === 'TL') {
+            getMaterialData();
+        }
         getAttachment();
         getAllComment();
     }, []);
@@ -65,9 +75,11 @@ function PostDetail() {
                     role={role}
                 />
             </div>
-            <div className={cx('submit-container')}>
-                <SubmitForm />
-            </div>
+            {type === 'BT' && (
+                <div className={cx('submit-container')}>
+                    <SubmitForm />
+                </div>
+            )}
         </div>
     );
 }

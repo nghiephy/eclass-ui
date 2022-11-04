@@ -88,7 +88,12 @@ function PostItem({ data, attachment, comments, handleSubmitComment, role }) {
                     </div>
                 </div>
                 <div className={cx('post-infor')}>
-                    <h3 className={cx('max-score')}>Điểm: {data?.maxScore}</h3>
+                    {role === 'BT' || role === 'CH' ? (
+                        <h3 className={cx('max-score')}>Điểm: {data?.maxScore}</h3>
+                    ) : (
+                        <div></div>
+                    )}
+
                     <p className={cx('deadline')}>
                         {data?.deadline
                             ? `Hạn cuối: ${moment(data?.deadline).format('DD/MM/YYYY')}`
