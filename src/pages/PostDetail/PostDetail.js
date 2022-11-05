@@ -13,6 +13,7 @@ const cx = classNames.bind(styles);
 function PostDetail() {
     const { classId, postId, role, type } = useParams();
     const [postData, setPostData] = useState();
+    const [choiceData, setChoiceData] = useState();
     const [attachment, setAttachment] = useState();
     const [comments, setComments] = useState([]);
 
@@ -26,6 +27,13 @@ function PostDetail() {
     const getMaterialData = async () => {
         const dataRes = await axiosPrivate.get(`/material/get-detail/${classId}/${postId}`);
         setPostData(dataRes.data.material);
+    };
+
+    const getQuestionData = async () => {
+        const dataRes = await axiosPrivate.get(`/question/get-detail/${classId}/${postId}`);
+        setPostData(dataRes.data.question);
+        setChoiceData(dataRes.data?.answerList);
+        console.log(dataRes);
     };
 
     const getAttachment = async () => {
@@ -54,12 +62,16 @@ function PostDetail() {
     };
 
     console.log(postData);
+    // console.log(choiceData);
     useEffect(() => {
         if (type === 'BT') {
             getExerciseData();
         }
         if (type === 'TL') {
             getMaterialData();
+        }
+        if (type === 'CH') {
+            getQuestionData();
         }
         getAttachment();
         getAllComment();
@@ -73,6 +85,7 @@ function PostDetail() {
                     comments={comments}
                     handleSubmitComment={handleSubmitComment}
                     role={role}
+                    choiceData={choiceData}
                 />
             </div>
             {type === 'BT' && (

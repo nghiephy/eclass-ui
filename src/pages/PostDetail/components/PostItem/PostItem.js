@@ -16,6 +16,8 @@ import Menu from '~/components/Popover/Menu';
 import AttachItem from '~/components/Attachment/AttachItem';
 import CommentForm from './CommentForm';
 import useAuth from '~/hooks/useAuth';
+import SubmitQuestionTextForm from './SubmitQuestionTextForm';
+import SubmitQuestionChoiceForm from './SubmitQuestionChoiceForm';
 
 const cx = classNames.bind(styles);
 
@@ -36,7 +38,7 @@ const MENU_STUDENT_POST = [
     },
 ];
 
-function PostItem({ data, attachment, comments, handleSubmitComment, role }) {
+function PostItem({ data, attachment, comments, handleSubmitComment, choiceData, role }) {
     const { auth } = useAuth();
     const axiosPrivate = useAxiosPrivate();
     const [showMoreCmt, setShowMoreCmt] = useState(true);
@@ -102,6 +104,7 @@ function PostItem({ data, attachment, comments, handleSubmitComment, role }) {
                 </div>
                 <div className={cx('body')}>
                     <div className={cx('body-content')} dangerouslySetInnerHTML={{ __html: data?.guide }}></div>
+
                     <div className={cx('body-attach', { row: true })}>
                         {attachment?.files &&
                             attachment.files.map((file, index) => {
@@ -125,16 +128,14 @@ function PostItem({ data, attachment, comments, handleSubmitComment, role }) {
                                     />
                                 );
                             })}
-
-                        {/* <AttachItem
-                            className={cx('body-attach-item')}
-                            data={{ url: 'url-https', title: '', index: 1 }}
-                        />
-                        <AttachItem
-                            className={cx('body-attach-item')}
-                            data={{ url: 'url-https', title: '', index: 1 }}
-                        /> */}
                     </div>
+
+                    {data?.typeExe === 'question_text' ? (
+                        <SubmitQuestionTextForm />
+                    ) : (
+                        <SubmitQuestionChoiceForm choiceData={choiceData} />
+                    )}
+
                     <CommentForm data={{ avatar: auth.avatar }} handleSubmit={handleSubmitComment} />
                     <div
                         className={cx('body-comment-section', {

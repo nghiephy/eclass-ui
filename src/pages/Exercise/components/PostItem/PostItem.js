@@ -19,12 +19,20 @@ import moment from 'moment';
 
 const cx = classNames.bind(styles);
 
-const MENU_ITEMS_POST = [
+const MENU_TEACHER_POST = [
     {
         title: 'Chỉnh sửa',
     },
     {
         title: 'Xoá',
+    },
+];
+const MENU_STUDENT_POST = [
+    {
+        title: 'Sao chép liên kết',
+    },
+    {
+        title: 'Báo cáo',
     },
 ];
 
@@ -53,7 +61,7 @@ function PostItem({ data, role, classId }) {
                     trigger={'click'}
                     placement="bottom-end"
                     delay={[50, 50]}
-                    items={MENU_ITEMS_POST}
+                    items={role === 't' ? MENU_TEACHER_POST : MENU_STUDENT_POST}
                     onChange={handleOnChange}
                     className={cx('menu-more')}
                 >

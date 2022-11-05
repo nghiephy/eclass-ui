@@ -14,10 +14,11 @@ import images from '~/assets/images';
 import Menu from '~/components/Popover/Menu';
 import AttachItem from '~/components/Attachment/AttachItem';
 import CommentForm from './CommentForm';
+import useAuth from '~/hooks/useAuth';
 
 const cx = classNames.bind(styles);
 
-const MENU_ITEMS_POST = [
+const MENU_TEACHER_POST = [
     {
         title: 'Chỉnh sửa',
     },
@@ -25,8 +26,17 @@ const MENU_ITEMS_POST = [
         title: 'Xoá',
     },
 ];
+const MENU_STUDENT_POST = [
+    {
+        title: 'Sao chép liên kết',
+    },
+    {
+        title: 'Báo cáo',
+    },
+];
 
 function PostItem({ data, avatarUser }) {
+    const { classData } = useAuth();
     const axiosPrivate = useAxiosPrivate();
     const [showMoreCmt, setShowMoreCmt] = useState(true);
     const [attachment, setAttachment] = useState();
@@ -75,7 +85,7 @@ function PostItem({ data, avatarUser }) {
                     trigger={'click'}
                     placement="bottom-end"
                     delay={[50, 50]}
-                    items={MENU_ITEMS_POST}
+                    items={classData.role === 't' ? MENU_TEACHER_POST : MENU_STUDENT_POST}
                     onChange={handleOnChange}
                     className={cx('menu-more')}
                 >

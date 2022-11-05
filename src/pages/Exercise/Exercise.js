@@ -157,7 +157,6 @@ function Exercise() {
                 </div>
                 <div className={cx('timeline')}>
                     {exercises.map((item, index) => {
-                        console.log(item);
                         return <PostItem key={index} data={item} role={role} classId={classId} />;
                     })}
                 </div>
