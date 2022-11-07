@@ -17,49 +17,6 @@ import useAuth from '~/hooks/useAuth';
 
 const cx = classNames.bind(styles);
 
-const MENU_ITEMS = [
-    {
-        icon: (
-            <MyIcon>
-                <IcCircleQuestion />
-            </MyIcon>
-        ),
-        title: 'Trang cá nhân',
-        to: '/profile',
-    },
-    {
-        icon: (
-            <MyIcon>
-                <IcLanguage />
-            </MyIcon>
-        ),
-        title: 'Ngôn Ngữ',
-        children: {
-            title: 'Ngôn Ngữ',
-            data: [
-                {
-                    type: 'language',
-                    code: 'en',
-                    title: 'Tiếng Anh',
-                },
-                {
-                    type: 'language',
-                    code: 'vi',
-                    title: 'Tiếng Việt',
-                },
-            ],
-        },
-    },
-    {
-        icon: (
-            <MyIcon>
-                <IcKeyboard />
-            </MyIcon>
-        ),
-        title: 'Đăng xuất',
-    },
-];
-
 function Header({ toggleSidebar }) {
     const navigate = useNavigate();
     const logout = useLogout();
@@ -75,11 +32,53 @@ function Header({ toggleSidebar }) {
         },
         {
             title: 'Thành viên',
-            path: '/member',
+            path: `/member/${classData?.classId}/all`,
         },
         {
             title: 'Điểm',
             path: '/grade',
+        },
+    ];
+    const MENU_ITEMS = [
+        {
+            icon: (
+                <MyIcon>
+                    <IcCircleQuestion />
+                </MyIcon>
+            ),
+            title: 'Trang cá nhân',
+            to: `/profile/${auth.id}`,
+        },
+        {
+            icon: (
+                <MyIcon>
+                    <IcLanguage />
+                </MyIcon>
+            ),
+            title: 'Ngôn Ngữ',
+            children: {
+                title: 'Ngôn Ngữ',
+                data: [
+                    {
+                        type: 'language',
+                        code: 'en',
+                        title: 'Tiếng Anh',
+                    },
+                    {
+                        type: 'language',
+                        code: 'vi',
+                        title: 'Tiếng Việt',
+                    },
+                ],
+            },
+        },
+        {
+            icon: (
+                <MyIcon>
+                    <IcKeyboard />
+                </MyIcon>
+            ),
+            title: 'Đăng xuất',
         },
     ];
 

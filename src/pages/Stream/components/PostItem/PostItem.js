@@ -17,6 +17,7 @@ import CommentForm from './CommentForm';
 import useAuth from '~/hooks/useAuth';
 import EditPost from '../Modals/EditPost';
 import ConfirmForm from '../Modals/ConfirmForm';
+import moment from 'moment';
 
 const cx = classNames.bind(styles);
 
@@ -60,7 +61,7 @@ function PostItem({ data, avatarUser, setPosts }) {
         setOpenEditPost(!openEditPost);
     };
     const toggleConfirmForm = () => {
-        setOpenConfirmForm(!openEditPost);
+        setOpenConfirmForm(!openConfirmForm);
     };
 
     console.log(data);
@@ -157,7 +158,7 @@ function PostItem({ data, avatarUser, setPosts }) {
                     </div>
                     <div className={cx('author-infor')}>
                         <h2 className={cx('name')}>{dataPost?.fullName}</h2>
-                        <p className={cx('time')}>{dataPost?.createdAt}</p>
+                        <p className={cx('time')}>{moment(dataPost?.createdAt).format('DD-MM-YYYY HH:mm:ss')}</p>
                     </div>
                 </div>
                 <div className={cx('body')}>

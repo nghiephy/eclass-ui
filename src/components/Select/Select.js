@@ -4,7 +4,7 @@ import styles from './Select.module.scss';
 
 const cx = classNames.bind(styles);
 
-function Select({ name = '', data = [], label = null, children, handleSelect, className, ...passProps }) {
+function Select({ name = '', data = [], currentData, label = null, children, handleSelect, className, ...passProps }) {
     let Comp = 'select';
     const props = {
         name,
@@ -29,6 +29,7 @@ function Select({ name = '', data = [], label = null, children, handleSelect, cl
                 onChange={(e) => {
                     return handleSelect(e.target.value);
                 }}
+                defaultValue={currentData}
                 {...passProps}
             >
                 {data.map((item, index) => {

@@ -15,7 +15,7 @@ import Button from '~/components/Button';
 import Inputs from '~/components/Inputs';
 import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 
-import styles from './Assignment.module.scss';
+import styles from './Question.module.scss';
 import Attachment from '~/components/Attachment';
 import AttachItem from '~/components/Attachment/AttachItem';
 import Select from '~/components/Select';
@@ -43,10 +43,11 @@ const toolbarOptions = [
     ['clean'], // remove formatting button
 ];
 
-function Assignment({ onClose, topics, setExercises, ...props }) {
+function Question({ onClose, topics = [], setExercises, ...props }) {
     const { classId } = useParams();
     const axiosPrivate = useAxiosPrivate();
     const [topic, setTopic] = useState(0);
+    const [questionType, setQuestionType] = useState('question_text');
     const [convertedText, setConvertedText] = useState('');
     const [linkList, setLinkList] = useState([]);
     const [fileList, setFileList] = useState();
@@ -72,25 +73,40 @@ function Assignment({ onClose, topics, setExercises, ...props }) {
         }
 
         const deadline = value;
+        let answerList = [];
+
+        if (questionType === 'question_choice') {
+            answerList = [
+                { content: data.choice1, correct: data.correct_ans === '0' },
+                { content: data.choice2, correct: data.correct_ans === '1' },
+                { content: data.choice3, correct: data.correct_ans === '2' },
+                { content: data.choice4, correct: data.correct_ans === '3' },
+            ];
+        }
+
+        answerList.map((item) => {
+            formData.append('answerList', JSON.stringify(item));
+        });
 
         formData.append('topicId', topic);
-        formData.append('title', data.title);
         formData.append('classId', classId);
+        formData.append('question', data.question);
         formData.append('deadline', deadline);
-        console.log(value);
+        formData.append('questionType', questionType);
+        console.log(data);
+
         try {
-            const response = await axiosPrivate.post('/exercise/BT/create', formData, {
+            const response = await axiosPrivate.post('/exercise/CH/create', formData, {
                 headers: {
                     'content-type': 'multipart/form-data',
                 },
             });
             setExercises((prev) => {
-                return [response.data.exerciseRes, ...prev];
+                return [response.data.questionRes, ...prev];
             });
-            // window.location.reload();
             onClose();
         } catch (err) {
-            alert('Đăng bài tập thất bại!');
+            alert('Đăng câu hỏi thất bại!');
         }
     };
 
@@ -117,7 +133,7 @@ function Assignment({ onClose, topics, setExercises, ...props }) {
                 <span className={cx('exits')} onClick={onClosePost}>
                     &times;
                 </span>
-                <h2 className={cx('title')}>Giao bài tập</h2>
+                <h2 className={cx('title')}>Đăng câu hỏi</h2>
 
                 <form className={cx('form')} onSubmit={handleSubmit(onSubmit)}>
                     <div className={cx('select-section')}>
@@ -133,16 +149,24 @@ function Assignment({ onClose, topics, setExercises, ...props }) {
                                 />
                             </LocalizationProvider>
                         </div>
+                        <Select
+                            data={[
+                                { title: 'Câu hỏi ngắn', value: 'question_text' },
+                                { title: 'Trắc nghiệm', value: 'question_choice' },
+                            ]}
+                            handleSelect={setQuestionType}
+                            label="Loại câu hỏi"
+                        />
                     </div>
 
                     <Inputs
                         primary
-                        name="title"
+                        name="question"
                         type="text"
-                        label="Tiêu đề (*)"
+                        label="Câu hỏi (*)"
                         register={register}
                         validate={{
-                            required: 'Chưa nhập tiêu đề',
+                            required: 'Chưa nhập câu hỏi',
                         }}
                         errors={errors}
                     />
@@ -153,11 +177,107 @@ function Assignment({ onClose, topics, setExercises, ...props }) {
                                 toolbar: toolbarOptions,
                             }}
                             theme="snow"
-                            placeholder="Nhập hướng dẫn cho bài tập"
+                            placeholder="Nhập hướng dẫn trả lời câu hỏi"
                             value={convertedText}
                             onChange={setConvertedText}
                         />
                     </div>
+
+                    {questionType === 'question_choice' && (
+                        <div className={cx('choice-section')}>
+                            <div className={cx('choice-item')}>
+                                <input
+                                    type="radio"
+                                    name="correct_ans"
+                                    value={0}
+                                    className={cx('choice-radio')}
+                                    {...register('correct_ans', {
+                                        required: 'Chọn đáp án đúng',
+                                    })}
+                                />
+                                <Inputs
+                                    primary
+                                    name="choice1"
+                                    type="text"
+                                    label="Lựa chọn 1"
+                                    register={register}
+                                    validate={{
+                                        required: 'Chưa nhập câu trả lời',
+                                    }}
+                                    errors={errors}
+                                />
+                            </div>
+                            <div className={cx('choice-item')}>
+                                <input
+                                    type="radio"
+                                    value={1}
+                                    name="correct_ans"
+                                    className={cx('choice-radio')}
+                                    {...register('correct_ans', {
+                                        required: 'Chọn đáp án đúng',
+                                    })}
+                                />
+
+                                <Inputs
+                                    primary
+                                    name="choice2"
+                                    type="text"
+                                    label="Lựa chọn 2"
+                                    register={register}
+                                    validate={{
+                                        required: 'Chưa nhập câu trả lời',
+                                    }}
+                                    errors={errors}
+                                />
+                            </div>
+                            <div className={cx('choice-item')}>
+                                <input
+                                    type="radio"
+                                    value={2}
+                                    name="correct_ans"
+                                    className={cx('choice-radio')}
+                                    {...register('correct_ans', {
+                                        required: 'Chọn đáp án đúng',
+                                    })}
+                                />
+
+                                <Inputs
+                                    primary
+                                    name="choice3"
+                                    type="text"
+                                    label="Lựa chọn 3"
+                                    register={register}
+                                    validate={{
+                                        required: 'Chưa nhập câu trả lời',
+                                    }}
+                                    errors={errors}
+                                />
+                            </div>
+                            <div className={cx('choice-item')}>
+                                <input
+                                    type="radio"
+                                    value={3}
+                                    name="correct_ans"
+                                    className={cx('choice-radio')}
+                                    {...register('correct_ans', {
+                                        required: 'Chọn đáp án đúng',
+                                    })}
+                                />
+                                <Inputs
+                                    primary
+                                    name="choice4"
+                                    type="text"
+                                    label="Lựa chọn 4"
+                                    register={register}
+                                    validate={{
+                                        required: 'Chưa nhập câu trả lời',
+                                    }}
+                                    errors={errors}
+                                />
+                            </div>
+                            {errors.correct_ans && <p className={cx('error_msg')}>** Chưa chọn đáp áp đúng!</p>}
+                        </div>
+                    )}
 
                     <div className={cx('attach-section')}>
                         <div className={cx('attach-file')}>
@@ -217,4 +337,4 @@ function Assignment({ onClose, topics, setExercises, ...props }) {
     );
 }
 
-export default Assignment;
+export default Question;

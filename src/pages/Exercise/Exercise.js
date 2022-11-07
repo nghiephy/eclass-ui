@@ -66,6 +66,7 @@ function Exercise() {
     const toggleQuestion = () => {
         setOpenQuestion(!openQuestion);
     };
+    console.log(exercises);
 
     const handleOnChange = async (menuItem) => {
         if (menuItem.code === 'assignment') {
@@ -96,16 +97,21 @@ function Exercise() {
     };
     const getAllExercise = async () => {
         const exerciseRes = await axiosPrivate.get(`/exercise/get-all/${classId}`);
-
         setExercises(exerciseRes.data.exercises);
     };
 
     const getExeViaTopic = async () => {
         const exerciseRes = await axiosPrivate.get(`/exercise/get-all/${classId}/${topic}`);
 
-        console.log(exerciseRes);
         setExercises(exerciseRes.data.exercises);
     };
+
+    // const handleSetExercise = (data) => {
+    //     console.log(data);
+    //     setExercises((prev) => {
+    //         return [data, ...prev];
+    //     });
+    // };
 
     useEffect(() => {
         getTopic();
@@ -157,7 +163,15 @@ function Exercise() {
                 </div>
                 <div className={cx('timeline')}>
                     {exercises.map((item, index) => {
-                        return <PostItem key={index} data={item} role={role} classId={classId} />;
+                        return (
+                            <PostItem
+                                key={index}
+                                data={item}
+                                role={role}
+                                classId={classId}
+                                setExercises={setExercises}
+                            />
+                        );
                     })}
                 </div>
             </div>

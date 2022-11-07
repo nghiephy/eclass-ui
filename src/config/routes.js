@@ -6,9 +6,9 @@ const routes = {
     classwork: '/classwork',
     exercise: '/exercise/:role/:classId/:topic',
     postDetail: '/exercise/:role/:classId/:type/:postId/detail',
-    member: '/member',
+    member: '/member/:classId/:filter',
     grade: '/grade',
-    profile: '/profile',
+    profile: '/profile/:userId',
     forgotPassword: '/forgot-password',
 };
 

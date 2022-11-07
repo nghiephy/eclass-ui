@@ -5,7 +5,7 @@ import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { MyIcon } from '~/components/MyIcons';
 import { IcUpload } from '~/components/MyIcons/regular';
@@ -13,9 +13,11 @@ import Button from '~/components/Button';
 import Inputs from '~/components/Inputs';
 import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 
-import styles from './EditPost.module.scss';
+import styles from './Material.module.scss';
 import Attachment from '~/components/Attachment';
 import AttachItem from '~/components/Attachment/AttachItem';
+import Select from '~/components/Select';
+import { useParams } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -36,14 +38,13 @@ const toolbarOptions = [
     ['clean'], // remove formatting button
 ];
 
-function EditPost({ onClose, postData, setDataPost, setUpdateAttachment, classId, ...props }) {
+function Material({ onClose, topics = [], setExercises, ...props }) {
+    const { classId } = useParams();
     const axiosPrivate = useAxiosPrivate();
+    const [topic, setTopic] = useState(0);
     const [convertedText, setConvertedText] = useState('');
-    const [attachment, setAttachment] = useState();
     const [linkList, setLinkList] = useState([]);
     const [fileList, setFileList] = useState();
-    const [linksDeleted, setLinksDeleted] = useState([]);
-    const [filesDeleted, setFilesDeleted] = useState([]);
     const {
         register,
         formState: { errors },
@@ -60,26 +61,23 @@ function EditPost({ onClose, postData, setDataPost, setUpdateAttachment, classId
             }
         }
 
-        formData.append('classId', parseInt(classId));
-        formData.append('type', 'TB');
-        formData.append('linksDeleted', linksDeleted);
-        formData.append('filesDeleted', filesDeleted);
-        formData.append('postId', postData.postId);
+        formData.append('topicId', topic);
+        formData.append('title', data.title);
+        formData.append('classId', classId);
+        formData.append('type', 'TL');
 
         try {
-            const response = await axiosPrivate.post('/post/update', formData, {
+            const response = await axiosPrivate.post(`/exercise/TL/create/${classId}`, formData, {
                 headers: {
                     'content-type': 'multipart/form-data',
                 },
             });
-            console.log(response);
-            setDataPost((prev) => ({ ...prev, ...response.data.updatedPost }));
-            console.log(response.data.updatedAttachment);
-            setUpdateAttachment(response.data.updatedAttachment);
+            setExercises((prev) => {
+                return [response.data.materialRes, ...prev];
+            });
             onClose();
         } catch (err) {
-            console.log(err);
-            alert('Chỉnh sửa thông báo thất bại!');
+            alert('Đăng bài tập thất bại!');
         }
     };
 
@@ -89,7 +87,7 @@ function EditPost({ onClose, postData, setDataPost, setUpdateAttachment, classId
 
     const onClosePost = () => {
         onClose();
-        setConvertedText(postData.content);
+        setConvertedText('');
     };
 
     const deleteItemLink = (index) => {
@@ -100,46 +98,30 @@ function EditPost({ onClose, postData, setDataPost, setUpdateAttachment, classId
         });
     };
 
-    const deleteOldLink = (linkId) => {
-        setAttachment((prev) => {
-            const linksNew = prev.links.filter((item) => item.linkId !== linkId);
-            return { files: prev.files, links: linksNew };
-        });
-        setLinksDeleted((prev) => [linkId, ...prev]);
-    };
-
-    const deleteOldFile = (fileId) => {
-        setAttachment((prev) => {
-            const filesNew = prev.files.filter((item) => item.fileId !== fileId);
-            return { links: prev.links, files: filesNew };
-        });
-        setFilesDeleted((prev) => [fileId, ...prev]);
-    };
-
-    const getAttachment = async () => {
-        const dataRes = await axiosPrivate.get(`/post/get-attachment/${postData.postId}`);
-        setAttachment(dataRes.data.data);
-    };
-
-    useEffect(() => {
-        getAttachment();
-        setConvertedText(postData.content);
-    }, []);
-
-    useEffect(() => {
-        getAttachment();
-    }, [postData]);
-
     return (
         <Popup className={cx('wrapper')} {...props} onClose={onClose} style={{ borderRadius: '10px' }} nested>
             <div className={cx('modal')}>
                 <span className={cx('exits')} onClick={onClosePost}>
                     &times;
                 </span>
-                <h2 className={cx('title')}>Chỉnh sửa thông báo</h2>
+                <h2 className={cx('title')}>Đăng tài liệu mới</h2>
 
                 <form className={cx('form')} onSubmit={handleSubmit(onSubmit)}>
-                    {/* <Select data={dataClass} label="Chọn lớp" /> */}
+                    <div className={cx('select-section')}>
+                        <Select data={topics} handleSelect={setTopic} label="Chủ đề" />
+                    </div>
+
+                    <Inputs
+                        primary
+                        name="title"
+                        type="text"
+                        label="Tiêu đề (*)"
+                        register={register}
+                        validate={{
+                            required: 'Chưa nhập tiêu đề',
+                        }}
+                        errors={errors}
+                    />
 
                     <div className={cx('form-editor')}>
                         <ReactQuill
@@ -147,7 +129,7 @@ function EditPost({ onClose, postData, setDataPost, setUpdateAttachment, classId
                                 toolbar: toolbarOptions,
                             }}
                             theme="snow"
-                            placeholder="Nhập thông báo cho lớp học của bạn"
+                            placeholder="Nhập hướng dẫn sử dụng tài liệu"
                             value={convertedText}
                             onChange={setConvertedText}
                         />
@@ -186,37 +168,14 @@ function EditPost({ onClose, postData, setDataPost, setUpdateAttachment, classId
                     </div>
 
                     <div className={cx('review')}>
-                        {attachment?.files &&
-                            attachment.files.map((file, index) => {
-                                return (
-                                    <AttachItem
-                                        key={index}
-                                        type="file"
-                                        deleteOldAttachment={deleteOldFile}
-                                        className={cx('body-attach-item', { 'w-full': true })}
-                                        data={{ ...file, index: 1 }}
-                                    />
-                                );
-                            })}
-                        {attachment?.links &&
-                            attachment.links.map((link, index) => {
-                                return (
-                                    <AttachItem
-                                        key={index}
-                                        type="link"
-                                        deleteOldAttachment={deleteOldLink}
-                                        className={cx('body-attach-item', { 'w-full': true })}
-                                        data={{ ...link, index: index }}
-                                    />
-                                );
-                            })}
                         {linkList.map((item, index) => {
                             return (
                                 <AttachItem
+                                    type="link"
                                     key={index}
                                     deleteItemLink={deleteItemLink}
-                                    className={cx('w-full')}
                                     data={{ url: item, index: index }}
+                                    className={cx('w-full')}
                                 />
                             );
                         })}
@@ -226,7 +185,7 @@ function EditPost({ onClose, postData, setDataPost, setUpdateAttachment, classId
                         <Button outline className={cx('cancel')} onClick={onClosePost}>
                             Huỷ
                         </Button>
-                        <Inputs submit className={cx('create')} type="submit" value="Cập nhật" />
+                        <Inputs submit className={cx('create')} type="submit" value="Đăng" />
                     </div>
                 </form>
             </div>
@@ -234,4 +193,4 @@ function EditPost({ onClose, postData, setDataPost, setUpdateAttachment, classId
     );
 }
 
-export default EditPost;
+export default Material;

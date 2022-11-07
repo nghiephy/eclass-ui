@@ -9,6 +9,7 @@ import Login from '~/pages/Login';
 import Register from '~/pages/Register';
 import ForgotPassword from '~/pages/ForgotPassword';
 import Stream from '~/pages/Stream';
+import Member from '~/pages/Member';
 import Exercise from '~/pages/Exercise';
 import PostDetail from '~/pages/PostDetail';
 import Home from '~/pages/Home';
@@ -22,6 +23,7 @@ const publicRoutes = [
 
 const privateRoutes = [
     { path: config.routes.stream, component: Stream },
+    { path: config.routes.member, component: Member },
     { path: config.routes.exercise, component: Exercise },
     { path: config.routes.postDetail, component: PostDetail },
     { path: config.routes.home, component: Home, layout: HomeLayout },

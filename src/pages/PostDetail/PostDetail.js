@@ -81,7 +81,9 @@ function PostDetail() {
             <div className={cx('post-container')}>
                 <PostItem
                     data={postData}
+                    setData={setPostData}
                     attachment={attachment}
+                    setAttachment={setAttachment}
                     comments={comments}
                     handleSubmitComment={handleSubmitComment}
                     role={role}

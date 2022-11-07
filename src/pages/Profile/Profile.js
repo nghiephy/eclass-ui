@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Popup from 'reactjs-popup';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import Button from '~/components/Button';
 import styles from './Profile.module.scss';
@@ -15,6 +15,7 @@ import useAuth from '~/hooks/useAuth';
 const cx = classNames.bind(styles);
 
 function Profile() {
+    const { userId } = useParams();
     const [user, setUser] = useState({ fullName: '', email: '', birthday: '', createdAt: '' });
     const [reviewImage, setReviewImage] = useState();
     const [imagefile, setImagefile] = useState('');
@@ -57,7 +58,7 @@ function Profile() {
     };
 
     const getUserData = async () => {
-        const userResponse = await axiosPrivate.get('/user/getinfor');
+        const userResponse = await axiosPrivate.get(`/user/getinfor/${userId}`);
         const user = userResponse.data.user;
 
         setUser(user);
@@ -88,13 +89,14 @@ function Profile() {
                                 }
                                 alt="avatar"
                             />
-                            <label htmlFor="avatar-upload">Chọn ảnh</label>
+                            {parseInt(userId) === auth.id && <label htmlFor="avatar-upload">Chọn ảnh</label>}
                             <input
                                 type="file"
                                 accept="image/*"
                                 style={{ display: 'none' }}
                                 name="avatar"
                                 id="avatar-upload"
+                                disabled={!parseInt(userId) === auth.id}
                                 onChange={onAvatarChange}
                                 // {...register('avatar')}
                             />
@@ -116,6 +118,7 @@ function Profile() {
                         name="fullName"
                         type="text"
                         label="Họ và tên"
+                        readOnly={!(parseInt(userId) === auth.id)}
                         register={register}
                         validate={{
                             required: 'Chưa nhập lại họ tên',
@@ -137,6 +140,7 @@ function Profile() {
                         name="email"
                         type="text"
                         label="Email"
+                        readOnly={!(parseInt(userId) === auth.id)}
                         register={register}
                         validate={{
                             required: 'Chưa nhập lại email',
@@ -151,6 +155,7 @@ function Profile() {
                         name="birthday"
                         type="text"
                         label="Ngày sinh"
+                        readOnly={!(parseInt(userId) === auth.id)}
                         register={register}
                         validate={{
                             required: 'Chưa nhập lại ngày sinh',
@@ -169,9 +174,17 @@ function Profile() {
                     />
                 </div>
                 <div className={cx('action-section')}>
-                    <Inputs submit type="submit" className={cx('update-btn')} value="Cập nhật" id="account-submit-btn">
-                        Cập nhật
-                    </Inputs>
+                    {parseInt(userId) === auth.id && (
+                        <Inputs
+                            submit
+                            type="submit"
+                            className={cx('update-btn')}
+                            value="Cập nhật"
+                            id="account-submit-btn"
+                        >
+                            Cập nhật
+                        </Inputs>
+                    )}
                 </div>
             </form>
 

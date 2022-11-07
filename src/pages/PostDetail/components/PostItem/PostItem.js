@@ -18,12 +18,14 @@ import CommentForm from './CommentForm';
 import useAuth from '~/hooks/useAuth';
 import SubmitQuestionTextForm from './SubmitQuestionTextForm';
 import SubmitQuestionChoiceForm from './SubmitQuestionChoiceForm';
+import EditAssignment from '~/pages/Exercise/components/Modals/EditAssignment';
 
 const cx = classNames.bind(styles);
 
 const MENU_TEACHER_POST = [
     {
         title: 'Chỉnh sửa',
+        code: 'edit',
     },
     {
         title: 'Xoá',
@@ -38,10 +40,18 @@ const MENU_STUDENT_POST = [
     },
 ];
 
-function PostItem({ data, attachment, comments, handleSubmitComment, choiceData, role }) {
+function PostItem({ data, setData, attachment, setAttachment, comments, handleSubmitComment, choiceData, role }) {
     const { auth } = useAuth();
     const axiosPrivate = useAxiosPrivate();
     const [showMoreCmt, setShowMoreCmt] = useState(true);
+
+    const [actionHidden, setActionHidden] = useState(false);
+    const [openUpdateAssignment, setOpenUpdateAssignment] = useState(false);
+    const closeUpdateAssignment = () => setOpenUpdateAssignment(false);
+
+    const toggleUpdateAssigment = () => {
+        setOpenUpdateAssignment(!openUpdateAssignment);
+    };
 
     let icon = images.noImage;
     if (data?.type === 'TL') {
@@ -55,7 +65,12 @@ function PostItem({ data, attachment, comments, handleSubmitComment, choiceData,
     }
 
     const handleOnChange = async (menuItem) => {
-        console.log(menuItem);
+        if (menuItem.code === 'edit') {
+            if (data?.type === 'BT') {
+                toggleUpdateAssigment();
+            }
+        }
+        setActionHidden((prev) => !prev);
     };
 
     return (
@@ -69,9 +84,15 @@ function PostItem({ data, attachment, comments, handleSubmitComment, choiceData,
                     delay={[50, 50]}
                     items={role === 't' ? MENU_TEACHER_POST : MENU_STUDENT_POST}
                     onChange={handleOnChange}
-                    className={cx('menu-more')}
+                    className={cx('menu-more', { hidden: actionHidden })}
                 >
-                    <Button circle className={cx('more-btn')}>
+                    <Button
+                        circle
+                        className={cx('more-btn')}
+                        onClick={() => {
+                            setActionHidden(false);
+                        }}
+                    >
                         <MyIcon className={cx('more-icon')}>
                             <IcThreeDotsVertical />
                         </MyIcon>
@@ -130,10 +151,14 @@ function PostItem({ data, attachment, comments, handleSubmitComment, choiceData,
                             })}
                     </div>
 
-                    {data?.typeExe === 'question_text' ? (
-                        <SubmitQuestionTextForm />
+                    {data?.type === 'CH' ? (
+                        data?.typeExe === 'question_text' ? (
+                            <SubmitQuestionTextForm />
+                        ) : (
+                            <SubmitQuestionChoiceForm choiceData={choiceData} />
+                        )
                     ) : (
-                        <SubmitQuestionChoiceForm choiceData={choiceData} />
+                        <></>
                     )}
 
                     <CommentForm data={{ avatar: auth.avatar }} handleSubmit={handleSubmitComment} />
@@ -195,6 +220,17 @@ function PostItem({ data, attachment, comments, handleSubmitComment, choiceData,
                 </div>
             </div>
             <div className={cx('comment')}></div>
+
+            <EditAssignment
+                data={data}
+                setData={setData}
+                attachment={attachment}
+                setAttachment={setAttachment}
+                open={openUpdateAssignment}
+                isOpen={openUpdateAssignment}
+                closeOnDocumentClick
+                onClose={closeUpdateAssignment}
+            />
         </div>
     );
 }
