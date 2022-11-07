@@ -5,14 +5,10 @@ import images from '~/assets/images';
 
 const cx = classNames.bind(styles);
 
-function AttachItem({ type, data, className, deleteItemLink, ...passProps }) {
+function AttachItem({ type, data, className, deleteItemLink, deleteOldAttachment, ...passProps }) {
     const classes = cx('wrapper', {
         [className]: className,
     });
-    // const Comp = 'a';
-    // if(type==='file') {
-    //     Comp = ''
-    // }
 
     return (
         <div
@@ -43,6 +39,16 @@ function AttachItem({ type, data, className, deleteItemLink, ...passProps }) {
                     className={cx('exits')}
                     onClick={() => {
                         deleteItemLink(data.index);
+                    }}
+                >
+                    &times;
+                </span>
+            )}
+            {deleteOldAttachment && (
+                <span
+                    className={cx('exits')}
+                    onClick={() => {
+                        deleteOldAttachment(data?.linkId ? data.linkId : data.fileId);
                     }}
                 >
                     &times;

@@ -95,7 +95,7 @@ function Stream() {
                     <Post open={openPost} closeOnDocumentClick onClose={closeModalPost} />
 
                     {posts.map((post, index) => {
-                        return <PostItem key={index} data={post} avatarUser={auth.avatar} />;
+                        return <PostItem key={index} data={post} avatarUser={auth.avatar} setPosts={setPosts} />;
                     })}
                 </div>
             </div>

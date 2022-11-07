@@ -15,15 +15,22 @@ import Menu from '~/components/Popover/Menu';
 import AttachItem from '~/components/Attachment/AttachItem';
 import CommentForm from './CommentForm';
 import useAuth from '~/hooks/useAuth';
+import EditPost from '../Modals/EditPost';
+import ConfirmForm from '../Modals/ConfirmForm';
 
 const cx = classNames.bind(styles);
 
 const MENU_TEACHER_POST = [
     {
         title: 'Chỉnh sửa',
+        code: 'edit',
+    },
+    {
+        title: 'Sao chép liên kết',
     },
     {
         title: 'Xoá',
+        code: 'delete',
     },
 ];
 const MENU_STUDENT_POST = [
@@ -35,22 +42,44 @@ const MENU_STUDENT_POST = [
     },
 ];
 
-function PostItem({ data, avatarUser }) {
+function PostItem({ data, avatarUser, setPosts }) {
     const { classData } = useAuth();
     const axiosPrivate = useAxiosPrivate();
     const [showMoreCmt, setShowMoreCmt] = useState(true);
     const [attachment, setAttachment] = useState();
     const [comments, setComments] = useState([]);
+    const [dataPost, setDataPost] = useState(data);
+
+    const [actionHidden, setActionHidden] = useState(false);
+    const [openEditPost, setOpenEditPost] = useState(false);
+    const closeEditPost = () => setOpenEditPost(false);
+    const [openConfirmForm, setOpenConfirmForm] = useState(false);
+    const closeConfirmForm = () => setOpenConfirmForm(false);
+
+    const toggleEditPost = () => {
+        setOpenEditPost(!openEditPost);
+    };
+    const toggleConfirmForm = () => {
+        setOpenConfirmForm(!openEditPost);
+    };
+
+    console.log(data);
 
     const handleOnChange = async (menuItem) => {
-        console.log(menuItem);
+        if (menuItem.code === 'edit') {
+            toggleEditPost();
+        }
+        if (menuItem.code === 'delete') {
+            toggleConfirmForm();
+        }
+        setActionHidden((prev) => !prev);
     };
 
     const getAllComment = async () => {
         const allCommentRes = await axiosPrivate.get(`/comment/get-all`, {
             params: {
-                postId: data.postId,
-                classId: data.classId,
+                postId: dataPost.postId,
+                classId: dataPost.classId,
             },
         });
         setComments(allCommentRes.data.allComment);
@@ -60,14 +89,23 @@ function PostItem({ data, avatarUser }) {
         console.log('Comment', comment);
         const dataCommentRes = await axiosPrivate.post(`/comment/create`, {
             content: comment,
-            postId: data.postId,
-            classId: data.classId,
+            postId: dataPost.postId,
+            classId: dataPost.classId,
         });
         await getAllComment();
     };
 
+    const handleDeletePost = async () => {
+        const deleteRes = await axiosPrivate.post(`/post/delete`, {
+            postId: dataPost.postId,
+            classId: dataPost.classId,
+        });
+        console.log(deleteRes);
+        setPosts(deleteRes.data.currentPost);
+    };
+
     const getAttachment = async () => {
-        const dataRes = await axiosPrivate.get(`/post/get-attachment/${data.postId}`);
+        const dataRes = await axiosPrivate.get(`/post/get-attachment/${dataPost.postId}`);
         setAttachment(dataRes.data.data);
     };
 
@@ -75,6 +113,12 @@ function PostItem({ data, avatarUser }) {
         getAttachment();
         getAllComment();
     }, []);
+
+    useEffect(() => {
+        getAttachment();
+        getAllComment();
+        setDataPost(data);
+    }, [data]);
 
     return (
         <div className={cx('wrapper')}>
@@ -87,9 +131,15 @@ function PostItem({ data, avatarUser }) {
                     delay={[50, 50]}
                     items={classData.role === 't' ? MENU_TEACHER_POST : MENU_STUDENT_POST}
                     onChange={handleOnChange}
-                    className={cx('menu-more')}
+                    className={cx('menu-more', { hidden: actionHidden })}
                 >
-                    <Button circle className={cx('more-btn')}>
+                    <Button
+                        circle
+                        className={cx('more-btn')}
+                        onClick={() => {
+                            setActionHidden(false);
+                        }}
+                    >
                         <MyIcon className={cx('more-icon')}>
                             <IcThreeDotsVertical />
                         </MyIcon>
@@ -102,16 +152,16 @@ function PostItem({ data, avatarUser }) {
                     <div className={cx('img-box')}>
                         <Images
                             alt="author-avatar"
-                            src={data?.avatar ? `http://localhost:8080${data.avatar}` : images.noAvatar}
+                            src={dataPost?.avatar ? `http://localhost:8080${dataPost.avatar}` : images.noAvatar}
                         />
                     </div>
                     <div className={cx('author-infor')}>
-                        <h2 className={cx('name')}>{data?.fullName}</h2>
-                        <p className={cx('time')}>{data?.createdAt}</p>
+                        <h2 className={cx('name')}>{dataPost?.fullName}</h2>
+                        <p className={cx('time')}>{dataPost?.createdAt}</p>
                     </div>
                 </div>
                 <div className={cx('body')}>
-                    <div className={cx('body-content')} dangerouslySetInnerHTML={{ __html: data?.content }}></div>
+                    <div className={cx('body-content')} dangerouslySetInnerHTML={{ __html: dataPost?.content }}></div>
                     <div className={cx('body-attach', { row: true })}>
                         {attachment?.files &&
                             attachment.files.map((file, index) => {
@@ -204,6 +254,22 @@ function PostItem({ data, avatarUser }) {
                 </div>
             </div>
             <div className={cx('comment')}></div>
+
+            <EditPost
+                postData={data}
+                setDataPost={setDataPost}
+                setUpdateAttachment={setAttachment}
+                classId={classData.classId}
+                open={openEditPost}
+                closeOnDocumentClick
+                onClose={closeEditPost}
+            />
+            <ConfirmForm
+                handleDeletePost={handleDeletePost}
+                open={openConfirmForm}
+                closeOnDocumentClick
+                onClose={closeConfirmForm}
+            />
         </div>
     );
 }
