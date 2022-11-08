@@ -41,9 +41,10 @@ const MENU_STUDENT_POST = [
 ];
 
 function PostItem({ data, setData, attachment, setAttachment, comments, handleSubmitComment, choiceData, role }) {
-    const { auth } = useAuth();
+    const { auth, classData } = useAuth();
     const axiosPrivate = useAxiosPrivate();
     const [showMoreCmt, setShowMoreCmt] = useState(true);
+    const [isChoiceCorrect, setIsChoiceCorrect] = useState(0);
 
     const [actionHidden, setActionHidden] = useState(false);
     const [openUpdateAssignment, setOpenUpdateAssignment] = useState(false);
@@ -71,6 +72,36 @@ function PostItem({ data, setData, attachment, setAttachment, comments, handleSu
             }
         }
         setActionHidden((prev) => !prev);
+    };
+
+    const handleSubmitTextForm = async (answerText) => {
+        try {
+            const respone = await axiosPrivate.post(`/question/submit`, {
+                postId: data.postId,
+                exerciseId: data.exerciseId,
+                answerText: answerText,
+                typeExe: data.typeExe,
+            });
+            console.log(respone);
+            setData(respone.data.submitRes);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleSubmitChoiceForm = async (answerChoice) => {
+        try {
+            const respone = await axiosPrivate.post(`/question/submit`, {
+                postId: data.postId,
+                exerciseId: data.exerciseId,
+                answerChoice: answerChoice,
+                typeExe: data.typeExe,
+            });
+            console.log(respone);
+            setData(respone.data.submitRes);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (
@@ -111,8 +142,8 @@ function PostItem({ data, setData, attachment, setAttachment, comments, handleSu
                     </div>
                 </div>
                 <div className={cx('post-infor')}>
-                    {role === 'BT' || role === 'CH' ? (
-                        <h3 className={cx('max-score')}>Điểm: {data?.maxScore}</h3>
+                    {data?.type === 'BT' || data?.type === 'CH' ? (
+                        <h3 className={cx('max-score')}>Điểm: {`${isChoiceCorrect} / ${data?.maxScore}`}</h3>
                     ) : (
                         <div></div>
                     )}
@@ -151,11 +182,16 @@ function PostItem({ data, setData, attachment, setAttachment, comments, handleSu
                             })}
                     </div>
 
-                    {data?.type === 'CH' ? (
+                    {data?.type === 'CH' && classData.role === 'h' ? (
                         data?.typeExe === 'question_text' ? (
-                            <SubmitQuestionTextForm />
+                            <SubmitQuestionTextForm handleSubmit={handleSubmitTextForm} data={data} />
                         ) : (
-                            <SubmitQuestionChoiceForm choiceData={choiceData} />
+                            <SubmitQuestionChoiceForm
+                                choiceData={choiceData}
+                                handleSubmitChoice={handleSubmitChoiceForm}
+                                data={data}
+                                setIsChoiceCorrect={setIsChoiceCorrect}
+                            />
                         )
                     ) : (
                         <></>

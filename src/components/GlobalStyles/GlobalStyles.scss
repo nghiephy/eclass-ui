@@ -261,3 +261,17 @@ body {
 .w-full {
     width: 100% !important;
 }
+
+.opacity-6 {
+    opacity: 0.6 !important;
+}
+
+.correct {
+    color: green !important;
+    background-color: rgba(79, 207, 96, 0.11) !important;
+}
+
+.wrong {
+    color: red !important;
+    background-color: rgba(240, 130, 67, 0.11) !important;
+}

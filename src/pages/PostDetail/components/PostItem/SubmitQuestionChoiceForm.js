@@ -1,17 +1,18 @@
 import classNames from 'classnames/bind';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import Button from '~/components/Button';
 import Inputs from '~/components/Inputs';
+import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 
 import styles from './PostItem.module.scss';
 
 const cx = classNames.bind(styles);
 
-function SubmitQuestionChoiceForm({ choiceData }) {
-    const [answerText, setCommentText] = useState('');
-    const isDisabledSubBtn = answerText?.length === 0;
+function SubmitQuestionChoiceForm({ choiceData, data, handleSubmitChoice, setIsChoiceCorrect }) {
+    const axiosPrivate = useAxiosPrivate();
+    const [answered, setAnswered] = useState('false');
 
     const {
         register,
@@ -20,8 +21,21 @@ function SubmitQuestionChoiceForm({ choiceData }) {
     } = useForm();
 
     const onSubmit = async (data) => {
-        console.log(data);
+        handleSubmitChoice(data.answerChoice);
     };
+
+    const getAnswer = async () => {
+        const respone = await axiosPrivate.get(`/question/get-answer/${data.exerciseId}`);
+        console.log(respone);
+        setAnswered(respone.data.answerRes);
+        setIsChoiceCorrect(respone.data.answerRes.correct === '1' ? 100 : 0);
+    };
+
+    useEffect(() => {
+        if (data.isCompleted === 1) {
+            getAnswer();
+        }
+    }, [data]);
 
     return (
         <div className={cx('body-submit')}>
@@ -30,14 +44,22 @@ function SubmitQuestionChoiceForm({ choiceData }) {
                     {choiceData &&
                         choiceData.map((choice, index) => {
                             return (
-                                <div key={index} className={cx('choice-item')}>
+                                <div
+                                    key={index}
+                                    className={cx('choice-item', {
+                                        correct: answered.correct === '1' && answered.answerChoice === choice.answerId,
+                                        wrong: answered.correct !== '1' && answered.answerChoice === choice.answerId,
+                                    })}
+                                >
                                     <input
                                         id={`choice${index}`}
                                         type="radio"
-                                        value={index}
+                                        value={choice.answerId}
                                         name="answer"
+                                        disabled={data.isCompleted}
+                                        checked={data.isCompleted ? answered.answerChoice === choice.answerId : true}
                                         className={cx('choice-radio')}
-                                        {...register('answer', {
+                                        {...register('answerChoice', {
                                             required: 'Chọn đáp án',
                                         })}
                                     />
@@ -46,7 +68,13 @@ function SubmitQuestionChoiceForm({ choiceData }) {
                             );
                         })}
                 </div>
-                <Inputs submit className={cx('submit')} type="submit" value="Nộp bài" />
+                <Inputs
+                    submit
+                    className={cx('submit', { 'opacity-6': data.isCompleted })}
+                    type="submit"
+                    value={data.isCompleted ? 'Đã nộp' : 'Nộp bài'}
+                    disabled={data.isCompleted}
+                />
             </form>
         </div>
     );

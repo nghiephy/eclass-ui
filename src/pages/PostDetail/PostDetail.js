@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import PostItem from './components/PostItem';
 import useAxiosPrivate from '~/hooks/useAxiosPrivate';
+import useAuth from '~/hooks/useAuth';
 
 import styles from './PostDetail.module.scss';
 import SubmitForm from './components/SubmitForm';
@@ -11,17 +12,20 @@ import SubmitForm from './components/SubmitForm';
 const cx = classNames.bind(styles);
 
 function PostDetail() {
+    const { classData } = useAuth();
     const { classId, postId, role, type } = useParams();
     const [postData, setPostData] = useState();
     const [choiceData, setChoiceData] = useState();
     const [attachment, setAttachment] = useState();
     const [comments, setComments] = useState([]);
+    const [isCompleted, setIsCompleted] = useState();
 
     const axiosPrivate = useAxiosPrivate();
 
     const getExerciseData = async () => {
         const dataRes = await axiosPrivate.get(`/exercise/get-detail/${classId}/${postId}`);
         setPostData(dataRes.data.exercise);
+        setIsCompleted(dataRes.data.exercise.isCompleted);
     };
 
     const getMaterialData = async () => {
@@ -33,7 +37,7 @@ function PostDetail() {
         const dataRes = await axiosPrivate.get(`/question/get-detail/${classId}/${postId}`);
         setPostData(dataRes.data.question);
         setChoiceData(dataRes.data?.answerList);
-        console.log(dataRes);
+        setIsCompleted(dataRes.data.question.isCompleted);
     };
 
     const getAttachment = async () => {
@@ -62,7 +66,6 @@ function PostDetail() {
     };
 
     console.log(postData);
-    // console.log(choiceData);
     useEffect(() => {
         if (type === 'BT') {
             getExerciseData();
@@ -73,6 +76,7 @@ function PostDetail() {
         if (type === 'CH') {
             getQuestionData();
         }
+
         getAttachment();
         getAllComment();
     }, []);
@@ -90,10 +94,17 @@ function PostDetail() {
                     choiceData={choiceData}
                 />
             </div>
-            {type === 'BT' && (
+            {type === 'BT' && classData.role === 'h' ? (
                 <div className={cx('submit-container')}>
-                    <SubmitForm />
+                    <SubmitForm
+                        data={postData}
+                        setPostData={setPostData}
+                        isCompleted={isCompleted}
+                        setIsCompleted={setIsCompleted}
+                    />
                 </div>
+            ) : (
+                <></>
             )}
         </div>
     );

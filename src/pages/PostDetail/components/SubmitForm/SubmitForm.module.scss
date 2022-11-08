@@ -21,3 +21,11 @@
         }
     }
 }
+
+.submit-files {
+    margin-top: 20px;
+    width: 100%;
+    & + div {
+        width: 100% !important;
+    }
+}
