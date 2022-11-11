@@ -40,7 +40,18 @@ const MENU_STUDENT_POST = [
     },
 ];
 
-function PostItem({ data, setData, attachment, setAttachment, comments, handleSubmitComment, choiceData, role }) {
+function PostItem({
+    data,
+    setData,
+    attachment,
+    setAttachment,
+    comments,
+    handleSubmitComment,
+    choiceData,
+    role,
+    isCompleted,
+    setIsCompleted,
+}) {
     const { auth, classData } = useAuth();
     const axiosPrivate = useAxiosPrivate();
     const [showMoreCmt, setShowMoreCmt] = useState(true);
@@ -84,6 +95,7 @@ function PostItem({ data, setData, attachment, setAttachment, comments, handleSu
             });
             console.log(respone);
             setData(respone.data.submitRes);
+            setIsCompleted(true);
         } catch (error) {
             console.log(error);
         }
@@ -99,10 +111,13 @@ function PostItem({ data, setData, attachment, setAttachment, comments, handleSu
             });
             console.log(respone);
             setData(respone.data.submitRes);
+            setIsCompleted(true);
         } catch (error) {
             console.log(error);
         }
     };
+
+    console.log(isCompleted);
 
     return (
         <div className={cx('wrapper')}>
@@ -182,15 +197,21 @@ function PostItem({ data, setData, attachment, setAttachment, comments, handleSu
                             })}
                     </div>
 
-                    {data?.type === 'CH' && classData.role === 'h' ? (
-                        data?.typeExe === 'question_text' ? (
-                            <SubmitQuestionTextForm handleSubmit={handleSubmitTextForm} data={data} />
+                    {data?.type === 'CH' ? (
+                        data?.typeExe === 'question_text' && classData.role === 'h' ? (
+                            <SubmitQuestionTextForm
+                                handleSubmit={handleSubmitTextForm}
+                                data={data}
+                                isCompleted={isCompleted}
+                            />
                         ) : (
                             <SubmitQuestionChoiceForm
                                 choiceData={choiceData}
                                 handleSubmitChoice={handleSubmitChoiceForm}
                                 data={data}
                                 setIsChoiceCorrect={setIsChoiceCorrect}
+                                isCompleted={isCompleted}
+                                disabled={classData.role === 't'}
                             />
                         )
                     ) : (

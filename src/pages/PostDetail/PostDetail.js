@@ -12,7 +12,7 @@ import SubmitForm from './components/SubmitForm';
 const cx = classNames.bind(styles);
 
 function PostDetail() {
-    const { classData } = useAuth();
+    const { classData, auth } = useAuth();
     const { classId, postId, role, type } = useParams();
     const [postData, setPostData] = useState();
     const [choiceData, setChoiceData] = useState();
@@ -25,7 +25,8 @@ function PostDetail() {
     const getExerciseData = async () => {
         const dataRes = await axiosPrivate.get(`/exercise/get-detail/${classId}/${postId}`);
         setPostData(dataRes.data.exercise);
-        setIsCompleted(dataRes.data.exercise.isCompleted);
+        setIsCompleted(dataRes.data.checkCompletedRes);
+        console.log(dataRes);
     };
 
     const getMaterialData = async () => {
@@ -34,10 +35,18 @@ function PostDetail() {
     };
 
     const getQuestionData = async () => {
-        const dataRes = await axiosPrivate.get(`/question/get-detail/${classId}/${postId}`);
-        setPostData(dataRes.data.question);
-        setChoiceData(dataRes.data?.answerList);
-        setIsCompleted(dataRes.data.question.isCompleted);
+        try {
+            const dataRes = await axiosPrivate.get(`/question/get-detail/${classId}/${postId}`, {
+                params: {
+                    userId: auth.id,
+                },
+            });
+            setPostData(dataRes.data.question);
+            setChoiceData(dataRes.data?.answerList);
+            setIsCompleted(dataRes.data.checkCompletedRes);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const getAttachment = async () => {
@@ -92,6 +101,8 @@ function PostDetail() {
                     handleSubmitComment={handleSubmitComment}
                     role={role}
                     choiceData={choiceData}
+                    isCompleted={isCompleted}
+                    setIsCompleted={setIsCompleted}
                 />
             </div>
             {type === 'BT' && classData.role === 'h' ? (

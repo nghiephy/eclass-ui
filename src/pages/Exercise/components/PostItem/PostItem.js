@@ -14,7 +14,7 @@ import images from '~/assets/images';
 import Menu from '~/components/Popover/Menu';
 import AttachItem from '~/components/Attachment/AttachItem';
 import CommentForm from './CommentForm';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import EditAssignment from '../Modals/EditAssignment';
 import ConfirmForm from '../Modals/ConfirmForm';
@@ -25,6 +25,10 @@ const MENU_TEACHER_POST = [
     {
         title: 'Chỉnh sửa',
         code: 'edit',
+    },
+    {
+        title: 'Xem câu trả lời',
+        code: 'view_answer',
     },
     {
         title: 'Xoá',
@@ -41,6 +45,7 @@ const MENU_STUDENT_POST = [
 ];
 
 function PostItem({ data, role, classId, setExercises }) {
+    const navigate = useNavigate();
     const axiosPrivate = useAxiosPrivate();
 
     // const [dataExercise, setDataExercise] = useState();
@@ -65,6 +70,13 @@ function PostItem({ data, role, classId, setExercises }) {
         }
         if (menuItem.code === 'delete') {
             toggleConfirmForm();
+        }
+        if (menuItem.code === 'view_answer') {
+            if (data?.type !== 'TL') {
+                navigate(`/exercise/mark/${data.userId}/${data.type}/${data.postId}`);
+            } else {
+                alert('Chỉ là bài tập mới xem được câu trả lời!');
+            }
         }
         setActionHidden((prev) => !prev);
     };

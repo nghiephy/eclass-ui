@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import Button from '~/components/Button';
 import { MyIcon } from '~/components/MyIcons';
@@ -98,12 +98,12 @@ function Header({ toggleSidebar }) {
                     </Button>
                 </Tippy>
 
-                <div className={cx('logo')}>
+                <Link to="/" className={cx('logo')}>
                     <div className={cx('logo-imgbox')}>
                         <img src={images.logo} alt="logo"></img>
                     </div>
                     <h2 className={cx('logo-title')}>EClass - Lớp học trực tuyến</h2>
-                </div>
+                </Link>
             </div>
 
             <div className={cx('header-right')}>

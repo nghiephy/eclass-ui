@@ -6,17 +6,39 @@ import Button from '~/components/Button';
 import Inputs from '~/components/Inputs';
 
 import styles from './JoinClass.module.scss';
+import useAxiosPrivate from '~/hooks/useAxiosPrivate';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
 function JoinClass({ onClose, ...props }) {
+    const navigate = useNavigate();
+    const axiosPrivate = useAxiosPrivate();
     const {
         register,
         formState: { errors },
         handleSubmit,
     } = useForm();
 
-    const onSubmit = (data) => console.log(data);
+    const onSubmit = async (data) => {
+        const enrollKey = data.enrollKey;
+
+        try {
+            const response = await axiosPrivate.post(`/class/enroll`, {
+                enrollKey: enrollKey,
+            });
+            console.log(response);
+            navigate(`/stream/${response.data.data.id}`);
+        } catch (err) {
+            if (err.response.data.code === 'invalid') {
+                alert('Mã mời không hợp lệ!');
+            } else if (err.response.data.code === 'joined') {
+                alert('Bạn đã tham gia lớp học này rồi!');
+            } else {
+                alert('Không thể tham gia lớp học!');
+            }
+        }
+    };
 
     return (
         <Popup className={cx('wrapper')} {...props} onClose={onClose} style={{ borderRadius: '10px' }}>
@@ -30,7 +52,7 @@ function JoinClass({ onClose, ...props }) {
                 <form className={cx('form')} onSubmit={handleSubmit(onSubmit)}>
                     <Inputs
                         primary
-                        name="classname"
+                        name="enrollKey"
                         type="text"
                         label="Mã khoá học (*)"
                         register={register}

@@ -1,5 +1,6 @@
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import Button from '~/components/Button';
 import Menu from '~/components/Popover/Menu';
@@ -8,9 +9,9 @@ import Assignment, { Topic } from './components/Modals';
 import Material from './components/Modals/Material';
 import Question from './components/Modals/Question';
 import useAxiosPrivate from '~/hooks/useAxiosPrivate';
+import useAuth from '~/hooks/useAuth';
 
 import styles from './Member.module.scss';
-import { useParams } from 'react-router-dom';
 import MemberItem from './components/MemberItem';
 
 const cx = classNames.bind(styles);
@@ -31,13 +32,14 @@ const FILTER_LABEL = [
 ];
 
 function Member() {
-    const { classId, filter } = useParams();
+    const { classData } = useAuth();
+    const { filter } = useParams();
     const axiosPrivate = useAxiosPrivate();
     const [teacherList, setTeacherList] = useState([]);
     const [studentList, setStudentList] = useState([]);
 
     const getMemberData = async () => {
-        const memberRes = await axiosPrivate.get(`/user/get-all/${classId}`);
+        const memberRes = await axiosPrivate.get(`/user/get-all/${classData.classId}`);
         console.log(memberRes);
         setTeacherList(memberRes.data.teacherData);
         setStudentList(memberRes.data.studentData);

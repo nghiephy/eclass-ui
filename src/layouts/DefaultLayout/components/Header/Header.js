@@ -32,11 +32,7 @@ function Header({ toggleSidebar }) {
         },
         {
             title: 'Thành viên',
-            path: `/member/${classData?.classId}/all`,
-        },
-        {
-            title: 'Điểm',
-            path: '/grade',
+            path: `/member/all`,
         },
     ];
     const MENU_ITEMS = [
@@ -81,6 +77,13 @@ function Header({ toggleSidebar }) {
             title: 'Đăng xuất',
         },
     ];
+
+    if (classData.role === 't') {
+        DATA_TABS.push({
+            title: 'Điểm',
+            path: '/grade/mark',
+        });
+    }
 
     const signOut = async () => {
         await logout();

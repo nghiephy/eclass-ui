@@ -8,15 +8,17 @@ import styles from './PostItem.module.scss';
 
 const cx = classNames.bind(styles);
 
-function SubmitQuestionTextForm({ handleSubmit, data }) {
+function SubmitQuestionTextForm({ handleSubmit, data, isCompleted }) {
     const axiosPrivate = useAxiosPrivate();
     const [answerText, setAnswerText] = useState('');
-    const isDisabledSubBtn = answerText?.length === 0 || data.isCompleted === 1;
+    const isDisabledSubBtn = answerText?.length === 0 || isCompleted !== null;
 
     const submitComment = () => {
         handleSubmit(answerText);
         setAnswerText('');
     };
+
+    console.log(isCompleted);
 
     const getAnswer = async () => {
         const respone = await axiosPrivate.get(`/question/get-answer/${data.exerciseId}`);
@@ -24,7 +26,7 @@ function SubmitQuestionTextForm({ handleSubmit, data }) {
     };
 
     useEffect(() => {
-        if (data.isCompleted === 1) {
+        if (isCompleted) {
             getAnswer();
         }
     }, [data]);
@@ -35,10 +37,10 @@ function SubmitQuestionTextForm({ handleSubmit, data }) {
                 onChange={(e) => setAnswerText(e.target.value)}
                 className={cx('input-answer')}
                 placeholder="Nhập câu trả lời của bạn ở đây"
-                readOnly={data.isCompleted === 1}
+                readOnly={isCompleted}
             />
             <Button primary disabled={isDisabledSubBtn} onClick={submitComment}>
-                {data.isCompleted === 1 ? 'Đã nộp' : 'Nộp bài'}
+                {isCompleted ? 'Đã nộp' : 'Nộp bài'}
             </Button>
         </div>
     );

@@ -11,6 +11,8 @@ import ForgotPassword from '~/pages/ForgotPassword';
 import Stream from '~/pages/Stream';
 import Member from '~/pages/Member';
 import Exercise from '~/pages/Exercise';
+import MarkExercise from '~/pages/MarkExercise';
+import Grade from '~/pages/Grade';
 import PostDetail from '~/pages/PostDetail';
 import Home from '~/pages/Home';
 import Profile from '~/pages/Profile';
@@ -25,6 +27,8 @@ const privateRoutes = [
     { path: config.routes.stream, component: Stream },
     { path: config.routes.member, component: Member },
     { path: config.routes.exercise, component: Exercise },
+    { path: config.routes.grade, component: Grade },
+    { path: config.routes.markExercise, component: MarkExercise },
     { path: config.routes.postDetail, component: PostDetail },
     { path: config.routes.home, component: Home, layout: HomeLayout },
     { path: config.routes.profile, component: Profile, layout: HomeLayout },

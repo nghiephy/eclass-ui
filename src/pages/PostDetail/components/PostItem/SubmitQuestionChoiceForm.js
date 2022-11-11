@@ -10,7 +10,7 @@ import styles from './PostItem.module.scss';
 
 const cx = classNames.bind(styles);
 
-function SubmitQuestionChoiceForm({ choiceData, data, handleSubmitChoice, setIsChoiceCorrect }) {
+function SubmitQuestionChoiceForm({ choiceData, data, handleSubmitChoice, setIsChoiceCorrect, isCompleted, disabled }) {
     const axiosPrivate = useAxiosPrivate();
     const [answered, setAnswered] = useState('false');
 
@@ -32,7 +32,7 @@ function SubmitQuestionChoiceForm({ choiceData, data, handleSubmitChoice, setIsC
     };
 
     useEffect(() => {
-        if (data.isCompleted === 1) {
+        if (isCompleted) {
             getAnswer();
         }
     }, [data]);
@@ -56,8 +56,10 @@ function SubmitQuestionChoiceForm({ choiceData, data, handleSubmitChoice, setIsC
                                         type="radio"
                                         value={choice.answerId}
                                         name="answer"
-                                        disabled={data.isCompleted}
-                                        checked={data.isCompleted ? answered.answerChoice === choice.answerId : true}
+                                        disabled={isCompleted || disabled}
+                                        checked={
+                                            isCompleted || disabled ? answered.answerChoice === choice.answerId : true
+                                        }
                                         className={cx('choice-radio')}
                                         {...register('answerChoice', {
                                             required: 'Chọn đáp án',
@@ -70,10 +72,10 @@ function SubmitQuestionChoiceForm({ choiceData, data, handleSubmitChoice, setIsC
                 </div>
                 <Inputs
                     submit
-                    className={cx('submit', { 'opacity-6': data.isCompleted })}
+                    className={cx('submit', { 'opacity-6': isCompleted || disabled })}
                     type="submit"
-                    value={data.isCompleted ? 'Đã nộp' : 'Nộp bài'}
-                    disabled={data.isCompleted}
+                    value={isCompleted ? 'Đã nộp' : 'Nộp bài'}
+                    disabled={isCompleted || disabled}
                 />
             </form>
         </div>
