@@ -1,18 +1,14 @@
 import classNames from 'classnames/bind';
 import 'reactjs-popup/dist/index.css';
 import 'react-quill/dist/quill.snow.css';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import moment from 'moment';
 
 import useAxiosPrivate from '~/hooks/useAxiosPrivate';
-import { MyIcon } from '~/components/MyIcons';
-import { IcThreeDotsVertical } from '~/components/MyIcons/regular';
-import Button from '~/components/Button';
 
 import styles from './PostItem.module.scss';
 import Images from '~/components/Images';
 import images from '~/assets/images';
-import Menu from '~/components/Popover/Menu';
 import AttachItem from '~/components/Attachment/AttachItem';
 import useAuth from '~/hooks/useAuth';
 import SubmitQuestionTextForm from './SubmitQuestionTextForm';
@@ -22,17 +18,7 @@ import AssignmentFilesBoard from './AssignmentFilesBoard';
 
 const cx = classNames.bind(styles);
 
-function PostItem({
-    data,
-    setData,
-    attachment,
-    setAttachment,
-    choiceData,
-    role,
-    isCompleted,
-    setIsCompleted,
-    checkUserId,
-}) {
+function PostItem({ data, setData, attachment, choiceData, role, isCompleted, setIsCompleted, checkUserId }) {
     const { auth, classData } = useAuth();
     const { userId, type } = useParams();
     const axiosPrivate = useAxiosPrivate();
@@ -65,7 +51,7 @@ function PostItem({
         }
     };
 
-    console.log(type);
+    console.log(isCompleted);
 
     const handleSubmitChoiceForm = async (answerChoice) => {
         try {
@@ -156,7 +142,7 @@ function PostItem({
                                 data={data}
                                 setIsChoiceCorrect={setIsChoiceCorrect}
                                 isCompleted={isCompleted}
-                                disabled={role === 't'}
+                                disabled={true}
                                 checkUserId={checkUserId}
                             />
                         )
