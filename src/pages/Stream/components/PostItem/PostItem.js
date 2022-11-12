@@ -64,8 +64,6 @@ function PostItem({ data, avatarUser, setPosts }) {
         setOpenConfirmForm(!openConfirmForm);
     };
 
-    console.log(data);
-
     const handleOnChange = async (menuItem) => {
         if (menuItem.code === 'edit') {
             toggleEditPost();

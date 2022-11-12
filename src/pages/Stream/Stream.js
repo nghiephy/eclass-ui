@@ -18,15 +18,18 @@ const cx = classNames.bind(styles);
 const MENU_TEACHER_ENROLL = [
     {
         title: 'Đổi mã',
+        code: 'changeKey',
     },
     {
         title: 'Sao chép mã',
     },
     {
         title: 'Vô hiệu hoá',
+        code: 'blockKey',
     },
     {
         title: 'Ẩn mã',
+        code: 'hiddenKey',
     },
 ];
 
@@ -99,7 +102,12 @@ function Stream() {
             <div className={cx('container')}>
                 <div className={cx('annouce-board')}>
                     <h4 className={cx('annouce-title')}>Bảng thông báo</h4>
-                    <EnrollSection data={classData} role={classDataLocal.role} menuEnroll={menuEnroll} />
+                    <EnrollSection
+                        data={classData}
+                        role={classDataLocal.role}
+                        menuEnroll={menuEnroll}
+                        setClassData={setClassData}
+                    />
                     <div className={cx('annouce-panel')}>
                         <h2 className={cx('label')}>Phòng học online</h2>
                         <Button to="/" primary className={cx('join-btn')}>
