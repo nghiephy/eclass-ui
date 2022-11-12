@@ -1,218 +1,130 @@
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
+import { downloadExcel } from 'react-export-table-to-excel';
+import { Link, useNavigate } from 'react-router-dom';
 
-import Button from '~/components/Button';
-import Menu from '~/components/Popover/Menu';
-import ListItem from './components/ListItem';
-import Assignment, { Topic } from './components/Modals';
-import Material from './components/Modals/Material';
-import Question from './components/Modals/Question';
-import PostItem from './components/PostItem';
 import useAxiosPrivate from '~/hooks/useAxiosPrivate';
+import useAuth from '~/hooks/useAuth';
 
 import styles from './Grade.module.scss';
-import { useParams } from 'react-router-dom';
+import Button from '~/components/Button';
+import moment from 'moment';
 
 const cx = classNames.bind(styles);
 
-const MENU_ACTIONS = [
-    {
-        title: 'Bài tập',
-        code: 'assignment',
-    },
-    {
-        title: 'Câu hỏi trắc nghiệm',
-    },
-    {
-        title: 'Câu hỏi ngắn',
-        code: 'question',
-    },
-    {
-        title: 'Tài liệu',
-        code: 'material',
-    },
-    {
-        title: 'Chủ đề',
-        code: 'topic',
-    },
-];
-
-const FILTER_LABEL = [
-    {
-        name: 'Tất cả bài tập',
-        code: 'all',
-    },
-    {
-        name: 'Giáo viên',
-        code: 't',
-    },
-    {
-        name: 'Học sinh',
-        code: 'h',
-    },
-];
-
 function Grade() {
-    const [actionHidden, setActionHidden] = useState(false);
-    const [openAssignment, setOpenAssignment] = useState(false);
-    const closeAssignment = () => setOpenAssignment(false);
-    const [openCreateTopic, setOpenCreateTopic] = useState(false);
-    const closeCreateTopic = () => setOpenCreateTopic(false);
-    const [openMaterial, setOpenMaterial] = useState(false);
-    const closeMaterial = () => setOpenMaterial(false);
-    const [openQuestion, setOpenQuestion] = useState(false);
-    const closeQuestion = () => setOpenQuestion(false);
-
+    const { auth } = useAuth();
+    const navigate = useNavigate();
     const axiosPrivate = useAxiosPrivate();
-    const { role, classId, topic } = useParams();
+    const { classData } = useAuth();
+    const [headerData, setHeaderData] = useState([]);
+    const [headerExportData, setHeaderExportData] = useState([]);
+    const [bodyData, setBodyData] = useState([]);
+    const [bodyExportData, setBodyExportData] = useState([]);
 
-    const [topics, setTopics] = useState([]);
-    const [exercises, setExercises] = useState([]);
-
-    const toggleAssigment = () => {
-        setOpenAssignment(!openAssignment);
-    };
-    const toggleCreateTopic = () => {
-        setOpenCreateTopic(!openCreateTopic);
-    };
-    const toggleMaterial = () => {
-        setOpenMaterial(!openMaterial);
-    };
-    const toggleQuestion = () => {
-        setOpenQuestion(!openQuestion);
-    };
-    console.log(exercises);
-
-    const handleOnChange = async (menuItem) => {
-        if (menuItem.code === 'assignment') {
-            toggleAssigment();
-        }
-        if (menuItem.code === 'topic') {
-            toggleCreateTopic();
-        }
-        if (menuItem.code === 'material') {
-            toggleMaterial();
-        }
-        if (menuItem.code === 'question') {
-            toggleQuestion();
-        }
-        setActionHidden((prev) => !prev);
-    };
-
-    const getTopic = async () => {
-        const topicRes = await axiosPrivate.get(`/topic/get-topics/${classId}`);
-
-        setTopics((prev) => [
-            {
-                name: 'Tẩt cả',
-                topicId: 0,
+    function handleDownloadExcel() {
+        downloadExcel({
+            fileName: 'react-export-table-to-excel -> downloadExcel method',
+            sheet: 'react-export-table-to-excel',
+            tablePayload: {
+                header: headerExportData,
+                // accept two different data structures
+                body: bodyExportData,
             },
-            ...topicRes.data.topics,
-        ]);
-    };
-    const getAllExercise = async () => {
-        const exerciseRes = await axiosPrivate.get(`/exercise/get-all/${classId}`);
-        setExercises(exerciseRes.data.exercises);
+        });
+    }
+
+    const getNameExercises = async () => {
+        const nameExerciseRes = await axiosPrivate.get(`/exercise/get-name-exercise/${classData.classId}`);
+        console.log(nameExerciseRes);
+        const originHeader = nameExerciseRes.data.nameExercise;
+        const customHeader = ['Tên Học Sinh'];
+        originHeader.map((item) => {
+            return customHeader.push(item.content);
+        });
+        setHeaderData([{ content: 'Tên Học Sinh', id: 0 }, ...originHeader]);
+        setHeaderExportData(customHeader);
     };
 
-    const getExeViaTopic = async () => {
-        const exerciseRes = await axiosPrivate.get(`/exercise/get-all/${classId}/${topic}`);
-
-        setExercises(exerciseRes.data.exercises);
+    const getAllScore = async () => {
+        const allScoreRes = await axiosPrivate.get(`/exercise/get-all-score/${classData.classId}`);
+        const originBody = allScoreRes.data.allScore;
+        const customBody = [];
+        const displayBody = [];
+        originBody.map((userScore, index) => {
+            const itemBody = [];
+            const itemDisplay = [];
+            userScore.map((item, index) => {
+                if (index === 0) {
+                    itemBody.push(item.fullName);
+                    itemDisplay.push({ fullName: item.fullName, userId: item.userId });
+                }
+                if (index !== 0) {
+                    itemBody.push(item.score);
+                    itemDisplay.push(item.score);
+                }
+            });
+            customBody.push(itemBody);
+            displayBody.push(itemDisplay);
+        });
+        console.log(allScoreRes);
+        setBodyData(displayBody);
+        setBodyExportData(customBody);
     };
 
-    // const handleSetExercise = (data) => {
-    //     console.log(data);
-    //     setExercises((prev) => {
-    //         return [data, ...prev];
-    //     });
-    // };
+    console.log(bodyData);
+
+    const handleNavigateDetailSubmit = (postId, type) => {
+        if (type) navigate(`/exercise/mark/${auth.id}/${type}/${postId}`);
+    };
 
     useEffect(() => {
-        getTopic();
-        getAllExercise();
+        getNameExercises();
+        getAllScore();
     }, []);
-
-    useEffect(() => {
-        // getTopic();
-        if (topic === '0') {
-            getAllExercise();
-        } else {
-            getExeViaTopic();
-        }
-    }, [topic]);
 
     return (
         <div className={cx('wrapper')}>
-            <div className={cx('actions-section')}>
-                {topic === '0' && role === 't' ? (
-                    <Menu
-                        arrow={false}
-                        hideOnClick={true}
-                        trigger={'click'}
-                        placement="bottom-end"
-                        delay={[50, 50]}
-                        items={MENU_ACTIONS}
-                        onChange={handleOnChange}
-                        className={cx('menu-more', { hidden: actionHidden })}
-                    >
-                        <Button
-                            primary
-                            className={cx('post-exercise-btn')}
-                            onClick={() => {
-                                setActionHidden(false);
-                            }}
-                        >
-                            Tạo mới
-                        </Button>
-                    </Menu>
-                ) : (
-                    <div className={cx('title-topic')}>
-                        <h2>{topics[parseInt(topic)]?.name}</h2>
-                    </div>
-                )}
-            </div>
             <div className={cx('container')}>
-                <div className={cx('annouce-board')}>
-                    <ListItem title="Danh mục" data={FILTER_LABEL} />
-                </div>
-                <div className={cx('timeline')}>
-                    {exercises.map((item, index) => {
-                        return (
-                            <PostItem
-                                key={index}
-                                data={item}
-                                role={role}
-                                classId={classId}
-                                setExercises={setExercises}
-                            />
-                        );
-                    })}
-                </div>
-            </div>
+                <h2 className={cx('title')}>Bảng điểm của lớp học</h2>
+                <Button primary onClick={handleDownloadExcel} className={cx('download-btn')}>
+                    Tải file Excel
+                </Button>
 
-            <Assignment
-                setExercises={setExercises}
-                topics={topics}
-                open={openAssignment}
-                closeOnDocumentClick
-                onClose={closeAssignment}
-            />
-            <Topic setTopics={setTopics} open={openCreateTopic} closeOnDocumentClick onClose={closeCreateTopic} />
-            <Material
-                setExercises={setExercises}
-                topics={topics}
-                open={openMaterial}
-                closeOnDocumentClick
-                onClose={closeMaterial}
-            />
-            <Question
-                setExercises={setExercises}
-                topics={topics}
-                open={openQuestion}
-                closeOnDocumentClick
-                onClose={closeQuestion}
-            />
+                <table>
+                    <tbody>
+                        <tr>
+                            {headerData.map((head) => (
+                                <th key={head.id} className={cx('header-column')}>
+                                    <h3
+                                        onClick={() => {
+                                            handleNavigateDetailSubmit(head.id, head.type);
+                                        }}
+                                        className={cx('header-name')}
+                                    >
+                                        {head.content}
+                                    </h3>
+                                    <p className={cx('header-deadline')}>
+                                        {head.deadline
+                                            ? `Hạn: ${moment(head.deadline).format('DD-MM-YYYY')}`
+                                            : head.type && `Không có hạn`}
+                                    </p>
+                                </th>
+                            ))}
+                        </tr>
+
+                        {bodyData.map((item, i) => (
+                            <tr key={i}>
+                                {item.map((it) => (
+                                    <td key={it?.userId ? it.userId : it}>
+                                        {it?.fullName ? <Link to={`/profile/${it.userId}`}>{it.fullName}</Link> : it}
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }

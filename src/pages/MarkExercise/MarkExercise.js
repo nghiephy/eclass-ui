@@ -49,6 +49,17 @@ function MarkExercise() {
         getStudentList();
     };
 
+    const handleEditScore = async (score) => {
+        const udpateRes = await axiosPrivate.post('/exercise/update-mark-exercise', {
+            postId: postId,
+            score: score,
+            comment: '',
+            userId: userId,
+        });
+        console.log(udpateRes);
+        getStudentList();
+    };
+
     useEffect(() => {
         getStudentList();
     }, []);
@@ -67,6 +78,7 @@ function MarkExercise() {
                         data={studentList}
                         resultSubmit={resultSubmit}
                         handleSaveScore={handleSaveScore}
+                        handleEditScore={handleEditScore}
                     />
                 </div>
                 <div className={cx('timeline')}>

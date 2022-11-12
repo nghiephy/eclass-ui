@@ -9,7 +9,7 @@ import SubmitScoreForm from './SubmitScoreForm';
 
 const cx = classNames.bind(styles);
 
-const ListItem = ({ title, data, bottomline = 1, resultSubmit, handleSaveScore, ...passProps }) => {
+const ListItem = ({ title, data, bottomline = 1, resultSubmit, handleSaveScore, handleEditScore, ...passProps }) => {
     const { postId, type } = useParams();
 
     return (
@@ -27,7 +27,11 @@ const ListItem = ({ title, data, bottomline = 1, resultSubmit, handleSaveScore, 
                                 <p className={cx('name')}>{item.fullName}</p>
                             </div>
 
-                            <SubmitScoreForm handleSaveScore={handleSaveScore} resultSubmit={item} />
+                            <SubmitScoreForm
+                                handleSaveScore={handleSaveScore}
+                                handleEditScore={handleEditScore}
+                                resultSubmit={item}
+                            />
 
                             {/* <div className={cx('submit-section')}>
                                 <input className={cx('grade-input')} type="number" name="score" placeholder="Điểm" />

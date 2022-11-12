@@ -15,7 +15,7 @@ const ListItem = ({ title, data, bottomline = 1, ...passProps }) => {
                 {data?.map((item, index) => {
                     return (
                         <NavLink
-                            to={`/member/${classData.classId}${item.code !== 0 ? `/${item.code}` : '/all'}`}
+                            to={`/member${item.code !== 0 ? `/${item.code}` : '/all'}`}
                             key={index}
                             className={(nav) => cx('item', { active: nav.isActive })}
                         >
