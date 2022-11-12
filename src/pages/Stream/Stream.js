@@ -11,16 +11,42 @@ import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 import useAuth from '~/hooks/useAuth';
 
 import styles from './Stream.module.scss';
+import EnrollSection from './EnrollSection';
 
 const cx = classNames.bind(styles);
+
+const MENU_TEACHER_ENROLL = [
+    {
+        title: 'Đổi mã',
+    },
+    {
+        title: 'Sao chép mã',
+    },
+    {
+        title: 'Vô hiệu hoá',
+    },
+    {
+        title: 'Ẩn mã',
+    },
+];
+
+const MENU_STUDENT_ENROLL = [
+    {
+        title: 'Sao chép mã',
+    },
+    {
+        title: 'Báo cáo',
+    },
+];
 
 function Stream() {
     const { id } = useParams();
     // let [searchParams, setSearchParams] = useSearchParams();
     const axiosPrivate = useAxiosPrivate();
-    const { auth, handleSetClassData } = useAuth();
+    const { auth, handleSetClassData, classData: classDataLocal } = useAuth();
     const [posts, setPosts] = useState([]);
     const [classData, setClassData] = useState();
+    const [menuEnroll, setMenuEnroll] = useState([]);
     const [openPost, setOpenCreate] = useState(false);
     const closeModalPost = () => setOpenCreate(false);
 
@@ -39,17 +65,22 @@ function Stream() {
         });
         const role = auth.id === dataClass.data.data.teacherId ? 't' : 'h';
         handleSetClassData({ classId: dataClass.data.data.id, role });
+        if (role === 't') {
+            setMenuEnroll(MENU_TEACHER_ENROLL);
+        } else {
+            setMenuEnroll(MENU_STUDENT_ENROLL);
+        }
     };
 
     useEffect(() => {
-        const curURL = window.location.pathname.split('/');
-        const classId = curURL[curURL.length - 1];
+        // const curURL = window.location.pathname.split('/');
+        // const classId = curURL[curURL.length - 1];
 
         // for (let entry of searchParams.entries()) {
         //     params.push(entry);
         // }
-        getClassData(classId);
-        getPostData(classId);
+        getClassData(id);
+        getPostData(id);
     }, [id]);
 
     return (
@@ -68,9 +99,12 @@ function Stream() {
             <div className={cx('container')}>
                 <div className={cx('annouce-board')}>
                     <h4 className={cx('annouce-title')}>Bảng thông báo</h4>
+                    <EnrollSection data={classData} role={classDataLocal.role} menuEnroll={menuEnroll} />
                     <div className={cx('annouce-panel')}>
-                        <h2 className={cx('label')}>Mã mời</h2>
-                        <h2 className={cx('key')}>{classData?.enrollKey}</h2>
+                        <h2 className={cx('label')}>Phòng học online</h2>
+                        <Button to="/" primary className={cx('join-btn')}>
+                            Tham gia
+                        </Button>
                     </div>
                     <div className={cx('annouce-panel', 'view-all')}>
                         <h2 className={cx('label')}>Công việc sắp tới</h2>
