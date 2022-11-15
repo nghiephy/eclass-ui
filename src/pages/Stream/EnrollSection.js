@@ -41,7 +41,6 @@ function EnrollSection({ data, role, menuEnroll, setClassData }) {
         const classRes = await axiosPrivate.post(`/class/custom-key/${data.id}`, {
             code: 'changeKey',
         });
-        console.log(classRes);
         setClassData(classRes.data.data);
     };
 
@@ -74,8 +73,6 @@ function EnrollSection({ data, role, menuEnroll, setClassData }) {
             changeTitleMenu('blockKey', 'Kích hoạt mã');
         }
     }, [data]);
-
-    console.log(actionHidden);
 
     return (
         <div className={cx('annouce-panel', { hidden: role === 'h' && data?.isHiddenKey === true })}>

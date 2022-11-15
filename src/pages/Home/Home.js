@@ -40,7 +40,7 @@ function Home() {
         <div className={cx('wrapper')}>
             <div className={cx('quick-actions')}>
                 <Button
-                    to={'/todolist'}
+                    to={'/not-submitted/all'}
                     className={cx('actions-item')}
                     outline
                     leftIcon={

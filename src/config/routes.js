@@ -8,6 +8,7 @@ const routes = {
     postDetail: '/exercise/:role/:classId/:type/:postId/detail',
     markExercise: '/exercise/mark/:userId/:type/:postId',
     member: '/member/:filter',
+    notSubmitted: '/not-submitted/:filter',
     grade: '/grade/mark',
     profile: '/profile/:userId',
     forgotPassword: '/forgot-password',

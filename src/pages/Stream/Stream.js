@@ -48,6 +48,9 @@ function Stream() {
     const axiosPrivate = useAxiosPrivate();
     const { auth, handleSetClassData, classData: classDataLocal } = useAuth();
     const [posts, setPosts] = useState([]);
+    const [reviewImage, setReviewImage] = useState();
+    const [imagefile, setImagefile] = useState('');
+    const [coverImage, setCoverImage] = useState('');
     const [classData, setClassData] = useState();
     const [menuEnroll, setMenuEnroll] = useState([]);
     const [openPost, setOpenCreate] = useState(false);
@@ -66,8 +69,9 @@ function Stream() {
         setClassData((prev) => {
             return dataClass.data.data;
         });
-        const role = auth.id === dataClass.data.data.teacherId ? 't' : 'h';
-        handleSetClassData({ classId: dataClass.data.data.id, role });
+        setCoverImage(dataClass.data?.data?.coverImg);
+        const role = auth.id === dataClass.data?.data?.teacherId ? 't' : 'h';
+        handleSetClassData({ classId: dataClass.data?.data?.id, role });
         if (role === 't') {
             setMenuEnroll(MENU_TEACHER_ENROLL);
         } else {
@@ -75,6 +79,30 @@ function Stream() {
         }
     };
 
+    const handleUpdateCover = async (file) => {
+        const formData = new FormData();
+
+        formData.append('cover_img', file);
+        formData.append('old_cover', coverImage);
+        formData.append('classId', classData.id);
+
+        const response = await axiosPrivate.post(`/class/update-cover`, formData, {
+            headers: {
+                'content-type': 'multipart/form-data',
+            },
+        });
+        console.log('old-cover', coverImage);
+        setCoverImage(response.data.coverImgPath);
+        console.log(response);
+    };
+
+    const onAvatarChange = (e) => {
+        setImagefile(e.target.files[0]);
+        setReviewImage(URL.createObjectURL(e.target.files[0]));
+        handleUpdateCover(e.target.files[0]);
+    };
+
+    console.log(classData);
     useEffect(() => {
         // const curURL = window.location.pathname.split('/');
         // const classId = curURL[curURL.length - 1];
@@ -90,21 +118,42 @@ function Stream() {
         <div className={cx('wrapper')}>
             <div className={cx('background-cover')}>
                 <Images
-                    src={classData?.coverImg ? `http://localhost:8080${classData.coverImg}` : images.classCover}
+                    src={
+                        reviewImage
+                            ? reviewImage
+                            : coverImage
+                            ? `http://localhost:8080${coverImage}`
+                            : images.classCover
+                    }
                     alt="class cover"
                     className={cx('background-img')}
                 />
                 <h2 className={cx('class-name')}>{classData?.name}</h2>
-                <Button outline className={cx('config-btn')}>
+
+                {parseInt(classData?.teacherId) === auth.id && (
+                    <label htmlFor="cover-upload" className={cx('config-btn')}>
+                        Chỉnh sửa
+                    </label>
+                )}
+                <input
+                    type="file"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    name="avatar"
+                    id="cover-upload"
+                    disabled={!parseInt(classData?.teacherId) === auth.id}
+                    onChange={onAvatarChange}
+                />
+                {/* <Button outline className={cx('config-btn')}>
                     Chỉnh sửa
-                </Button>
+                </Button> */}
             </div>
             <div className={cx('container')}>
                 <div className={cx('annouce-board')}>
                     <h4 className={cx('annouce-title')}>Bảng thông báo</h4>
                     <EnrollSection
                         data={classData}
-                        role={classDataLocal.role}
+                        role={classDataLocal?.role}
                         menuEnroll={menuEnroll}
                         setClassData={setClassData}
                     />
