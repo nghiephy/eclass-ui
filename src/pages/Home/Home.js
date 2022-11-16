@@ -94,7 +94,7 @@ function Home() {
             {classes?.classStudy ? (
                 <div className={'row col'}>
                     {classes?.classStudy.map((item, index) => {
-                        return <ClassItem key={index} data={item} />;
+                        return <ClassItem key={index} data={item} setClasses={setClasses} />;
                     })}
                 </div>
             ) : (

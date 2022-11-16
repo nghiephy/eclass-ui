@@ -85,7 +85,6 @@ function PostItem({ data, avatarUser, setPosts }) {
     };
 
     const handleSubmitComment = async (comment) => {
-        console.log('Comment', comment);
         const dataCommentRes = await axiosPrivate.post(`/comment/create`, {
             content: comment,
             postId: dataPost.postId,
@@ -112,6 +111,8 @@ function PostItem({ data, avatarUser, setPosts }) {
         getAttachment();
         getAllComment();
     }, []);
+
+    console.log(dataPost);
 
     useEffect(() => {
         getAttachment();

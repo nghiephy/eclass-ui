@@ -10,32 +10,77 @@ import Menu from '~/components/Popover/Menu';
 
 import styles from './ClassItem.module.scss';
 import useAuth from '~/hooks/useAuth';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import EditClass from '../Modals/EditClass';
+import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 
 const cx = classNames.bind(styles);
 
 const MENU_ITEMS_STUDY = [
     {
         title: 'Huỷ đăng ký',
+        code: 'unenroll',
     },
 ];
 const MENU_ITEMS_TEACH = [
     {
         title: 'Chỉnh sửa',
+        code: 'edit',
     },
     {
         title: 'Xoá',
+        code: 'delete',
     },
 ];
 
-function ClassItem({ data }) {
+function ClassItem({ data, setClasses }) {
     const { auth, handleSetClassData } = useAuth();
+    const axiosPrivate = useAxiosPrivate();
+
+    const [actionHidden, setActionHidden] = useState(false);
+    const [openEditClass, setOpenEditClass] = useState(false);
+    const closeEditClass = () => setOpenEditClass(false);
+
+    const toggleEditClass = () => {
+        setOpenEditClass(!openEditClass);
+    };
+
+    const handleUnEnroll = async () => {
+        const response = await axiosPrivate.post(`/class/unenroll`, {
+            classId: data.classId,
+            userId: auth.id,
+        });
+        alert('Huỷ đăng ký lớp học thành công!');
+        setClasses((prev) => {
+            const newClassStudy = prev.classStudy.filter((item) => item.classId !== data.classId);
+
+            return { ...prev, classStudy: newClassStudy };
+        });
+    };
+
+    const handleDeleteClass = async () => {
+        const response = await axiosPrivate.post(`/class/delete`, {
+            classId: data.classId,
+        });
+        console.log(response);
+        alert('Xoá lớp học thành công!');
+        window.location.reload();
+    };
 
     const handleOnChange = async (menuItem) => {
-        if (menuItem.title === 'Huỷ đăng ký') {
-            alert('Huy dang ky');
+        if (menuItem.code === 'unenroll') {
+            handleUnEnroll();
         }
+        if (menuItem.code === 'edit') {
+            toggleEditClass();
+        }
+        if (menuItem.code === 'delete') {
+            handleDeleteClass();
+        }
+        setActionHidden((prev) => !prev);
     };
+
+    console.log(data);
 
     return (
         <div className={'xl-2-4 l-3 m-4 c-12 g-16 col'}>
@@ -49,9 +94,15 @@ function ClassItem({ data }) {
                         delay={[50, 50]}
                         items={data.userId === data.teacherId ? MENU_ITEMS_TEACH : MENU_ITEMS_STUDY}
                         onChange={handleOnChange}
-                        className={cx('menu-more')}
+                        className={cx('menu-more', { hidden: actionHidden })}
                     >
-                        <Button circle className={cx('more-btn')}>
+                        <Button
+                            circle
+                            className={cx('more-btn')}
+                            onClick={() => {
+                                setActionHidden(false);
+                            }}
+                        >
                             <MyIcon className={cx('more-icon')}>
                                 <IcThreeDotsVertical />
                             </MyIcon>
@@ -60,7 +111,11 @@ function ClassItem({ data }) {
                 </div>
 
                 <div className={cx('header')}>
-                    <img src={images.classCover} alt="class cover" className={cx('header-img')} />
+                    <img
+                        src={data.coverImg ? `http://localhost:8080${data.coverImg}` : images.classCover}
+                        alt="class cover"
+                        className={cx('header-img')}
+                    />
                     <div className={cx('header-content')}>
                         <Link to={`/stream/${data.classId}`} className={cx('name-class')}>
                             <h2 className={cx('name')}>{data.className}</h2>
@@ -113,6 +168,8 @@ function ClassItem({ data }) {
                     </Tippy>
                 </div>
             </div>
+
+            <EditClass open={openEditClass} closeOnDocumentClick onClose={closeEditClass} data={data} />
         </div>
     );
 }
