@@ -19,6 +19,9 @@ function Home() {
     const handleClickToDoExercise = () => {
         handleSetClassData({ role: 'h' });
     };
+    const handleClickToDoMark = () => {
+        handleSetClassData({ role: 't' });
+    };
 
     useEffect(() => {
         let isMounted = true;
@@ -60,7 +63,7 @@ function Home() {
                     Việc cần làm
                 </Button>
                 <Button
-                    to={'/todolist'}
+                    to={'/todo-mark/not-marked/all'}
                     className={cx('actions-item')}
                     outline
                     leftIcon={
@@ -69,6 +72,7 @@ function Home() {
                         </MyIcon>
                     }
                     text
+                    onClick={handleClickToDoMark}
                 >
                     Cần đánh giá
                 </Button>

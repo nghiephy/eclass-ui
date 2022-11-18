@@ -18,6 +18,7 @@ import PostDetail from '~/pages/PostDetail';
 import Home from '~/pages/Home';
 import Profile from '~/pages/Profile';
 import ToDoExercise from '~/pages/ToDoExercise';
+import ToDoMark from '~/pages/ToDoMark';
 
 const publicRoutes = [
     { path: config.routes.login, component: Login, layout: LoginRegisterLayout },
@@ -31,6 +32,7 @@ const privateRoutes = [
     { path: config.routes.exercise, component: Exercise },
     { path: config.routes.grade, component: Grade },
     { path: config.routes.notSubmitted, component: ToDoExercise, layout: ToDoLayout },
+    { path: config.routes.toDoMark, component: ToDoMark, layout: ToDoLayout },
     { path: config.routes.markExercise, component: MarkExercise },
     { path: config.routes.postDetail, component: PostDetail },
     { path: config.routes.home, component: Home, layout: HomeLayout },

@@ -5,7 +5,7 @@ import styles from './Menu.module.scss';
 import { Wrapper as PopoverWrapper } from '~/components/Popover';
 import MenuItem from './MenuItem';
 import Header from './Header';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MyIcon } from '~/components/MyIcons';
 import { IcAngleDownSolid } from '~/components/MyIcons/solid';
 import images from '~/assets/images';
@@ -85,6 +85,10 @@ function Menu({
     const handleResetToFirstPage = () => {
         return firstLoad ? setHistory([{ data: items.slice(0, firstLoad) }]) : setHistory((prev) => prev.slice(0, 1));
     };
+
+    useEffect(() => {
+        setHistory([{ data: items }]);
+    }, [items]);
 
     return (
         <Tippy

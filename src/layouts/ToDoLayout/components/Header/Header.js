@@ -90,6 +90,19 @@ function Header({ toggleSidebar }) {
         ];
     }
 
+    if (curURL.includes('todo-mark')) {
+        DATA_TABS = [
+            {
+                title: 'Chưa đánh giá',
+                path: `/todo-mark/not-marked/all`,
+            },
+            {
+                title: 'Đã đánh giá',
+                path: `/todo-mark/marked/all`,
+            },
+        ];
+    }
+
     const signOut = async () => {
         await logout();
         navigate('/login');
