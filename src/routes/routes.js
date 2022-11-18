@@ -3,7 +3,7 @@ import config from '~/config';
 // Import Layouts
 import { LoginRegisterLayout } from '~/layouts';
 import { HomeLayout } from '~/layouts';
-import { DefaultLayout } from '~/layouts';
+import { ToDoLayout } from '~/layouts';
 
 // Import Pages
 import Login from '~/pages/Login';
@@ -17,6 +17,7 @@ import Grade from '~/pages/Grade';
 import PostDetail from '~/pages/PostDetail';
 import Home from '~/pages/Home';
 import Profile from '~/pages/Profile';
+import ToDoExercise from '~/pages/ToDoExercise';
 
 const publicRoutes = [
     { path: config.routes.login, component: Login, layout: LoginRegisterLayout },
@@ -29,7 +30,7 @@ const privateRoutes = [
     { path: config.routes.member, component: Member },
     { path: config.routes.exercise, component: Exercise },
     { path: config.routes.grade, component: Grade },
-    { path: config.routes.notSubmitted, component: Exercise, layout: DefaultLayout },
+    { path: config.routes.notSubmitted, component: ToDoExercise, layout: ToDoLayout },
     { path: config.routes.markExercise, component: MarkExercise },
     { path: config.routes.postDetail, component: PostDetail },
     { path: config.routes.home, component: Home, layout: HomeLayout },

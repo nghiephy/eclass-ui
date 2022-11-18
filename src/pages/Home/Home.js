@@ -7,12 +7,18 @@ import { IcCalendar, IcPenCheck, IcTodoList } from '~/components/MyIcons/regular
 import ClassItem from './components/ClassItem';
 import styles from './Home.module.scss';
 import useAxiosPrivate from '~/hooks/useAxiosPrivate';
+import useAuth from '~/hooks/useAuth';
 
 const cx = classNames.bind(styles);
 
 function Home() {
+    const { handleSetClassData } = useAuth();
     const [classes, setClasses] = useState({});
     const axiosPrivate = useAxiosPrivate();
+
+    const handleClickToDoExercise = () => {
+        handleSetClassData({ role: 'h' });
+    };
 
     useEffect(() => {
         let isMounted = true;
@@ -40,7 +46,7 @@ function Home() {
         <div className={cx('wrapper')}>
             <div className={cx('quick-actions')}>
                 <Button
-                    to={'/not-submitted/all'}
+                    to={'/todo-exercise/not-submitted/all'}
                     className={cx('actions-item')}
                     outline
                     leftIcon={
@@ -49,6 +55,7 @@ function Home() {
                         </MyIcon>
                     }
                     text
+                    onClick={handleClickToDoExercise}
                 >
                     Việc cần làm
                 </Button>
