@@ -72,6 +72,9 @@
             }
         }
         .teacher-name {
+            display: block;
+            color: var(--white);
+            font-weight: 500;
             margin-top: 10px;
             &:hover {
                 text-decoration: underline;
@@ -83,14 +86,22 @@
 .body {
     padding: 16px 16px 12px;
     &-item {
+        width: 100%;
         display: flex;
         justify-content: flex-start;
         align-items: center;
+        flex-wrap: nowrap;
         .icon {
             width: 30px;
             height: 30px;
         }
         .text {
+            flex: 1;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
             &:hover {
                 text-decoration: underline;
             }

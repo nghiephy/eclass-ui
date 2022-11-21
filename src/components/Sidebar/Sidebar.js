@@ -36,14 +36,14 @@ const TEACH_CLASSES = [
     {
         image: images.listCheck,
         name: 'Cần đánh giá',
-        path: '/javascript',
+        path: '/todo-mark/not-marked/all',
     },
 ];
 const STUDY_CLASSES = [
     {
         image: images.todolist,
         name: 'Việc cần làm',
-        path: '/javascript',
+        path: '/todo-exercise/not-submitted/all',
     },
 ];
 

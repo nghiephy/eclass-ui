@@ -1,6 +1,6 @@
 import Tippy from '@tippyjs/react';
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import images from '~/assets/images';
 import Button from '~/components/Button';
@@ -13,6 +13,7 @@ import useAuth from '~/hooks/useAuth';
 import { useEffect, useState } from 'react';
 import EditClass from '../Modals/EditClass';
 import useAxiosPrivate from '~/hooks/useAxiosPrivate';
+import moment from 'moment';
 
 const cx = classNames.bind(styles);
 
@@ -36,7 +37,9 @@ const MENU_ITEMS_TEACH = [
 function ClassItem({ data, setClasses }) {
     const { auth, handleSetClassData } = useAuth();
     const axiosPrivate = useAxiosPrivate();
+    const navigate = useNavigate();
 
+    const [toDoList, setToDoList] = useState([]);
     const [actionHidden, setActionHidden] = useState(false);
     const [openEditClass, setOpenEditClass] = useState(false);
     const closeEditClass = () => setOpenEditClass(false);
@@ -80,7 +83,52 @@ function ClassItem({ data, setClasses }) {
         setActionHidden((prev) => !prev);
     };
 
-    console.log(data);
+    const handleOpenExercise = (classId) => {
+        if (data.userId === data.teacherId) {
+            navigate(`/exercise/t/${classId}/0`);
+            handleSetClassData({ classId: classId, role: 't' });
+        } else {
+            navigate(`/exercise/h/${classId}/0`);
+            handleSetClassData({ classId: classId, role: 'h' });
+        }
+    };
+
+    const handleOpenGrade = (classId) => {
+        navigate('/grade/mark');
+        handleSetClassData({ classId: classId, role: 't' });
+    };
+
+    const getTodoList = async (dataGet) => {
+        let apiString = '/exercise/get-not-submitted';
+
+        if (dataGet.userId === dataGet.teacherId) {
+            apiString = '/exercise/get-not-marked';
+        }
+
+        const toDoListRes = await axiosPrivate.get(apiString, {
+            params: {
+                classId: dataGet.classId,
+            },
+        });
+        const data = toDoListRes.data.exerciseRes;
+        const dataDisplay = data.filter(
+            (item) => moment(item.deadline).diff(moment(), 'weeks') === 0 && moment(item.deadline) > moment(),
+        );
+        setToDoList(dataDisplay.splice(0, 3));
+        console.log(toDoListRes);
+    };
+
+    const handleClickToDo = (classId) => {
+        if (data.userId === data.teacherId) {
+            handleSetClassData({ classId: classId, role: 't' });
+        } else {
+            handleSetClassData({ classId: classId, role: 'h' });
+        }
+    };
+
+    useEffect(() => {
+        getTodoList(data);
+    }, [data]);
 
     return (
         <div className={'xl-2-4 l-3 m-4 c-12 g-16 col'}>
@@ -121,35 +169,51 @@ function ClassItem({ data, setClasses }) {
                             <h2 className={cx('name')}>{data.className}</h2>
                             <p className={cx('semester')}>{data.semester}</p>
                         </Link>
-                        <h5 className={cx('teacher-name')}>Giáo viên: {data.teacherName}</h5>
-                    </div>
-                </div>
-                <div className={cx('body')}>
-                    <div className={cx('body-item')}>
-                        <MyIcon className={cx('icon')}>
-                            <IcDot />
-                        </MyIcon>
-                        <Link to={'/exercise'} className={cx('text')}>
-                            Bai tap can hoan thanh
+                        <Link to={`/profile/${data.teacherId}`} className={cx('teacher-name')}>
+                            Giáo viên: {data.teacherName}
                         </Link>
                     </div>
                 </div>
+                <div className={cx('body')}>
+                    {toDoList.map((item, index) => {
+                        return (
+                            <div key={index} className={cx('body-item')}>
+                                <MyIcon className={cx('icon')}>
+                                    <IcDot />
+                                </MyIcon>
+                                <Link
+                                    to={
+                                        data.userId === data.teacherId
+                                            ? `/exercise/mark/1/${item.type}/${item.postId}`
+                                            : `/exercise/h/${item.classId}/${item.type}/${item.postId}/detail`
+                                    }
+                                    className={cx('text')}
+                                    onClick={() => handleClickToDo(data.classId)}
+                                >
+                                    {item.title}
+                                </Link>
+                            </div>
+                        );
+                    })}
+                </div>
                 <div className={cx('bottom')}>
-                    <Tippy
-                        delay={[300, 80]}
-                        offset={[10, 5]}
-                        moveTransition="transform 0.2s ease-out"
-                        hideOnClick={false}
-                        arrow={false}
-                        content="Mở trang quản lí điểm"
-                        placement="bottom"
-                    >
-                        <Button circle className={cx('action-btn')}>
-                            <MyIcon className={cx('action-icon')}>
-                                <IcGradeBook />
-                            </MyIcon>
-                        </Button>
-                    </Tippy>
+                    {data.userId === data.teacherId && (
+                        <Tippy
+                            delay={[300, 80]}
+                            offset={[10, 5]}
+                            moveTransition="transform 0.2s ease-out"
+                            hideOnClick={false}
+                            arrow={false}
+                            content="Mở trang quản lí điểm"
+                            placement="bottom"
+                        >
+                            <Button circle className={cx('action-btn')} onClick={() => handleOpenGrade(data.classId)}>
+                                <MyIcon className={cx('action-icon')}>
+                                    <IcGradeBook />
+                                </MyIcon>
+                            </Button>
+                        </Tippy>
+                    )}
 
                     <Tippy
                         delay={[300, 80]}
@@ -160,7 +224,7 @@ function ClassItem({ data, setClasses }) {
                         content="Mở trang bài tập"
                         placement="bottom"
                     >
-                        <Button circle className={cx('action-btn')}>
+                        <Button circle className={cx('action-btn')} onClick={() => handleOpenExercise(data.classId)}>
                             <MyIcon className={cx('action-icon')}>
                                 <IcExercise />
                             </MyIcon>
