@@ -17,6 +17,7 @@ import Grade from '~/pages/Grade';
 import PostDetail from '~/pages/PostDetail';
 import Home from '~/pages/Home';
 import Profile from '~/pages/Profile';
+import Calendar from '~/pages/Calendar';
 import ToDoExercise from '~/pages/ToDoExercise';
 import ToDoMark from '~/pages/ToDoMark';
 
@@ -37,6 +38,7 @@ const privateRoutes = [
     { path: config.routes.postDetail, component: PostDetail },
     { path: config.routes.home, component: Home, layout: HomeLayout },
     { path: config.routes.profile, component: Profile, layout: HomeLayout },
+    { path: config.routes.calendar, component: Calendar, layout: HomeLayout },
 ];
 
 export { publicRoutes, privateRoutes };

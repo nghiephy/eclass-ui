@@ -1,0 +1,20 @@
+.event-item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    p {
+        width: 100%;
+        font-size: 1.4rem;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 2px 5px;
+        cursor: pointer;
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+}

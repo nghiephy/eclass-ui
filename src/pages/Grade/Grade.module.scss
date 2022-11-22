@@ -43,50 +43,49 @@ table tr:not(:first-child):hover {
     background-color: #ddd;
 }
 
-table th {
-    width: 120px;
-    max-height: 100px;
-    height: 100px;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    color: black;
-    &:first-child {
-        width: 200px;
-    }
-    &:not(:first-child):hover {
-        cursor: pointer;
-        text-decoration: underline;
-    }
-}
+// table th {
+//     width: 120px;
+//     max-height: 180px;
+//     height: 150px;
+//     padding-bottom: 12px;
+//     text-align: left;
+//     color: black;
+//     &:first-child {
+//         width: 200px;
+//     }
+//     &:not(:first-child):hover {
+//         cursor: pointer;
+//         text-decoration: underline;
+//     }
+// }
 
-table td {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    color: black;
-    font-size: 1.6rem;
-    &:first-child {
-        width: 200px;
-        &:hover {
-            cursor: pointer;
-        }
-    }
-    &:hover {
-        background-color: var(--primary-hover);
-    }
-}
+// table td {
+//     padding-top: 12px;
+//     padding-bottom: 12px;
+//     text-align: left;
+//     color: black;
+//     font-size: 1.6rem;
+//     &:first-child {
+//         width: 200px;
+//         &:hover {
+//             cursor: pointer;
+//         }
+//     }
+//     &:hover {
+//         background-color: var(--primary-hover);
+//     }
+// }
 
-thead,
-tbody {
-    display: block;
-}
+// thead,
+// tbody {
+//     display: block;
+// }
 
-tbody {
-    width: 100%;
-    overflow-y: auto; /* Trigger vertical scroll    */
-    overflow-x: auto; /* Hide the horizontal scroll */
-}
+// tbody {
+//     width: 100%;
+//     overflow-y: auto; /* Trigger vertical scroll    */
+//     overflow-x: auto; /* Hide the horizontal scroll */
+// }
 
 .header-name {
     display: -webkit-box;

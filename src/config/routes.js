@@ -12,6 +12,7 @@ const routes = {
     notSubmitted: '/todo-exercise/:type/:filter',
     grade: '/grade/mark',
     profile: '/profile/:userId',
+    calendar: '/calendar',
     forgotPassword: '/forgot-password',
 };
 
