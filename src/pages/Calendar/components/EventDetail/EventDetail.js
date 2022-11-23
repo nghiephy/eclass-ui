@@ -1,12 +1,9 @@
 import classNames from 'classnames/bind';
-import { useForm } from 'react-hook-form';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import Button from '~/components/Button';
-import Inputs from '~/components/Inputs';
 
 import styles from './EventDetail.module.scss';
-import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '~/hooks/useAuth';
 

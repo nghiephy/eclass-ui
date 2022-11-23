@@ -1,18 +1,10 @@
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import Popup from 'reactjs-popup';
-import { useNavigate, useParams } from 'react-router-dom';
 import FullCalendar from '@fullcalendar/react'; // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
 
-import Button from '~/components/Button';
 import styles from './Calendar.module.scss';
 import useAxiosPrivate from '~/hooks/useAxiosPrivate';
-import Images from '~/components/Images';
-import images from '~/assets/images';
-import Inputs from '~/components/Inputs';
-import useAuth from '~/hooks/useAuth';
 import moment from 'moment';
 import EventDetail from './components/EventDetail';
 

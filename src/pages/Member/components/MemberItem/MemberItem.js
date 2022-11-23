@@ -13,6 +13,7 @@ import Menu from '~/components/Popover/Menu';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import useAuth from '~/hooks/useAuth';
+import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 
 const cx = classNames.bind(styles);
 
@@ -35,13 +36,30 @@ const MENU_STUDENT_POST = [
     },
 ];
 
-function MemberItem({ data, role, classId }) {
+function MemberItem({ data, setStudentList }) {
     const { auth, classData } = useAuth();
+    const axiosPrivate = useAxiosPrivate();
 
     // const [dataExercise, setDataExercise] = useState();
     const [actionHidden, setActionHidden] = useState(false);
 
+    const handleRemoveStudent = async () => {
+        const response = await axiosPrivate.post(`/class/unenroll`, {
+            classId: classData.classId,
+            userId: data.userId,
+        });
+        alert('Xoá học sinh thành công!');
+        setStudentList((prev) => {
+            const newStudentList = prev.filter((item) => item.userId !== data.userId);
+
+            return [...newStudentList];
+        });
+    };
+
     const handleOnChange = async (menuItem) => {
+        if (menuItem.code === 'delete') {
+            handleRemoveStudent();
+        }
         setActionHidden((prev) => !prev);
     };
 

@@ -70,7 +70,7 @@ function Member() {
                         <div>
                             <h1 className={cx('timeline-title')}>Học sinh</h1>
                             {studentList?.map((studentData, index) => {
-                                return <MemberItem key={index} data={studentData} />;
+                                return <MemberItem key={index} data={studentData} setStudentList={setStudentList} />;
                             })}
                         </div>
                     )}
