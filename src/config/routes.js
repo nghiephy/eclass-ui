@@ -13,6 +13,8 @@ const routes = {
     grade: '/grade/mark',
     profile: '/profile/:userId',
     calendar: '/calendar',
+    exam: '/exam',
+    createExam: '/create-exam',
     forgotPassword: '/forgot-password',
 };
 

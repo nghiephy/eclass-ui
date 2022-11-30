@@ -1,0 +1,192 @@
+// Container
+.container {
+    margin-top: 20px;
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    .annouce-board {
+        width: 300px;
+    }
+    .timeline {
+        flex: 1;
+        padding-left: 30px;
+    }
+}
+
+.actions-section {
+    .post-exercise-btn {
+        margin-top: 25px;
+        margin-left: 260px;
+        padding: 10px 15px;
+    }
+}
+
+.title {
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+}
+
+.timeline-title {
+    margin-bottom: 20px;
+}
+
+.guide-textarea {
+    width: 100%;
+    font-size: 1.4rem;
+    padding: 10px 20px;
+    outline: none;
+    border-color: var(--border);
+    border-radius: 5px;
+}
+
+.form {
+    textarea {
+        margin-bottom: 16px;
+    }
+    .input-item {
+        margin-bottom: 20px;
+    }
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.deadline-input {
+    width: 100%;
+    input {
+        flex: 1;
+        font-size: 1.4rem;
+        padding: 10px;
+        width: 100px;
+    }
+    label {
+        font-size: 1.4rem;
+    }
+}
+
+.add-choice-btn {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+// Choice item section
+.choice-item {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.choice-radio {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2.4rem;
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+}
+
+.error_msg {
+    color: var(--error-color);
+}
+
+.choice-delete {
+    position: absolute;
+    font-size: 3rem;
+    color: var(--border);
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    &:hover {
+        color: var(--black);
+    }
+}
+
+.question {
+    position: relative;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-top: 10px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    .num-question {
+        font-weight: 500;
+        font-size: 1.8rem;
+    }
+    .body-content {
+        margin-bottom: 14px;
+        font-size: 1.6rem;
+    }
+    .question-delete {
+        position: absolute;
+        font-size: 3.2rem;
+        color: var(--border);
+        right: 10px;
+        top: -5px;
+        cursor: pointer;
+        &:hover {
+            color: var(--black);
+        }
+    }
+    .question-edit {
+        position: absolute;
+        font-size: 1.8rem;
+        color: var(--border);
+        right: 40px;
+        top: 5px;
+        cursor: pointer;
+        &:hover {
+            color: var(--black);
+        }
+    }
+}
+
+// Modal success
+.modal {
+    display: block;
+    width: 30vw;
+    min-width: 350px;
+    position: relative;
+    padding: 0px 20px;
+}
+
+.title {
+    font-size: 2.4rem;
+    margin-bottom: 4px;
+}
+
+.exits {
+    position: absolute;
+    top: -20px;
+    right: 0px;
+    font-size: 3.8rem;
+    cursor: pointer;
+}
+
+.form {
+    margin-top: 20px;
+    &-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 100%;
+        margin-top: 20px;
+        .cancel {
+            padding: 7.5px 16px;
+            margin-right: 20px;
+        }
+    }
+}

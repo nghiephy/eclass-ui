@@ -7,6 +7,7 @@ const images = {
     noAvatar: require('~/assets/images/no_avatar.jpg'),
     logoLink: require('~/assets/images/logo_link.png'),
     fileIcon: require('~/assets/images/file_icon.png'),
+    examIcon: require('~/assets/images/exam_icon.png'),
     materialIcon: require('~/assets/images/material_icon.png'),
     exerciseIcon: require('~/assets/images/exercise_icon.png'),
     questionIcon: require('~/assets/images/question_icon.png'),

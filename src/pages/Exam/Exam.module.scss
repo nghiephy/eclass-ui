@@ -1,0 +1,40 @@
+// Container
+.container {
+    margin-top: 20px;
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    .annouce-board {
+        position: relative;
+        width: 240px;
+    }
+    .timeline {
+        flex: 1;
+    }
+}
+
+.create-exam-btn {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.actions-section {
+    .post-exercise-btn {
+        margin-top: 25px;
+        margin-left: 260px;
+        padding: 10px 15px;
+    }
+}
+
+.title-topic {
+    margin-left: 260px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 2.2rem;
+}
+
+.timeline-title {
+    margin-bottom: 20px;
+}

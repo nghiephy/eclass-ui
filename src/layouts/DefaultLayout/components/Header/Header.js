@@ -34,6 +34,10 @@ function Header({ toggleSidebar }) {
             title: 'Thành viên',
             path: `/member/all`,
         },
+        {
+            title: 'Bài thi',
+            path: `/exam`,
+        },
     ];
     const MENU_ITEMS = [
         {

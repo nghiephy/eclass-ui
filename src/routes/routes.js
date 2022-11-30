@@ -20,6 +20,8 @@ import Profile from '~/pages/Profile';
 import Calendar from '~/pages/Calendar';
 import ToDoExercise from '~/pages/ToDoExercise';
 import ToDoMark from '~/pages/ToDoMark';
+import Exam from '~/pages/Exam';
+import CreateExam from '~/pages/CreateExam';
 
 const publicRoutes = [
     { path: config.routes.login, component: Login, layout: LoginRegisterLayout },
@@ -30,6 +32,8 @@ const publicRoutes = [
 const privateRoutes = [
     { path: config.routes.stream, component: Stream },
     { path: config.routes.member, component: Member },
+    { path: config.routes.exam, component: Exam },
+    { path: config.routes.createExam, component: CreateExam },
     { path: config.routes.exercise, component: Exercise },
     { path: config.routes.grade, component: Grade },
     { path: config.routes.notSubmitted, component: ToDoExercise, layout: ToDoLayout },

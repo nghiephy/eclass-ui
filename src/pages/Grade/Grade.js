@@ -2,6 +2,7 @@ import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import { downloadExcel } from 'react-export-table-to-excel';
 import { Link, useNavigate } from 'react-router-dom';
+import SmartDataTable from 'react-smart-data-table';
 
 import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 import useAuth from '~/hooks/useAuth';
@@ -83,6 +84,18 @@ function Grade() {
         getAllScore();
     }, []);
 
+    // const testData = [];
+    // const numResults = 100;
+
+    // for (let i = 0; i < numResults; i++) {
+    //     testData.push({
+    //         _id: i,
+    //         fullName: 'Nguyen Van A',
+    //         'email.address': '@gmail.com',
+    //         phone_number: '10121212',
+    //     });
+    // }
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -91,11 +104,11 @@ function Grade() {
                     Tải file Excel
                 </Button>
 
-                <table>
-                    <tbody>
+                <table className={cx('table-grade')}>
+                    <tbody className={cx('tbody-grade')}>
                         <tr>
                             {headerData.map((head) => (
-                                <th key={head.id} className={cx('header-column')}>
+                                <th key={head.id} className={cx('header-column', 'table-grade-th')}>
                                     <h3
                                         onClick={() => {
                                             handleNavigateDetailSubmit(head.id, head.type);
@@ -116,7 +129,7 @@ function Grade() {
                         {bodyData.map((item, i) => (
                             <tr key={i}>
                                 {item.map((it) => (
-                                    <td key={it?.userId ? it.userId : it}>
+                                    <td key={it?.userId ? it.userId : it} className={cx('table-grade-td')}>
                                         {it?.fullName ? <Link to={`/profile/${it.userId}`}>{it.fullName}</Link> : it}
                                     </td>
                                 ))}
@@ -125,6 +138,7 @@ function Grade() {
                     </tbody>
                 </table>
             </div>
+            {/* <SmartDataTable data={testData} name="test-table" className="ui compact selectable table" sortable />, */}
         </div>
     );
 }
