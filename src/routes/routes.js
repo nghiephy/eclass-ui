@@ -34,6 +34,7 @@ const privateRoutes = [
     { path: config.routes.member, component: Member },
     { path: config.routes.exam, component: Exam },
     { path: config.routes.createExam, component: CreateExam },
+    { path: config.routes.detailExam, component: CreateExam },
     { path: config.routes.exercise, component: Exercise },
     { path: config.routes.grade, component: Grade },
     { path: config.routes.notSubmitted, component: ToDoExercise, layout: ToDoLayout },

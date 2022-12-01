@@ -6,12 +6,25 @@
     justify-content: flex-start;
     align-items: flex-start;
     .annouce-board {
+        position: sticky;
+        top: 0px;
         width: 300px;
     }
     .timeline {
         flex: 1;
         padding-left: 30px;
     }
+}
+
+.add-question-section {
+    position: sticky;
+    top: 0px;
+    background: white;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    z-index: 99;
 }
 
 .actions-section {
@@ -48,12 +61,6 @@
     .input-item {
         margin-bottom: 20px;
     }
-}
-
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
 }
 
 .deadline-input {
@@ -183,10 +190,13 @@
         justify-content: flex-end;
         align-items: center;
         width: 100%;
-        margin-top: 20px;
         .cancel {
             padding: 7.5px 16px;
             margin-right: 20px;
         }
     }
+}
+
+.update-btn {
+    padding: 7px 14px;
 }

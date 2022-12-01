@@ -15,6 +15,7 @@ const routes = {
     calendar: '/calendar',
     exam: '/exam',
     createExam: '/create-exam',
+    detailExam: '/detail-exam/:postId',
     forgotPassword: '/forgot-password',
 };
 

@@ -11,7 +11,7 @@ import images from '~/assets/images';
 import styles from './ExamItem.module.scss';
 import Images from '~/components/Images';
 import Menu from '~/components/Popover/Menu';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import useAuth from '~/hooks/useAuth';
 import useAxiosPrivate from '~/hooks/useAxiosPrivate';
@@ -39,6 +39,7 @@ const MENU_STUDENT_POST = [
 ];
 
 function ExamItem({ data, setExamData }) {
+    const navigate = useNavigate();
     const { auth, classData } = useAuth();
     const axiosPrivate = useAxiosPrivate();
 
@@ -71,7 +72,7 @@ function ExamItem({ data, setExamData }) {
 
     const handleClickExamItem = () => {
         if (auth.id === data.userId) {
-            alert('Ban la giao vien');
+            navigate(`/detail-exam/${data.postId}`);
         } else {
             toggleJoinExam();
         }

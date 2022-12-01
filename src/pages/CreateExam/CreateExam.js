@@ -34,10 +34,15 @@ const FILTER_LABEL = [
 function CreateExam() {
     const navigate = useNavigate();
     const { classData } = useAuth();
-    const { filter } = useParams();
+    const { postId } = useParams();
     const axiosPrivate = useAxiosPrivate();
 
     const [guide, setGuide] = useState();
+    const [title, setTitle] = useState();
+    const [password, setPassword] = useState();
+    const [totalScore, setTotalScore] = useState();
+    const [duration, setDuration] = useState();
+    const [detailExam, setDetailExam] = useState({});
     const [numChoice, setNumChocie] = useState(0);
     const [totalChoice, setTotalChoice] = useState([]);
     const [currentUpdateQuestion, setCurrentUpdateQuestion] = useState({});
@@ -60,6 +65,7 @@ function CreateExam() {
         register,
         formState: { errors },
         handleSubmit,
+        setValue: setFormValue,
     } = useForm();
 
     const {
@@ -123,14 +129,12 @@ function CreateExam() {
         setCurrentQuestion([...newCurrQuestions]);
     };
     const handleEditQuestion = (index) => {
-        console.log(index);
         const updateQuestion = { ...currentQuestion[index] };
         updateQuestion.index = index;
         setCurrentUpdateQuestion(updateQuestion);
         toggleUpdateQuestion();
     };
     const handleDataAfterUpdate = (data) => {
-        console.log(data);
         setCurrentQuestion((prev) => {
             const newGG = [...prev];
             console.log(prev[data.index].questionName);
@@ -141,9 +145,56 @@ function CreateExam() {
         });
     };
 
+    const getDataDetailExam = async (postId) => {
+        const res = await axiosPrivate.get(`/exam/detail/${postId}`);
+        const examData = res.data.data;
+        const questionList = res.data.questionListRes;
+        console.log(res);
+
+        setGuide(examData.guide);
+        setDuration(moment(examData.finishedAt).diff(moment(examData.startedAt), 'minutes'));
+        setTotalScore(examData.maxScore);
+        setPassword(examData.password);
+        setTitle(examData.title);
+        setValue(moment(examData.deadline).format('DD/MM/YYYY HH:mm:ss'));
+
+        const detailCurrentQuestion = questionList.map((question) => {
+            return {
+                questionName: question.question,
+                answerList: question.Exam_Answers,
+            };
+        });
+
+        setCurrentQuestion(detailCurrentQuestion);
+    };
+
+    const handleUpdateExam = async () => {
+        const dataUpdate = {
+            postId: postId,
+            title: title,
+            totalScore: totalScore,
+            duration: duration,
+            password: password,
+            time: value,
+            guide: guide,
+            classId: classData.classId,
+            questionList: currentQuestion,
+        };
+        console.log(dataUpdate);
+        const updateRes = await axiosPrivate.post(`/exam/update`, dataUpdate);
+        console.log(updateRes);
+    };
+
     useEffect(() => {
         resetPost({ question_name: '' });
     }, [currentQuestion]);
+
+    useEffect(() => {
+        console.log(postId);
+        if (postId) {
+            getDataDetailExam(postId);
+        }
+    }, []);
 
     return (
         <div className={cx('wrapper')}>
@@ -155,6 +206,8 @@ function CreateExam() {
                             primary
                             name="title"
                             type="text"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
                             register={register}
                             label="Tên bài thi"
                             validate={{
@@ -174,6 +227,8 @@ function CreateExam() {
                             primary
                             name="totalScore"
                             type="number"
+                            value={totalScore}
+                            onChange={(e) => setTotalScore(e.target.value)}
                             register={register}
                             label="Tổng điểm"
                             validate={{
@@ -186,6 +241,8 @@ function CreateExam() {
                             primary
                             name="duration"
                             type="number"
+                            value={duration}
+                            onChange={(e) => setDuration(e.target.value)}
                             register={register}
                             label="Thời gian thi (phút)"
                             validate={{
@@ -197,7 +254,9 @@ function CreateExam() {
                         <Inputs
                             primary
                             name="passwordExam"
-                            type="password"
+                            type="text"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             register={register}
                             label="Mật khẩu"
                             validate={{
@@ -218,75 +277,89 @@ function CreateExam() {
                             </LocalizationProvider>
                         </div>
                         <div className={cx('form-actions')}>
-                            <Inputs submit className={cx('login')} id="submit-form" type="submit" value="Tạo đề thi" />
+                            {postId ? (
+                                <Button
+                                    primary
+                                    className={cx('update-btn')}
+                                    id="update-form"
+                                    onClick={() => {
+                                        handleUpdateExam();
+                                    }}
+                                >
+                                    Cập Nhật
+                                </Button>
+                            ) : (
+                                <Inputs
+                                    submit
+                                    className={cx('login')}
+                                    id="submit-form"
+                                    type="submit"
+                                    value="Tạo đề thi"
+                                />
+                            )}
                         </div>
                     </form>
                 </div>
                 <div className={cx('timeline')}>
-                    {filter !== 'h' && (
-                        <div>
-                            <h2 className={cx('timeline-title')}>Câu hỏi</h2>
-                            <form className={cx('form-post')} onSubmit={handleSubmitPost(onSubmitPost)}>
-                                <Inputs
-                                    primary
-                                    name="question_name"
-                                    type="text"
-                                    label="Câu hỏi (*)"
-                                    autoComplete="off"
-                                    register={registerPost}
-                                    validate={{
-                                        required: 'Chưa nhập câu hỏi',
-                                    }}
-                                    errors={errorsPost}
-                                />
-                                <Button outline className={cx('add-choice-btn')} onClick={handleAddQuantityChocie}>
-                                    Thêm lựa chọn
-                                </Button>
-                                {totalChoice.map((item, i) => {
-                                    return (
-                                        <div key={i + item} className={cx('choice-item')}>
-                                            <input
-                                                type="radio"
-                                                value={i}
-                                                name="correct_ans"
-                                                className={cx('choice-radio')}
-                                                {...registerPost('correct_ans', {
-                                                    required: 'Chọn đáp án đúng',
-                                                })}
-                                            />
+                    <div className={cx('add-question-section')}>
+                        <h2 className={cx('timeline-title')}>Câu hỏi</h2>
+                        <form className={cx('form-post')} onSubmit={handleSubmitPost(onSubmitPost)}>
+                            <Inputs
+                                primary
+                                name="question_name"
+                                type="text"
+                                label="Câu hỏi (*)"
+                                autoComplete="off"
+                                register={registerPost}
+                                validate={{
+                                    required: 'Chưa nhập câu hỏi',
+                                }}
+                                errors={errorsPost}
+                            />
+                            <Button outline className={cx('add-choice-btn')} onClick={handleAddQuantityChocie}>
+                                Thêm lựa chọn
+                            </Button>
+                            {totalChoice.map((item, i) => {
+                                return (
+                                    <div key={i + item} className={cx('choice-item')}>
+                                        <input
+                                            type="radio"
+                                            value={i}
+                                            name="correct_ans"
+                                            className={cx('choice-radio')}
+                                            {...registerPost('correct_ans', {
+                                                required: 'Chọn đáp án đúng',
+                                            })}
+                                        />
 
-                                            <Inputs
-                                                primary
-                                                name={`choice${i}`}
-                                                type="text"
-                                                label={`Lựa chọn ${i + 1}`}
-                                                register={registerPost}
-                                                validate={{
-                                                    required: 'Chưa nhập câu trả lời',
-                                                }}
-                                                errors={errorsPost}
-                                            />
-                                            <span
-                                                className={cx('choice-delete')}
-                                                onClick={() => handleDeleteChoice(item)}
-                                            >
-                                                &times;
-                                            </span>
-                                        </div>
-                                    );
-                                })}
-                                <div className={cx('form-actions')}>
-                                    <Inputs
-                                        submit
-                                        className={cx('login')}
-                                        id="submit-form-post"
-                                        type="submit"
-                                        value="Thêm câu hỏi"
-                                    />
-                                </div>
-                            </form>
-                        </div>
-                    )}
+                                        <Inputs
+                                            primary
+                                            name={`choice${i}`}
+                                            type="text"
+                                            label={`Lựa chọn ${i + 1}`}
+                                            register={registerPost}
+                                            validate={{
+                                                required: 'Chưa nhập câu trả lời',
+                                            }}
+                                            errors={errorsPost}
+                                        />
+                                        <span className={cx('choice-delete')} onClick={() => handleDeleteChoice(item)}>
+                                            &times;
+                                        </span>
+                                    </div>
+                                );
+                            })}
+                            <div className={cx('form-actions')}>
+                                <Inputs
+                                    submit
+                                    className={cx('login')}
+                                    id="submit-form-post"
+                                    type="submit"
+                                    value="Thêm câu hỏi"
+                                />
+                            </div>
+                        </form>
+                    </div>
                     {currentQuestion.map((question, index) => {
                         return (
                             <div key={index} className={cx('question')}>
