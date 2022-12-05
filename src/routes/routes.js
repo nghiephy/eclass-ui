@@ -22,6 +22,7 @@ import ToDoExercise from '~/pages/ToDoExercise';
 import ToDoMark from '~/pages/ToDoMark';
 import Exam from '~/pages/Exam';
 import CreateExam from '~/pages/CreateExam';
+import JoinExam from '~/pages/JoinExam';
 
 const publicRoutes = [
     { path: config.routes.login, component: Login, layout: LoginRegisterLayout },
@@ -35,6 +36,7 @@ const privateRoutes = [
     { path: config.routes.exam, component: Exam },
     { path: config.routes.createExam, component: CreateExam },
     { path: config.routes.detailExam, component: CreateExam },
+    { path: config.routes.joinExam, component: JoinExam },
     { path: config.routes.exercise, component: Exercise },
     { path: config.routes.grade, component: Grade },
     { path: config.routes.notSubmitted, component: ToDoExercise, layout: ToDoLayout },

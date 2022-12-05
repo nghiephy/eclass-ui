@@ -1,35 +1,50 @@
 import classNames from 'classnames/bind';
+import moment from 'moment';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 
 import Button from '~/components/Button';
 import Inputs from '~/components/Inputs';
+import useAuth from '~/hooks/useAuth';
 import useAxiosPrivate from '~/hooks/useAxiosPrivate';
-import { useParams } from 'react-router-dom';
 
 import styles from './JoinExam.module.scss';
 
 const cx = classNames.bind(styles);
 
-function JoinExam({ onClose, setTopics, ...props }) {
+function JoinExam({ onClose, dataExam, ...props }) {
+    const navigate = useNavigate();
+    const { auth } = useAuth();
     const {
         register,
         formState: { errors },
         handleSubmit,
     } = useForm();
     const axiosPrivate = useAxiosPrivate();
-    const { classId } = useParams();
 
     const onSubmit = async (data) => {
-        const topicRes = await axiosPrivate.post('/topic/create', {
-            classId: classId,
-            topic: data.topic,
-        });
-        setTopics((prev) => {
-            return [...prev, topicRes.data.response];
-        });
-        onClose();
+        try {
+            const joinRes = await axiosPrivate.post('/exam/join', {
+                userId: auth.id,
+                postId: dataExam.postId,
+                password: data.passwordJoin,
+            });
+            console.log(joinRes);
+            console.log(dataExam);
+            if (dataExam.status === 1) {
+                alert('Bạn đã hoàn thành bài thi!');
+            } else if (moment(dataExam.startedAt).diff(moment(), 'minutes') > 0) {
+                alert('Chưa đến thời gian thi!');
+            } else if (moment(dataExam.finishedAt).diff(moment(), 'minutes') < 0) {
+                alert('Bài thi đã kết thúc!');
+            } else {
+                // navigate(`/join-exam/${dataExam.postId}/${joinRes.data.data.id}`);
+            }
+        } catch (err) {
+            alert('Mật khẩu sai! Vui lòng thử lại!');
+        }
     };
 
     return (

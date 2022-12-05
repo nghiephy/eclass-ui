@@ -16,6 +16,7 @@ const routes = {
     exam: '/exam',
     createExam: '/create-exam',
     detailExam: '/detail-exam/:postId',
+    joinExam: '/join-exam/:postId/:takeId',
     forgotPassword: '/forgot-password',
 };
 

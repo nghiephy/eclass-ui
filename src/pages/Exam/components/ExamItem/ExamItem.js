@@ -131,20 +131,39 @@ function ExamItem({ data, setExamData }) {
                     </div>
                 </div>
                 <div className={cx('body-more')}>
-                    <p className={cx('body-more-item')}>
-                        Thời gian:&nbsp;&nbsp;
-                        <strong>{moment(data.finishedAt).diff(moment(data.startedAt), 'minutes')}&nbsp;phút</strong>
-                    </p>
-                    <p className={cx('body-more-item')}>
-                        Số câu hỏi:&nbsp;&nbsp;<strong>{data.totalQuestion}</strong>
-                    </p>
-                    <p className={cx('body-more-item')}>
-                        Điểm tối đa:&nbsp;&nbsp;<strong>{data.maxScore}</strong>
-                    </p>
+                    {data.status ? (
+                        <>
+                            <p className={cx('body-more-item')}>Đã hoàn thành bài thi!</p>
+                            <p className={cx('body-more-item')}>
+                                Số điểm:&nbsp;&nbsp;<strong>{data.score}</strong>
+                            </p>
+                            <p className={cx('body-more-item')}>
+                                Thời gian:&nbsp;&nbsp;
+                                <strong>
+                                    {moment(data.doStartedAt).diff(moment(data.doFinishedAt), 'minutes')}&nbsp;phút
+                                </strong>
+                            </p>
+                        </>
+                    ) : (
+                        <div>
+                            <p className={cx('body-more-item')}>
+                                Thời gian:&nbsp;&nbsp;
+                                <strong>
+                                    {moment(data.finishedAt).diff(moment(data.startedAt), 'minutes')}&nbsp;phút
+                                </strong>
+                            </p>
+                            <p className={cx('body-more-item')}>
+                                Số câu hỏi:&nbsp;&nbsp;<strong>{data.totalQuestion}</strong>
+                            </p>
+                            <p className={cx('body-more-item')}>
+                                Điểm tối đa:&nbsp;&nbsp;<strong>{data.maxScore}</strong>
+                            </p>
+                        </div>
+                    )}
                 </div>
             </div>
 
-            <JoinExam open={joinExam} closeOnDocumentClick onClose={closeJoinExam} />
+            <JoinExam dataExam={data} open={joinExam} closeOnDocumentClick onClose={closeJoinExam} />
         </div>
     );
 }

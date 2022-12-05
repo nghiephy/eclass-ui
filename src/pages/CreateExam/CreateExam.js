@@ -52,7 +52,7 @@ function CreateExam() {
     const [openSuccess, setOpenSuccess] = useState(false);
     const closeModalSuccess = () => setOpenSuccess(false);
 
-    const [value, setValue] = useState(moment().format('MM/DD/YYYY'));
+    const [value, setValue] = useState(moment().format('DD/MM/YYYY HH:mm:ss'));
 
     const toggleUpdateQuestion = () => {
         setOpenUpdateQuestion(!openUpdateQuestion);
@@ -86,6 +86,9 @@ function CreateExam() {
         });
         console.log(createExamRes);
         toggleOpenSuccess();
+    };
+
+    const handleConfirmBtn = () => {
         navigate(`/exam`);
     };
 
@@ -156,7 +159,7 @@ function CreateExam() {
         setTotalScore(examData.maxScore);
         setPassword(examData.password);
         setTitle(examData.title);
-        setValue(moment(examData.deadline).format('DD/MM/YYYY HH:mm:ss'));
+        setValue(moment(examData.startedAt).format('DD/MM/YYYY HH:mm:ss'));
 
         const detailCurrentQuestion = questionList.map((question) => {
             return {
@@ -182,7 +185,7 @@ function CreateExam() {
         };
         console.log(dataUpdate);
         const updateRes = await axiosPrivate.post(`/exam/update`, dataUpdate);
-        console.log(updateRes);
+        toggleOpenSuccess();
     };
 
     useEffect(() => {
@@ -269,7 +272,7 @@ function CreateExam() {
                             <h3 className={cx('title-input')}>Ngày giờ thi: </h3>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DateTimePicker
-                                    inputFormat="DD/MM/YYYY HH:mm"
+                                    // inputFormat="DD-MM-YYYY HH:mm:ss"
                                     value={value}
                                     onChange={handleChange}
                                     renderInput={(params) => <TextField {...params} className={cx('deadline-input')} />}
@@ -396,14 +399,18 @@ function CreateExam() {
             <Popup onClose={closeModalSuccess} closeOnDocumentClick open={openSuccess}>
                 <div className={cx('modal')}>
                     <div className={cx('title')} style={{ fontWeight: 500, textAlign: 'center', marginBottom: '15px' }}>
-                        {' '}
-                        Đã tạo bài thi thành công!{' '}
+                        {postId ? 'Đã cập nhật bài thi thành công!' : 'Đã tạo bài thi thành công!'}
                     </div>
                     <div className={cx('sub-title')} style={{ textAlign: 'center' }}>
                         Vui lòng kiểm tra lại thông tin! Bài thi có thể được chỉnh sửa ở mục Bài Thi! <br />
                     </div>
                     <div className={cx('form-actions')}>
-                        <Button primary className={cx('cancel')} style={{ margin: '0 auto' }}>
+                        <Button
+                            primary
+                            className={cx('cancel')}
+                            style={{ margin: '0 auto' }}
+                            onClick={() => handleConfirmBtn()}
+                        >
                             Đã hiểu
                         </Button>
                     </div>
