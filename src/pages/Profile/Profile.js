@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { useEffect, useState } from 'react';
+import { useEffect, useInsertionEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Popup from 'reactjs-popup';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -11,6 +11,7 @@ import Images from '~/components/Images';
 import images from '~/assets/images';
 import Inputs from '~/components/Inputs';
 import useAuth from '~/hooks/useAuth';
+import moment from 'moment';
 
 const cx = classNames.bind(styles);
 
@@ -36,6 +37,8 @@ function Profile() {
     const [openSuccess, setOpenSuccess] = useState(false);
     const closeModalSuccess = () => setOpenSuccess(false);
 
+    console.log(moment('10-2-2022')._isValid);
+
     const onSubmit = async (data) => {
         const formData = new FormData();
         formData.append('avatar', imagefile);
@@ -44,12 +47,16 @@ function Profile() {
         formData.append('email', email);
         formData.append('birthday', birthday);
 
-        const response = await axiosPrivate.post('/user/update', formData, {
-            headers: {
-                'content-type': 'multipart/form-data',
-            },
-        });
-        setOpenSuccess(true);
+        if (moment(birthday)._isValid) {
+            const response = await axiosPrivate.post('/user/update', formData, {
+                headers: {
+                    'content-type': 'multipart/form-data',
+                },
+            });
+            setOpenSuccess(true);
+        } else {
+            alert('Ngày sinh không hợp lệ!');
+        }
     };
 
     const onAvatarChange = (e) => {
@@ -120,16 +127,6 @@ function Profile() {
                         label="Họ và tên"
                         readOnly={!(parseInt(userId) === auth.id)}
                         register={register}
-                        validate={{
-                            required: 'Chưa nhập lại họ tên',
-                            validate: {
-                                compareValue: (value) => {
-                                    if (value === user.fullName) {
-                                        return 'Họ tên chưa được thay đổi';
-                                    }
-                                },
-                            },
-                        }}
                         errors={errors}
                     />
                     <Inputs
@@ -142,14 +139,11 @@ function Profile() {
                         label="Email"
                         readOnly={!(parseInt(userId) === auth.id)}
                         register={register}
-                        validate={{
-                            required: 'Chưa nhập lại email',
-                        }}
                         errors={errors}
                     />
                     <Inputs
                         className={cx('input')}
-                        value={birthday}
+                        value={birthday || ''}
                         onChange={(event) => setBirthday(event.target.value)}
                         primary
                         name="birthday"
@@ -157,9 +151,6 @@ function Profile() {
                         label="Ngày sinh"
                         readOnly={!(parseInt(userId) === auth.id)}
                         register={register}
-                        validate={{
-                            required: 'Chưa nhập lại ngày sinh',
-                        }}
                         errors={errors}
                     />
                     <Inputs

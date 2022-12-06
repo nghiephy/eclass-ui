@@ -34,6 +34,16 @@ function Calendar() {
         handleData(exerciseRes?.data?.exerciseRes);
     };
 
+    const getAllExamData = async (idList) => {
+        const allExamsRes = await axiosPrivate.get(`/exam/get-all/null`, {
+            params: {
+                classId: classIdList.length === 0 ? idList : classIdList,
+            },
+        });
+        console.log(allExamsRes);
+        handleDataExam(allExamsRes?.data?.data);
+    };
+
     const getEventDetail = async (type, classId, postId) => {
         let apiString = `/exercise/get-detail/${classId}/${postId}`;
 
@@ -59,9 +69,8 @@ function Calendar() {
         });
         setClassIdList(classIdArr);
         getExerciseData(classIdArr);
+        getAllExamData(classIdArr);
     };
-
-    console.log(dataDisplay);
 
     const handleData = async (dataRes) => {
         const data = dataRes.map((item) => {
@@ -75,14 +84,36 @@ function Calendar() {
         setDataDisplay(data);
     };
 
+    const handleDataExam = async (dataRes) => {
+        const data = dataRes.map((item) => {
+            return {
+                ...item,
+                Id: item.examId,
+                title: item.content,
+                type: 'KT',
+                date: moment(item.deadline).format('YYYY-MM-DD'),
+            };
+        });
+        setDataDisplay((prev) => {
+            return [...prev, ...data];
+        });
+    };
+
     const handleClickEvent = (data) => {
         setOpenEventDetail((o) => !o);
-        getEventDetail(data.type, data.classId, data.postId);
+        if (data.type === 'KT') {
+            setDataEventDetail({ ...data });
+        } else {
+            getEventDetail(data.type, data.classId, data.postId);
+        }
     };
 
     function renderEventContent(eventInfo) {
         return (
-            <div className={cx('event-item')} onClick={() => handleClickEvent(eventInfo.event.extendedProps)}>
+            <div
+                className={cx('event-item', { exam: eventInfo.event.extendedProps.type === 'KT' })}
+                onClick={() => handleClickEvent(eventInfo.event.extendedProps)}
+            >
                 <p>{eventInfo.event.title}</p>
             </div>
         );

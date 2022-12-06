@@ -15,8 +15,14 @@ function EventDetail({ onClose, data, ...props }) {
 
     const handleClickEvent = (data) => {
         handleSetClassData({ classId: data.classId, role: 'h' });
-        navigate(`/exercise/h/${data?.classId}/${data?.type}/${data?.postId}/detail`);
+        if (data.type === 'KT') {
+            navigate(`/exam`);
+        } else {
+            navigate(`/exercise/h/${data?.classId}/${data?.type}/${data?.postId}/detail`);
+        }
     };
+
+    console.log(data);
 
     return (
         <Popup className={cx('wrapper')} {...props} onClose={onClose} style={{ borderRadius: '10px' }}>
@@ -24,19 +30,27 @@ function EventDetail({ onClose, data, ...props }) {
                 <span className={cx('exits')} onClick={onClose}>
                     &times;
                 </span>
-                <h2 className={cx('title')}>Thông tin bài tập</h2>
+                <h2 className={cx('title')}>{data?.type === 'KT' ? 'Thông tin bài thi' : 'Thông tin bài tập'}</h2>
 
                 <div className={cx('item')}>
                     <h3>Tiêu đề</h3>
-                    <p className={cx('sub-title')}>{data?.title}</p>
+                    <p className={cx('sub-title')}>{data?.title || data?.content}</p>
                 </div>
                 <div className={cx('item')}>
                     <h3>Hướng dẫn</h3>
                     <p className={cx('sub-title')}>{data?.guide}</p>
                 </div>
                 <div className={cx('item')}>
+                    <h3>Điểm thi</h3>
+                    <p className={cx('sub-title')}>{data?.maxScore}</p>
+                </div>
+                <div className={cx('item')}>
+                    <h3>Số câu hỏi</h3>
+                    <p className={cx('sub-title')}>{data?.totalQuestion}</p>
+                </div>
+                <div className={cx('item')}>
                     <h3>Lớp</h3>
-                    <p className={cx('sub-title')}>{data?.className}</p>
+                    <p className={cx('sub-title')}>{data?.className || data?.classNameExam}</p>
                 </div>
                 <div className={cx('form-actions')}>
                     <Button outline className={cx('cancel')} onClick={onClose}>

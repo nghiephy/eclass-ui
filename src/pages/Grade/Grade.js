@@ -2,7 +2,6 @@ import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import { downloadExcel } from 'react-export-table-to-excel';
 import { Link, useNavigate } from 'react-router-dom';
-import SmartDataTable from 'react-smart-data-table';
 
 import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 import useAuth from '~/hooks/useAuth';

@@ -157,7 +157,7 @@ function Stream() {
                         menuEnroll={menuEnroll}
                         setClassData={setClassData}
                     />
-                    <div className={cx('annouce-panel')}>
+                    <div className={cx('annouce-panel', { hidden: true })}>
                         <h2 className={cx('label')}>Phòng học online</h2>
                         <Button to="/" primary className={cx('join-btn')}>
                             Tham gia
