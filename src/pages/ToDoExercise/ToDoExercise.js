@@ -155,6 +155,14 @@ function ToDoExercise() {
         setNotSubmiitedList(newListNotSubmitted);
     };
 
+    const handleSelectFilter = (filter) => {
+        navigate(`/todo-exercise/${type}${filter !== 'all' ? `/${filter}` : '/all'}`);
+    };
+
+    const handleSelectType = (type) => {
+        navigate(type);
+    };
+
     useEffect(() => {
         getClasses();
     }, []);
@@ -191,13 +199,39 @@ function ToDoExercise() {
                     />
                 </div>
                 <div className={cx('timeline')}>
-                    <Select
-                        data={[{ title: 'Tất cả', value: 0 }, ...classes]}
-                        handleSelect={setClassChoosed}
-                        currentData={0}
-                        label="Chọn lớp"
-                        className={cx('class-select')}
-                    />
+                    <div className={cx('timeline-actions')}>
+                        <Select
+                            data={[{ title: 'Tất cả', value: 0 }, ...classes]}
+                            handleSelect={setClassChoosed}
+                            currentData={0}
+                            label="Chọn lớp"
+                            className={cx('class-select')}
+                        />
+                        <Select
+                            data={[
+                                { title: 'Tất cả', value: 'all' },
+                                { title: '7 ngày tới', value: 'this_week' },
+                                { title: '14 ngày tới', value: 'next_week' },
+                                { title: '21 ngày tới', value: 'next_2_week' },
+                            ]}
+                            handleSelect={handleSelectFilter}
+                            currentData={'all'}
+                            label="Bộ lọc"
+                            className={cx('class-select', 'filter')}
+                        />
+                        <Select
+                            data={[
+                                { title: 'Chưa nộp', value: '/todo-exercise/not-submitted/all' },
+                                { title: 'Đã nộp', value: '/todo-exercise/submitted/all' },
+                                { title: 'Quá hạn', value: '/todo-exercise/out-date/all' },
+                            ]}
+                            handleSelect={handleSelectType}
+                            currentData={'/todo-exercise/not-submitted/all'}
+                            label="Trạng thái"
+                            className={cx('class-select', 'type')}
+                        />
+                    </div>
+
                     {notSubmittedList?.map((item, index) => {
                         return <PostItem key={index} data={item} />;
                     })}

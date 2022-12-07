@@ -7,9 +7,21 @@
     align-items: flex-start;
     .annouce-board {
         width: 240px;
+        @media screen and (max-width: 825px) {
+            display: none;
+        }
     }
     .timeline {
         flex: 1;
+        &-actions {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        @media screen and (max-width: 825px) {
+            width: 100%;
+        }
     }
 }
 
@@ -38,4 +50,11 @@
 
 .class-select {
     margin-left: 20px;
+    &.type,
+    &.filter {
+        display: none;
+        @media screen and (max-width: 825px) {
+            display: flex;
+        }
+    }
 }

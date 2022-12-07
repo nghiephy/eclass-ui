@@ -53,6 +53,7 @@ const Sidebar = forwardRef(({ show, ...passProps }, ref) => {
     const { classData } = useAuth();
     const [classes, setClasses] = useState({});
     const [openStreamNav, setOpenStreamNav] = useState(false);
+    const [openToDoNav, setOpenToDoNav] = useState(false);
     const SIDEBAR_NAVIGATION = [
         {
             image: images.class,
@@ -73,6 +74,13 @@ const Sidebar = forwardRef(({ show, ...passProps }, ref) => {
             image: images.calendar,
             name: 'Bài thi',
             path: `/exam`,
+        },
+    ];
+    const SIDEBAR_NAVIGATION_TODOLIST = [
+        {
+            image: images.class,
+            name: 'Đã đánh giá',
+            path: `/todo-mark/marked/all`,
         },
     ];
 
@@ -96,6 +104,12 @@ const Sidebar = forwardRef(({ show, ...passProps }, ref) => {
             setOpenStreamNav(true);
         } else {
             setOpenStreamNav(false);
+        }
+
+        if (path.includes('/todo-mark')) {
+            setOpenToDoNav(true);
+        } else {
+            setOpenToDoNav(false);
         }
     };
 
@@ -131,6 +145,9 @@ const Sidebar = forwardRef(({ show, ...passProps }, ref) => {
             <ListItem dataActions={SIDEBAR_TOP_ITEMS} bottomline />
             <div className={cx('sidebar-navigation', { hidden: !openStreamNav })}>
                 <ListItem dataActions={SIDEBAR_NAVIGATION} bottomline />
+            </div>
+            <div className={cx('sidebar-navigation', { hidden: !openToDoNav })}>
+                <ListItem dataActions={SIDEBAR_NAVIGATION_TODOLIST} bottomline />
             </div>
             <ListItem title="Giảng dạy" dataActions={TEACH_CLASSES} data={classes?.classTeach} bottomline />
             <ListItem title="Học tập" dataActions={STUDY_CLASSES} data={classes?.classStudy} bottomline />

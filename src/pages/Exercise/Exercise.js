@@ -11,7 +11,9 @@ import PostItem from './components/PostItem';
 import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 
 import styles from './Exercise.module.scss';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import Select from '~/components/Select';
+import useAuth from '~/hooks/useAuth';
 
 const cx = classNames.bind(styles);
 
@@ -38,6 +40,8 @@ const MENU_ACTIONS = [
 ];
 
 function Exercise() {
+    const navigate = useNavigate();
+    const { classData } = useAuth();
     const [actionHidden, setActionHidden] = useState(false);
     const [openAssignment, setOpenAssignment] = useState(false);
     const closeAssignment = () => setOpenAssignment(false);
@@ -106,12 +110,9 @@ function Exercise() {
         setExercises(exerciseRes.data.exercises);
     };
 
-    // const handleSetExercise = (data) => {
-    //     console.log(data);
-    //     setExercises((prev) => {
-    //         return [data, ...prev];
-    //     });
-    // };
+    const handleSelectType = (topicId) => {
+        navigate(`/exercise/${classData.role}/${classData.classId}${topicId !== 0 ? `/${topicId}` : '/0'}`);
+    };
 
     useEffect(() => {
         getTopic();
@@ -162,6 +163,20 @@ function Exercise() {
                     <ListItem title="Chủ đề" data={topics} />
                 </div>
                 <div className={cx('timeline')}>
+                    <div className={cx('timeline-actions')}>
+                        <Select
+                            data={topics.map((item) => {
+                                return {
+                                    title: item.name,
+                                    value: item.topicId,
+                                };
+                            })}
+                            handleSelect={handleSelectType}
+                            currentData={'/todo-exercise/not-submitted/all'}
+                            label="Chủ đề"
+                            className={cx('class-select', 'type')}
+                        />
+                    </div>
                     {exercises.map((item, index) => {
                         return (
                             <PostItem

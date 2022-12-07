@@ -134,6 +134,14 @@ function ToDoMark() {
         setExerciseData(newListNotSubmitted);
     };
 
+    const handleSelectFilter = (filter) => {
+        navigate(`/todo-mark/${type}${filter !== 'all' ? `/${filter}` : '/all'}`);
+    };
+
+    const handleSelectType = (type) => {
+        navigate(type);
+    };
+
     useEffect(() => {
         getClasses();
     }, [type]);
@@ -160,13 +168,37 @@ function ToDoMark() {
                     />
                 </div>
                 <div className={cx('timeline')}>
-                    <Select
-                        data={[{ title: 'Tất cả', value: 0 }, ...classes]}
-                        handleSelect={setClassChoosed}
-                        currentData={0}
-                        label="Chọn lớp"
-                        className={cx('class-select')}
-                    />
+                    <div className={cx('timeline-actions')}>
+                        <Select
+                            data={[{ title: 'Tất cả', value: 0 }, ...classes]}
+                            handleSelect={setClassChoosed}
+                            currentData={0}
+                            label="Chọn lớp"
+                            className={cx('class-select')}
+                        />
+                        <Select
+                            data={[
+                                { title: 'Tất cả', value: 'all' },
+                                { title: '14 ngày trước', value: '14_days_before' },
+                                { title: '7 ngày trước', value: '7_days_before' },
+                                { title: '7 ngày tới', value: '7_days_after' },
+                            ]}
+                            handleSelect={handleSelectFilter}
+                            currentData={'all'}
+                            label="Bộ lọc"
+                            className={cx('class-select', 'filter')}
+                        />
+                        <Select
+                            data={[
+                                { title: 'Chưa đánh giá', value: '/todo-mark/not-marked/all' },
+                                { title: 'Đã đánh giá', value: '/todo-mark/marked/all' },
+                            ]}
+                            handleSelect={handleSelectType}
+                            currentData={'/todo-mark/not-marked/all'}
+                            label="Trạng thái"
+                            className={cx('class-select', 'type')}
+                        />
+                    </div>
                     {exerciseData?.map((item, index) => {
                         return (
                             <PostItem
