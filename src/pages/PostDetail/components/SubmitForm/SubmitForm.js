@@ -64,7 +64,18 @@ function SubmitForm({ data, setPostData, isCompleted, setIsCompleted }) {
         <div className={cx('wrapper')}>
             <div className={cx('header')}>
                 <h2 className={cx('title')}>Phần nộp bài</h2>
-                <p className={cx('status')}>{isCompleted ? 'Đã nộp' : 'Chưa nộp'}</p>
+                <p className={cx('status')}>
+                    <span
+                        className={cx('status-completed', {
+                            correct: isCompleted,
+                            wrong: !isCompleted,
+                            marked: data?.score,
+                        })}
+                    >
+                        {isCompleted ? (data?.score ? 'Đã chấm điểm' : 'Đã nộp') : 'Chưa nộp'}
+                    </span>
+                    {/* {isCompleted ? 'Đã nộp' : 'Chưa nộp'} */}
+                </p>
             </div>
             {!isCompleted && (
                 <div className={cx('body')}>

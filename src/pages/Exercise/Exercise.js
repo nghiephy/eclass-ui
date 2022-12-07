@@ -93,7 +93,7 @@ function Exercise() {
 
         setTopics((prev) => [
             {
-                name: 'Tẩt cả',
+                name: 'Tất cả',
                 topicId: 0,
             },
             ...topicRes.data.topics,

@@ -77,17 +77,19 @@ function ToDoMark() {
         });
         setClasses(selectClasses);
         setClassChoosed(classIdArr);
-        setClassIdList(classIdArr);
+        setClassIdList(classIdArr || []);
         getExerciseData(classIdArr);
     };
 
     const getExerciseData = async (idList) => {
+        if (!idList) idList = [];
         let classIdData = 0;
         if (classChoosed !== '0') {
             classIdData = classChoosed;
         } else {
             classIdData = classIdList.length === 0 ? idList : classIdList;
         }
+        console.log('idList', idList);
         let apiString = '/exercise/get-not-marked';
         if (type === 'marked') apiString = `/exercise/get-marked`;
         let exerciseRes = '';

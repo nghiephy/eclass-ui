@@ -158,7 +158,9 @@ function PostItem({
                 </div>
                 <div className={cx('post-infor')}>
                     {data?.type === 'BT' || data?.type === 'CH' ? (
-                        <h3 className={cx('max-score')}>Điểm: {`${isChoiceCorrect} / ${data?.maxScore}`}</h3>
+                        <h3 className={cx('max-score')}>
+                            Điểm: {`${data?.score || isChoiceCorrect} / ${data?.maxScore}`}
+                        </h3>
                     ) : (
                         <div></div>
                     )}
