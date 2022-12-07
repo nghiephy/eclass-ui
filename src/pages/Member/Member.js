@@ -49,8 +49,6 @@ function Member() {
         getMemberData();
     }, []);
 
-    console.log(teacherList);
-
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>

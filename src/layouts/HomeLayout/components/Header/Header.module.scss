@@ -41,6 +41,9 @@
     &-title {
         color: #5f6368;
         font-weight: 600;
+        @media screen and (max-width: 700px) {
+            display: none;
+        }
     }
 }
 

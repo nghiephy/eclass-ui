@@ -15,3 +15,10 @@
         transform: translateX(0);
     }
 }
+
+.sidebar-navigation {
+    display: none;
+    @media screen and (max-width: 825px) {
+        display: block;
+    }
+}

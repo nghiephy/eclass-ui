@@ -3,4 +3,8 @@
     margin: 0 auto;
     width: 1000px;
     height: calc(100vh - var(--default-layout-header-height));
+    @media screen and (max-width: 1000px) {
+        width: unset;
+        padding: 0 10px;
+    }
 }

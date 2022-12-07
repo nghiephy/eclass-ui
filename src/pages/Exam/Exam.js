@@ -49,7 +49,7 @@ function Exam() {
                 <div className={cx('annouce-board')}>
                     <Button
                         primary
-                        className={cx('create-exam-btn')}
+                        className={cx('create-exam-btn', { hidden: classData.role !== 't' })}
                         onClick={() => {
                             handleClickCreatBtn();
                         }}

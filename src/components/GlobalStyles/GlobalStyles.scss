@@ -28,6 +28,11 @@
     --default-layout-width: 1150px;
     --default-layout-sidebar-width: 356px;
     --default-layout-horizontal-spacer: 24px;
+
+    --mobile-width: 480px;
+    --tablet-width: 768px;
+    --desktop-width: 992px;
+    --desktop-lg-width: 1200px;
 }
 
 * {
@@ -281,3 +286,71 @@ body {
 //     width: 50px;
 //     min-width: unset;
 // }
+
+// Responsive
+/* Mixin */
+/* Set các giá trị với màn hình tương ứng */
+$mobile-width: 480px;
+$tablet-width: 768px;
+$desktop-width: 992px;
+$desktop-lg-width: 1200px;
+
+@mixin mobile {
+    @media (max-width: #{$tablet-width - 1px}) {
+        @content;
+    }
+}
+
+@mixin mobile-sm {
+    @media (max-width: #{$mobile-width - 1px}) {
+        @content;
+    }
+}
+
+@mixin mobile-sm-580 {
+    @media (max-width: 580px) {
+        @content;
+    }
+}
+
+@mixin landscape-mobile {
+    @media (min-width: #{$mobile-width}) and (max-width: #{$tablet-width - 1px}) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
+        @content;
+    }
+}
+
+@mixin tablet-mobile {
+    @media (max-width: #{$desktop-width - 1px}) {
+        @content;
+    }
+}
+
+@mixin tablet-desktop {
+    @media (min-width: #{$tablet-width}) {
+        @content;
+    }
+}
+
+@mixin desktop {
+    @media (min-width: #{$desktop-width}) {
+        @content;
+    }
+}
+
+@mixin desktop-sm {
+    @media (min-width: #{$desktop-width}) and (max-width: #{$desktop-lg-width - 1px}) {
+        @content;
+    }
+}
+
+@mixin desktop-lg {
+    @media (min-width: #{$desktop-lg-width}) {
+        @content;
+    }
+}
