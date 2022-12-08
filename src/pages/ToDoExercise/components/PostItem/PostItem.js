@@ -10,11 +10,13 @@ import Images from '~/components/Images';
 import images from '~/assets/images';
 import { Link, useNavigate } from 'react-router-dom';
 import moment from 'moment';
+import useAuth from '~/hooks/useAuth';
 
 const cx = classNames.bind(styles);
 
 function PostItem({ data, role, classId, setExercises }) {
     const navigate = useNavigate();
+    const { handleSetClassData } = useAuth();
     const axiosPrivate = useAxiosPrivate();
 
     let icon = images.noImage;
@@ -28,13 +30,23 @@ function PostItem({ data, role, classId, setExercises }) {
         icon = images.questionIcon;
     }
 
+    const handleClickItem = (classId) => {
+        handleSetClassData({ classId: classId, role: 'h' });
+    };
+
     useEffect(() => {
         // setDataExercise({ ...data });
     }, []);
 
     return (
         <div className={cx('wrapper')}>
-            <Link to={`/exercise/h/${data?.classId}/${data?.type}/${data?.postId}/detail`} className={cx('content')}>
+            <Link
+                to={`/exercise/h/${data?.classId}/${data?.type}/${data?.postId}/detail`}
+                className={cx('content')}
+                onClick={() => {
+                    handleClickItem(data?.classId);
+                }}
+            >
                 <div className={cx('type-question')}>
                     <div className={cx('img-box')}>
                         <Images alt="type question icon" src={icon} />

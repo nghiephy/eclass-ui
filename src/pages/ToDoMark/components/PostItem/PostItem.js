@@ -20,7 +20,7 @@ const cx = classNames.bind(styles);
 function PostItem({ data, menuPost, setExerciseData, setExerciseDataOrigin }) {
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
-    const { auth } = useAuth();
+    const { auth, handleSetClassData } = useAuth();
 
     const [actionHidden, setActionHidden] = useState(false);
 
@@ -34,6 +34,10 @@ function PostItem({ data, menuPost, setExerciseData, setExerciseDataOrigin }) {
     if (data?.type === 'CH') {
         icon = images.questionIcon;
     }
+
+    const handleClickItem = (classId) => {
+        handleSetClassData({ classId: classId, role: 'h' });
+    };
 
     const handleOnChange = async (menuItem) => {
         if (menuItem.code === 'mark') {
@@ -100,7 +104,13 @@ function PostItem({ data, menuPost, setExerciseData, setExerciseDataOrigin }) {
                 </Menu>
             </div>
 
-            <Link to={`/exercise/h/${data?.classId}/${data?.type}/${data?.postId}/detail`} className={cx('content')}>
+            <Link
+                to={`/exercise/h/${data?.classId}/${data?.type}/${data?.postId}/detail`}
+                className={cx('content')}
+                onClick={() => {
+                    handleClickItem(data?.classId);
+                }}
+            >
                 <div className={cx('type-question')}>
                     <div className={cx('img-box')}>
                         <Images alt="type question icon" src={icon} />
