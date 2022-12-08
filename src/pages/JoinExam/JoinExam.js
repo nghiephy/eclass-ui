@@ -33,6 +33,7 @@ function JoinExam() {
     const [title, setTitle] = useState();
     const [totalScore, setTotalScore] = useState();
     const [duration, setDuration] = useState();
+    const [resultExam, setResultExam] = useState();
     const [userAnswers, setUserAnswers] = useState([]);
     const [currentQuestion, setCurrentQuestion] = useState([]);
     const [openSuccess, setOpenSuccess] = useState(false);
@@ -75,6 +76,14 @@ function JoinExam() {
 
         console.log('score', takeId);
         console.log(timeDoExam.current);
+        setResultExam({
+            score: score,
+            numCorrect: numCorrect,
+            totalQuestion: currentQuestion.length,
+            totalScore: totalScore,
+            timeDone: timeDoExam.current,
+        });
+        toggleOpenSuccess();
     };
 
     const handleSetUserAnswers = (data) => {
@@ -233,13 +242,32 @@ function JoinExam() {
                 <div className={cx('modal')}>
                     <div className={cx('title')} style={{ fontWeight: 500, textAlign: 'center', marginBottom: '15px' }}>
                         {' '}
-                        Đã tạo bài thi thành công!{' '}
+                        Bạn đã hoàn thành bài thi!{' '}
                     </div>
                     <div className={cx('sub-title')} style={{ textAlign: 'center' }}>
-                        Vui lòng kiểm tra lại thông tin! Bài thi có thể được chỉnh sửa ở mục Bài Thi! <br />
+                        Vui lòng kiểm tra lại thông tin làm bài! <br />
                     </div>
+                    <p className={cx('body-more-item')}>
+                        Số điểm:&nbsp;&nbsp;<strong>{resultExam?.score}</strong>
+                    </p>
+                    <p className={cx('body-more-item')}>
+                        Số câu đúng:&nbsp;&nbsp;<strong>{resultExam?.numCorrect}</strong>&nbsp;/&nbsp;
+                        <strong>{resultExam?.totalQuestion}</strong>
+                    </p>
+                    <p className={cx('body-more-item')}>
+                        Thời gian thi:&nbsp;&nbsp;<strong>{Math.floor(resultExam?.timeDone / 60)}</strong>
+                        &nbsp;phút&nbsp;
+                        <strong>{resultExam?.timeDone % 60}</strong>&nbsp;giây
+                    </p>
                     <div className={cx('form-actions')}>
-                        <Button primary className={cx('cancel')} style={{ margin: '0 auto' }}>
+                        <Button
+                            primary
+                            className={cx('cancel')}
+                            style={{ margin: '0 auto' }}
+                            onClick={() => {
+                                navigate(`/exam`);
+                            }}
+                        >
                             Đã hiểu
                         </Button>
                     </div>

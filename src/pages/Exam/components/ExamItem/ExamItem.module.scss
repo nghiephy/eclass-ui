@@ -9,6 +9,9 @@
     &:hover {
         background-color: var(--primary-hover);
     }
+    &.completed {
+        background-color: rgba(196, 248, 225, 0.4);
+    }
 }
 
 .more {
@@ -59,6 +62,9 @@
     &-item {
         font-size: 1.6rem;
         margin-bottom: 10px;
+        &.completed {
+            color: green;
+        }
     }
 }
 

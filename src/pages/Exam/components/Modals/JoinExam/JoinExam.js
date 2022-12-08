@@ -40,7 +40,7 @@ function JoinExam({ onClose, dataExam, ...props }) {
             } else if (moment(dataExam.finishedAt).diff(moment(), 'minutes') < 0) {
                 alert('Bài thi đã kết thúc!');
             } else {
-                // navigate(`/join-exam/${dataExam.postId}/${joinRes.data.data.id}`);
+                navigate(`/join-exam/${dataExam.postId}/${joinRes.data.data.id}`);
             }
         } catch (err) {
             alert('Mật khẩu sai! Vui lòng thử lại!');

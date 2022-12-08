@@ -81,7 +81,11 @@ function ExamItem({ data, setExamData }) {
     useEffect(() => {}, []);
 
     return (
-        <div className={cx('wrapper')}>
+        <div
+            className={cx('wrapper', {
+                completed: data?.score || data?.score === 0,
+            })}
+        >
             <div className={cx('more-btn-wrapper')}>
                 <Menu
                     arrow={false}
@@ -133,7 +137,7 @@ function ExamItem({ data, setExamData }) {
                 <div className={cx('body-more')}>
                     {data.status ? (
                         <>
-                            <p className={cx('body-more-item')}>Đã hoàn thành bài thi!</p>
+                            <p className={cx('body-more-item', 'completed')}>Đã hoàn thành bài thi!</p>
                             <p className={cx('body-more-item')}>
                                 Số điểm:&nbsp;&nbsp;<strong>{data.score}</strong>
                             </p>
