@@ -11,6 +11,9 @@
     justify-content: center;
     align-items: center;
     margin: 20px auto 20px;
+    @media screen and (max-height: 600px) {
+        margin: 0 auto 0;
+    }
     .imgBox {
         width: 70px;
         height: 70px;
@@ -24,11 +27,17 @@
             height: 100%;
             transform: scale(0.9);
         }
+        @media screen and (max-height: 600px) {
+            display: none;
+        }
     }
     .label {
         margin-top: 20px;
         text-transform: uppercase;
         user-select: none;
+        @media screen and (max-height: 600px) {
+            margin-top: 10px;
+        }
     }
     .sub-label {
         margin-top: 10px;
@@ -36,6 +45,9 @@
         text-align: center;
         user-select: none;
         color: var(--text-color);
+        @media screen and (max-height: 600px) {
+            display: none;
+        }
     }
 }
 
@@ -45,10 +57,16 @@
     margin: 30px auto 20px;
     width: 80%;
     max-width: 350px;
+    @media screen and (max-height: 600px) {
+        margin: 0 auto 0;
+    }
 }
 
 .form-actions {
     margin-top: 30px;
+    @media screen and (max-height: 600px) {
+        margin: 0 auto 0;
+    }
 }
 
 .register {
@@ -60,7 +78,9 @@
     bottom: 30px;
     width: 100%;
     text-align: center;
-
+    @media screen and (max-height: 600px) {
+        bottom: 10px;
+    }
     .login-btn {
         padding: 0;
         min-width: unset;

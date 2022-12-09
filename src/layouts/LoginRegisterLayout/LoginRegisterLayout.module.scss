@@ -19,6 +19,9 @@
     background-color: var(--white);
     border-radius: 20px;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    @media screen and (max-height: 600px) {
+        height: 90vh;
+    }
 }
 
 .slider-wrapper {
@@ -63,6 +66,9 @@
         margin: 0 auto;
         width: 70px;
         height: 70px;
+        @media screen and (max-height: 600px) {
+            display: none;
+        }
     }
 }
 

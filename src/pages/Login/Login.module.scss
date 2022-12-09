@@ -11,6 +11,9 @@
     justify-content: center;
     align-items: center;
     margin: 40px auto 20px;
+    @media screen and (max-height: 600px) {
+        margin: 0 auto 0;
+    }
     .imgBox {
         width: 70px;
         height: 70px;
@@ -23,6 +26,10 @@
             width: 100%;
             height: 100%;
             transform: scale(0.9);
+        }
+        @media screen and (max-height: 600px) {
+            width: 50px;
+            height: 50px;
         }
     }
     .label {
@@ -45,6 +52,9 @@
     margin: 30px auto 20px;
     width: 80%;
     max-width: 350px;
+    @media screen and (max-height: 600px) {
+        margin: 10px auto 10px;
+    }
 }
 
 .form-actions {
@@ -101,7 +111,9 @@
     bottom: 30px;
     width: 100%;
     text-align: center;
-
+    @media screen and (max-height: 600px) {
+        bottom: 10px;
+    }
     .register-btn {
         padding: 0;
         min-width: unset;
