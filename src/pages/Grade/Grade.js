@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
 import { downloadExcel } from 'react-export-table-to-excel';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import useAxiosPrivate from '~/hooks/useAxiosPrivate';
 import useAuth from '~/hooks/useAuth';
@@ -13,6 +13,7 @@ import moment from 'moment';
 const cx = classNames.bind(styles);
 
 function Grade() {
+    const { role, classId } = useParams();
     const { auth } = useAuth();
     const navigate = useNavigate();
     const axiosPrivate = useAxiosPrivate();
@@ -47,29 +48,41 @@ function Grade() {
     };
 
     const getAllScore = async () => {
-        const allScoreRes = await axiosPrivate.get(`/exercise/get-all-score/${classData.classId}`);
-        const originBody = allScoreRes.data.allScore;
-        const customBody = [];
-        const displayBody = [];
-        originBody.map((userScore, index) => {
-            const itemBody = [];
-            const itemDisplay = [];
-            userScore.map((item, index) => {
-                if (index === 0) {
-                    itemBody.push(item.fullName);
-                    itemDisplay.push({ fullName: item.fullName, userId: item.userId });
-                }
-                if (index !== 0) {
-                    itemBody.push(item.score);
-                    itemDisplay.push(item.score);
-                }
+        try {
+            const allScoreRes = await axiosPrivate.get(`/exercise/get-all-score/${classId}`, {
+                params: {
+                    role: role === 't' ? 'GV' : 'HS',
+                },
             });
-            customBody.push(itemBody);
-            displayBody.push(itemDisplay);
-        });
-        console.log(allScoreRes);
-        setBodyData(displayBody);
-        setBodyExportData(customBody);
+            const originBody = allScoreRes.data.allScore;
+            const customBody = [];
+            const displayBody = [];
+            originBody.map((userScore, index) => {
+                const itemBody = [];
+                const itemDisplay = [];
+                userScore.map((item, index) => {
+                    if (index === 0) {
+                        itemBody.push(item.fullName);
+                        itemDisplay.push({ fullName: item.fullName, userId: item.userId });
+                    }
+                    if (index !== 0) {
+                        const outDateExamScore = moment(item.deadline).diff(moment(), 'minutes') < 0 && 0;
+                        itemBody.push(item.score || item.scoreExam || outDateExamScore);
+                        itemDisplay.push(item.score || item.scoreExam || outDateExamScore);
+                    }
+                });
+                customBody.push(itemBody);
+                displayBody.push(itemDisplay);
+            });
+            console.log(allScoreRes);
+            setBodyData(displayBody);
+            setBodyExportData(customBody);
+        } catch (error) {
+            console.log(error);
+            if (error.response.data.code === 'unauthorized') {
+                navigate(`/unauthorized`);
+            }
+        }
     };
 
     console.log(bodyData);
@@ -110,7 +123,7 @@ function Grade() {
                                 <th key={head.id} className={cx('header-column', 'table-grade-th')}>
                                     <h3
                                         onClick={() => {
-                                            handleNavigateDetailSubmit(head.id, head.type);
+                                            if (head.type !== 'KT') handleNavigateDetailSubmit(head.id, head.type);
                                         }}
                                         className={cx('header-name')}
                                     >
@@ -126,9 +139,9 @@ function Grade() {
                         </tr>
 
                         {bodyData.map((item, i) => (
-                            <tr key={i}>
+                            <tr key={`${item.postId}${i}`}>
                                 {item.map((it) => (
-                                    <td key={it?.userId ? it.userId : it} className={cx('table-grade-td')}>
+                                    <td key={it?.userId ? it.userId : item.postId} className={cx('table-grade-td')}>
                                         {it?.fullName ? <Link to={`/profile/${it.userId}`}>{it.fullName}</Link> : it}
                                     </td>
                                 ))}

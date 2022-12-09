@@ -4,6 +4,7 @@ import config from '~/config';
 import { LoginRegisterLayout } from '~/layouts';
 import { HomeLayout } from '~/layouts';
 import { ToDoLayout } from '~/layouts';
+import { Fragment } from 'react';
 
 // Import Pages
 import Login from '~/pages/Login';
@@ -23,11 +24,13 @@ import ToDoMark from '~/pages/ToDoMark';
 import Exam from '~/pages/Exam';
 import CreateExam from '~/pages/CreateExam';
 import JoinExam from '~/pages/JoinExam';
+import UnAuthorized from '~/pages/UnAuthorized';
 
 const publicRoutes = [
     { path: config.routes.login, component: Login, layout: LoginRegisterLayout },
     { path: config.routes.register, component: Register, layout: LoginRegisterLayout },
     { path: config.routes.forgotPassword, component: ForgotPassword, layout: LoginRegisterLayout },
+    { path: config.routes.unauthorized, component: UnAuthorized, layout: null },
 ];
 
 const privateRoutes = [

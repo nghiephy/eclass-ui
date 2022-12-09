@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import images from '~/assets/images';
 import Button from '~/components/Button';
@@ -43,6 +43,7 @@ const MENU_STUDENT_ENROLL = [
 ];
 
 function Stream() {
+    const navigate = useNavigate();
     const { id } = useParams();
     // let [searchParams, setSearchParams] = useSearchParams();
     const axiosPrivate = useAxiosPrivate();
@@ -65,17 +66,23 @@ function Stream() {
         setPosts(dataPost.data.data);
     };
     const getClassData = async (classId) => {
-        const dataClass = await axiosPrivate.get(`/class/${classId}`);
-        setClassData((prev) => {
-            return dataClass.data.data;
-        });
-        setCoverImage(dataClass.data?.data?.coverImg);
-        const role = auth.id === dataClass.data?.data?.teacherId ? 't' : 'h';
-        handleSetClassData({ classId: dataClass.data?.data?.id, role });
-        if (role === 't') {
-            setMenuEnroll(MENU_TEACHER_ENROLL);
-        } else {
-            setMenuEnroll(MENU_STUDENT_ENROLL);
+        try {
+            const dataClass = await axiosPrivate.get(`/class/${classId}`);
+            setClassData((prev) => {
+                return dataClass.data.data;
+            });
+            setCoverImage(dataClass.data?.data?.coverImg);
+            const role = auth.id === dataClass.data?.data?.teacherId ? 't' : 'h';
+            handleSetClassData({ classId: dataClass.data?.data?.id, role });
+            if (role === 't') {
+                setMenuEnroll(MENU_TEACHER_ENROLL);
+            } else {
+                setMenuEnroll(MENU_STUDENT_ENROLL);
+            }
+        } catch (error) {
+            if (error.response.data.code === 'unauthorized') {
+                navigate(`/unauthorized`);
+            }
         }
     };
 

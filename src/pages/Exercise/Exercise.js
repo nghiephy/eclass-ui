@@ -100,8 +100,19 @@ function Exercise() {
         ]);
     };
     const getAllExercise = async () => {
-        const exerciseRes = await axiosPrivate.get(`/exercise/get-all/${classId}`);
-        setExercises(exerciseRes.data.exercises);
+        try {
+            const exerciseRes = await axiosPrivate.get(`/exercise/get-all/${classId}`, {
+                params: {
+                    role: role === 't' ? 'GV' : 'HS',
+                },
+            });
+            setExercises(exerciseRes.data.exercises);
+        } catch (error) {
+            console.log(error);
+            if (error.response.data.code === 'unauthorized') {
+                navigate(`/unauthorized`);
+            }
+        }
     };
 
     const getExeViaTopic = async () => {

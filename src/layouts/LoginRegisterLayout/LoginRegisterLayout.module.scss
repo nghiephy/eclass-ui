@@ -12,7 +12,8 @@
     top: 50%;
     left: 50%;
     width: 90%;
-    height: 700px;
+    max-height: 700px;
+    height: 70vh;
     max-width: 1150px;
     transform: translate(-50%, -50%);
     background-color: var(--white);
@@ -26,6 +27,9 @@
     width: 50%;
     background: linear-gradient(180deg, rgba(9, 198, 249, 0.92) 0%, rgba(4, 93, 233, 0.6808) 100%);
     border-radius: 20px 0px 0px 20px;
+    @media screen and (max-width: 700px) {
+        display: none;
+    }
 }
 
 .slider {
@@ -38,6 +42,9 @@
 .content {
     height: 100%;
     width: 50%;
+    @media screen and (max-width: 700px) {
+        width: 100%;
+    }
 }
 
 // Css header slider

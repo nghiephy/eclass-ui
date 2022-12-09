@@ -85,7 +85,7 @@ function Header({ toggleSidebar }) {
     if (classData?.role === 't') {
         DATA_TABS.push({
             title: 'Điểm',
-            path: '/grade/mark',
+            path: `/grade/mark/t/${classData?.classId}`,
         });
     }
 
