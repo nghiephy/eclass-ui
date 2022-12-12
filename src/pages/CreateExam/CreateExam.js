@@ -13,7 +13,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import moment from 'moment';
-import { TextField } from '@mui/material';
+import { alertClasses, TextField } from '@mui/material';
 import { EditQuestion } from './components/Modals';
 import ChoiceItem from './ChoiceItem';
 import Popup from 'reactjs-popup';
@@ -52,7 +52,7 @@ function CreateExam() {
     const [openSuccess, setOpenSuccess] = useState(false);
     const closeModalSuccess = () => setOpenSuccess(false);
 
-    const [value, setValue] = useState(moment().format('DD/MM/YYYY HH:mm:ss'));
+    const [value, setValue] = useState();
 
     const toggleUpdateQuestion = () => {
         setOpenUpdateQuestion(!openUpdateQuestion);
@@ -159,7 +159,7 @@ function CreateExam() {
         setTotalScore(examData.maxScore);
         setPassword(examData.password);
         setTitle(examData.title);
-        setValue(moment(examData.startedAt).format('DD/MM/YYYY HH:mm:ss'));
+        setValue(moment(examData.startedAt));
 
         const detailCurrentQuestion = questionList.map((question) => {
             return {
@@ -172,20 +172,24 @@ function CreateExam() {
     };
 
     const handleUpdateExam = async () => {
-        const dataUpdate = {
-            postId: postId,
-            title: title,
-            totalScore: totalScore,
-            duration: duration,
-            password: password,
-            time: value,
-            guide: guide,
-            classId: classData.classId,
-            questionList: currentQuestion,
-        };
-        console.log(dataUpdate);
-        const updateRes = await axiosPrivate.post(`/exam/update`, dataUpdate);
-        toggleOpenSuccess();
+        try {
+            const dataUpdate = {
+                postId: postId,
+                title: title,
+                totalScore: totalScore,
+                duration: duration,
+                password: password,
+                time: value,
+                guide: guide,
+                classId: classData.classId,
+                questionList: currentQuestion,
+            };
+            console.log(dataUpdate);
+            const updateRes = await axiosPrivate.post(`/exam/update`, dataUpdate);
+            toggleOpenSuccess();
+        } catch (error) {
+            alert('Không thể cập nhật bài đã thi!');
+        }
     };
 
     useEffect(() => {
@@ -272,7 +276,7 @@ function CreateExam() {
                             <h3 className={cx('title-input')}>Ngày giờ thi: </h3>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DateTimePicker
-                                    // inputFormat="DD-MM-YYYY HH:mm:ss"
+                                    inputFormat="DD-MM-YYYY hh:mm:ss"
                                     value={value}
                                     onChange={handleChange}
                                     renderInput={(params) => <TextField {...params} className={cx('deadline-input')} />}

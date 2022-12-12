@@ -35,14 +35,15 @@ function JoinExam({ onClose, dataExam, ...props }) {
             console.log(dataExam);
             if (dataExam.status === 1) {
                 alert('Bạn đã hoàn thành bài thi!');
-            } else if (moment(dataExam.startedAt).diff(moment(), 'minutes') > 0) {
+            } else if (moment(dataExam.startedAt).diff(moment(), 'seconds') > 0) {
                 alert('Chưa đến thời gian thi!');
-            } else if (moment(dataExam.finishedAt).diff(moment(), 'minutes') < 0) {
+            } else if (moment(dataExam.finishedAt).diff(moment(), 'seconds') < 0) {
                 alert('Bài thi đã kết thúc!');
             } else {
                 navigate(`/join-exam/${dataExam.postId}/${joinRes.data.data.id}`);
             }
         } catch (err) {
+            console.log(err);
             alert('Mật khẩu sai! Vui lòng thử lại!');
         }
     };

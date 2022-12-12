@@ -53,11 +53,26 @@
     margin-left: 260px;
     margin-top: 20px;
     margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     @media screen and (max-width: 825px) {
         margin: 20px auto;
         text-align: center;
     }
     font-size: 2.2rem;
+    .edit-topic {
+        display: none;
+        &:hover {
+            cursor: pointer;
+            opacity: 0.8;
+        }
+    }
+    &:hover {
+        .edit-topic {
+            display: block;
+        }
+    }
 }
 
 .class-select {

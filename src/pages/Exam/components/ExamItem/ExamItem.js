@@ -144,7 +144,11 @@ function ExamItem({ data, setExamData }) {
                             <p className={cx('body-more-item')}>
                                 Thời gian:&nbsp;&nbsp;
                                 <strong>
-                                    {moment(data.doStartedAt).diff(moment(data.doFinishedAt), 'minutes')}&nbsp;phút
+                                    {Math.floor(
+                                        moment(data.doFinishedAt).diff(moment(data.doStartedAt), 'seconds') / 60,
+                                    )}
+                                    &nbsp;phút &nbsp;
+                                    {moment(data.doFinishedAt).diff(moment(data.doStartedAt), 'seconds') % 60}&nbsp;giây
                                 </strong>
                             </p>
                         </>

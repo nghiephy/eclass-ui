@@ -141,7 +141,8 @@ function JoinExam() {
     const renderer = ({ total, hours, minutes, seconds, completed }) => {
         if (completed) {
             // Render a completed state
-            return <Completionist total={total} />;
+            onSubmit();
+            return;
         } else {
             // Render a countdown
             return (

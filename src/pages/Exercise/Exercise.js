@@ -14,6 +14,8 @@ import styles from './Exercise.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import Select from '~/components/Select';
 import useAuth from '~/hooks/useAuth';
+import Popup from 'reactjs-popup';
+import UpdateTopic from './components/Modals/UpdateTopic';
 
 const cx = classNames.bind(styles);
 
@@ -42,6 +44,7 @@ const MENU_ACTIONS = [
 function Exercise() {
     const navigate = useNavigate();
     const { classData } = useAuth();
+    const [currentTopic, setCurrentTopic] = useState();
     const [actionHidden, setActionHidden] = useState(false);
     const [openAssignment, setOpenAssignment] = useState(false);
     const closeAssignment = () => setOpenAssignment(false);
@@ -51,6 +54,8 @@ function Exercise() {
     const closeMaterial = () => setOpenMaterial(false);
     const [openQuestion, setOpenQuestion] = useState(false);
     const closeQuestion = () => setOpenQuestion(false);
+    const [openUpdateTopic, setOpenUpdateTopic] = useState(false);
+    const closeUpdateTopic = () => setOpenUpdateTopic(false);
 
     const axiosPrivate = useAxiosPrivate();
     const { role, classId, topic } = useParams();
@@ -69,6 +74,11 @@ function Exercise() {
     };
     const toggleQuestion = () => {
         setOpenQuestion(!openQuestion);
+    };
+
+    const togglesetOpenUpdateTopic = (topic) => {
+        setOpenUpdateTopic(!openUpdateTopic);
+        setCurrentTopic(parseInt(topic));
     };
     console.log(exercises);
 
@@ -125,6 +135,10 @@ function Exercise() {
         navigate(`/exercise/${classData.role}/${classData.classId}${topicId !== 0 ? `/${topicId}` : '/0'}`);
     };
 
+    const handleUpdateTopic = () => {
+        togglesetOpenUpdateTopic();
+    };
+
     useEffect(() => {
         getTopic();
         getAllExercise();
@@ -166,6 +180,9 @@ function Exercise() {
                 ) : (
                     <div className={cx('title-topic')}>
                         <h2>{topics[parseInt(topic)]?.name}</h2>
+                        <span className={cx('edit-topic')} onClick={() => handleUpdateTopic(parseInt(topic))}>
+                            Sửa
+                        </span>
                     </div>
                 )}
             </div>
@@ -210,6 +227,14 @@ function Exercise() {
                 onClose={closeAssignment}
             />
             <Topic setTopics={setTopics} open={openCreateTopic} closeOnDocumentClick onClose={closeCreateTopic} />
+            <UpdateTopic
+                currentTopic={topic}
+                topics={topics}
+                setTopics={setTopics}
+                open={openUpdateTopic}
+                closeOnDocumentClick
+                onClose={closeUpdateTopic}
+            />
             <Material
                 setExercises={setExercises}
                 topics={topics}
